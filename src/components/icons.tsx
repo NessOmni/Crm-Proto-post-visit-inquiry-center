@@ -1,0 +1,63 @@
+/* Minimal inline icons — no icon kit, offline-safe. */
+import type { SVGProps } from "react";
+
+const base = (props: SVGProps<SVGSVGElement>) => ({
+  width: 18,
+  height: 18,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.6,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+  ...props,
+});
+
+export const IconBiens = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M3 10.5 12 4l9 6.5" />
+    <path d="M5 9.5V20h14V9.5" />
+    <path d="M10 20v-6h4v6" />
+  </svg>
+);
+
+export const IconContacts = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <circle cx="12" cy="8" r="3.4" />
+    <path d="M5 19.5a7 7 0 0 1 14 0" />
+  </svg>
+);
+
+export const IconAgenda = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <rect x="4" y="5" width="16" height="16" rx="2.5" />
+    <path d="M4 9.5h16M8 3.5v3M16 3.5v3" />
+  </svg>
+);
+
+export const IconPerformance = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M4 19.5h16" />
+    <path d="M7 19.5v-6M12 19.5V8M17 19.5v-9" />
+  </svg>
+);
+
+export const IconMic = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 20, height: 20, ...p })}>
+    <rect x="9" y="3" width="6" height="11" rx="3" />
+    <path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" />
+  </svg>
+);
+
+export const IconSend = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M5 12h13M12 5.5 18.5 12 12 18.5" />
+  </svg>
+);
+
+export const IconReplay = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 14, height: 14, ...p })}>
+    <path d="M4 12a8 8 0 1 0 2.4-5.7" />
+    <path d="M4 4v4h4" />
+  </svg>
+);

@@ -1,0 +1,156 @@
+/* ============================================================
+   Omnicasa — shared substrate
+   The entity model both flows read. One substrate, two workflows.
+   ============================================================ */
+
+export type ID = string;
+
+/** Trust tier carried on every assistant action. */
+export type TrustTier = "automatic" | "drafted";
+
+/** Where a citation points — the source of a drafted output. */
+export type CitationSource = "voice-note" | "lead-message" | "record" | "visit" | "mandate";
+
+/** Listing intent for a bien. */
+export type BienKind = "sale" | "rental";
+
+/** Property portals leads arrive from. */
+export type Portal = "SeLoger" | "Leboncoin" | "Bien'ici" | "PAP" | "Logic-Immo";
+
+export interface Agency {
+  id: ID;
+  name: string;
+  city: string;
+  /** Short mono kicker shown in the shell header. */
+  kicker: string;
+}
+
+export interface Agent {
+  id: ID;
+  agencyId: ID;
+  firstName: string;
+  lastName: string;
+  /** Initials for the avatar. */
+  initials: string;
+  role: string;
+}
+
+export interface Owner {
+  id: ID;
+  firstName: string;
+  lastName: string;
+  /** Authentic French fixture detail. */
+  phone?: string;
+  email?: string;
+}
+
+export interface Contact {
+  id: ID;
+  firstName: string;
+  lastName: string;
+  initials: string;
+  phone?: string;
+  email?: string;
+  /** The hidden second transaction: this contact also has a property to sell. */
+  hasPropertyToSell?: boolean;
+}
+
+export interface Bien {
+  id: ID;
+  reference: string;
+  kind: BienKind;
+  /** Street line, authentic French. */
+  address: string;
+  postalCode: string;
+  city: string;
+  priceEur: number;
+  surfaceM2: number;
+  rooms: number;
+  bedrooms: number;
+  /** Short art-directed blurb. */
+  blurb: string;
+  ownerId: ID;
+  /** Optional photo URL (CDN); a gradient fallback covers offline. */
+  photoUrl?: string;
+}
+
+export interface Mandate {
+  id: ID;
+  bienId: ID;
+  ownerId: ID;
+  kind: "exclusive" | "simple";
+  active: boolean;
+  signedOn: string; // ISO date
+}
+
+export interface Visit {
+  id: ID;
+  bienId: ID;
+  contactId: ID;
+  agentId: ID;
+  date: string; // ISO datetime
+  durationMin: number;
+}
+
+export type LeadStatus = "new" | "acknowledged" | "active";
+export type Warmth = "hot" | "warm" | "tepid";
+
+export interface Lead {
+  id: ID;
+  firstName: string;
+  lastName: string;
+  initials: string;
+  portal: Portal;
+  status: LeadStatus;
+  warmth: Warmth;
+  /** Ranking score, deterministic. Higher = warmer. */
+  score: number;
+  /** Bien the lead enquired about. */
+  bienId: ID;
+  /** Short warmth signals, e.g. "Replied within 4 min". */
+  signals: string[];
+  arrivedAt: string; // ISO datetime
+  /** Was this lead a duplicate folded into another? */
+  dedupedFrom?: string;
+}
+
+export type CommunicationKind = "owner-update" | "buyer-follow-up" | "lead-reply" | "objection" | "note";
+export type CommunicationChannel = "email" | "sms" | "portal" | "internal";
+
+export interface Communication {
+  id: ID;
+  kind: CommunicationKind;
+  channel: CommunicationChannel;
+  tier: TrustTier;
+  subject?: string;
+  body: string;
+  /** Citations backing this drafted output. */
+  citationIds: ID[];
+  relatedContactId?: ID;
+  relatedLeadId?: ID;
+  relatedBienId?: ID;
+  createdAt: string; // ISO datetime
+}
+
+export interface Citation {
+  id: ID;
+  source: CitationSource;
+  /** Short chip label, e.g. "Voice note · 00:18". */
+  label: string;
+  /** The quoted fragment the output draws from. */
+  quote: string;
+}
+
+/** The full seed substrate both flows read. */
+export interface Substrate {
+  agency: Agency;
+  agent: Agent;
+  owners: Owner[];
+  contacts: Contact[];
+  biens: Bien[];
+  mandates: Mandate[];
+  visits: Visit[];
+  leads: Lead[];
+  communications: Communication[];
+  citations: Citation[];
+}

@@ -1,0 +1,378 @@
+/* ============================================================
+   Omnicasa — app shell layout
+   Mobile-first proportions, presents cleanly on a laptop.
+   Left rail (depth, inert) · briefing (home) · right column.
+   Conversation bar always present at the bottom.
+   ============================================================ */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 3vw, 34px);
+}
+
+/* --- Top header ------------------------------------------- */
+.shell__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px 4px 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.brand__mark {
+  font-family: var(--serif);
+  font-size: 22px;
+  letter-spacing: 0.01em;
+}
+.brand__sep {
+  width: 1px;
+  height: 16px;
+  background: var(--line);
+}
+
+.replay {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-45);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 1px var(--line);
+  transition: color var(--reveal), box-shadow var(--reveal);
+}
+.replay:hover {
+  color: var(--terra-deep);
+  box-shadow: inset 0 0 0 1px rgba(192, 94, 58, 0.3);
+}
+
+.agent-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.agent-chip__avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.agent-chip__name {
+  font-size: 13px;
+  line-height: 1.15;
+}
+.agent-chip__role {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-45);
+}
+
+/* --- Body grid -------------------------------------------- */
+.shell__body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--rail-w) minmax(0, 1fr) var(--right-w);
+  gap: var(--gap);
+  min-height: 0;
+  padding-bottom: 18px;
+}
+
+/* --- Left rail (inert depth nav) -------------------------- */
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 6px;
+}
+.rail__label {
+  margin: 4px 12px 10px;
+}
+.rail__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: var(--radius-soft);
+  color: var(--ink-70);
+  text-align: left;
+  width: 100%;
+  transition: background var(--reveal), color var(--reveal);
+}
+.rail__item:hover {
+  background: rgba(33, 28, 22, 0.04);
+  color: var(--ink);
+}
+.rail__item[aria-disabled="true"] {
+  cursor: default;
+}
+.rail__item-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  opacity: 0.62;
+}
+.rail__item-text {
+  font-size: 14px;
+}
+.rail__spacer {
+  flex: 1;
+}
+.rail__foot {
+  margin: 0 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-45);
+  line-height: 1.7;
+}
+
+/* --- Briefing (centre, the home) -------------------------- */
+.briefing {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px 2px 2px;
+}
+.briefing__greeting {
+  padding: 14px 6px 26px;
+}
+.briefing__hello {
+  font-family: var(--serif);
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.08;
+  letter-spacing: 0.005em;
+}
+.briefing__hello em {
+  font-style: italic;
+  color: var(--terra-deep);
+}
+.briefing__sub {
+  margin-top: 10px;
+  font-size: 14.5px;
+  color: var(--ink-70);
+  max-width: 46ch;
+}
+.briefing__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/* Calm empty state — the briefing is quiet for now. */
+.briefing__empty {
+  margin-top: 6px;
+  padding: 30px 28px;
+  border-radius: var(--radius-card);
+  box-shadow: inset 0 0 0 1px var(--line);
+  background:
+    linear-gradient(180deg, rgba(247, 242, 232, 0.5), rgba(247, 242, 232, 0.2));
+}
+.briefing__empty .kicker {
+  margin-bottom: 12px;
+}
+.briefing__empty p {
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.4;
+  color: var(--ink-70);
+  max-width: 40ch;
+}
+
+/* --- Right column ----------------------------------------- */
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  min-height: 0;
+  overflow-y: auto;
+  padding-top: 4px;
+}
+.panel {
+  padding: 20px;
+}
+.panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.panel__title {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+/* Next-visit block */
+.next-visit__when {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--terra-deep);
+  margin-bottom: 8px;
+}
+.next-visit__who {
+  font-family: var(--serif);
+  font-size: 21px;
+  line-height: 1.2;
+}
+.next-visit__where {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--ink-70);
+}
+.next-visit__meta {
+  margin-top: 14px;
+  padding-top: 13px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 18px;
+}
+.next-visit__meta div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.next-visit__meta dt {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-45);
+}
+.next-visit__meta dd {
+  font-size: 13px;
+}
+
+/* Assistant activity summary */
+.activity__row {
+  display: flex;
+  gap: 12px;
+  padding: 11px 0;
+  border-top: 1px solid var(--line);
+}
+.activity__row:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+.activity__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex: none;
+  background: var(--moss);
+}
+.activity__dot--drafted {
+  background: var(--terra);
+}
+.activity__text {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-70);
+}
+.activity__time {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-45);
+}
+.activity__empty {
+  font-size: 13px;
+  color: var(--ink-45);
+  font-style: italic;
+}
+
+/* --- Conversation bar (always present) -------------------- */
+.convo {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  padding: 14px 0 20px;
+  background: linear-gradient(180deg, rgba(242, 235, 221, 0) 0%, var(--paper-2) 38%);
+}
+.convo__inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px 10px 20px;
+  border-radius: var(--radius-pill);
+  background: var(--card);
+  box-shadow: var(--shadow-warm), var(--shadow-inset-line);
+}
+.convo__field {
+  flex: 1;
+  font-size: 14.5px;
+  color: var(--ink-45);
+  user-select: none;
+}
+.convo__mic {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--terra);
+  color: var(--paper);
+  box-shadow: 0 8px 20px -8px rgba(192, 94, 58, 0.7);
+  transition: transform var(--reveal), background var(--reveal);
+}
+.convo__mic:hover {
+  background: var(--terra-deep);
+  transform: translateY(-1px);
+}
+.convo__send {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--ink-45);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+/* --- Responsive — collapses gracefully -------------------- */
+@media (max-width: 1080px) {
+  .shell__body {
+    grid-template-columns: minmax(0, 1fr) var(--right-w);
+  }
+  .rail {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .shell__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .aside {
+    display: none;
+  }
+}
