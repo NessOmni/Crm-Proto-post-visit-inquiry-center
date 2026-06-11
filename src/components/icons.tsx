@@ -61,3 +61,41 @@ export const IconReplay = (p: SVGProps<SVGSVGElement>) => (
     <path d="M4 4v4h4" />
   </svg>
 );
+
+export const IconCheck = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 14, height: 14, ...p })}>
+    <path d="M4.5 12.5 9.5 17.5 19.5 6.5" />
+  </svg>
+);
+
+export const IconClose = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 16, height: 16, ...p })}>
+    <path d="M6 6l12 12M18 6 6 18" />
+  </svg>
+);
+
+export const IconArrow = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 15, height: 15, ...p })}>
+    <path d="M5 12h13M12 5.5 18.5 12 12 18.5" />
+  </svg>
+);
+
+/* Citation source markers */
+export const IconQuote = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 12, height: 12, ...p })}>
+    <path d="M9 7H6a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1.5L6 17M20 7h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1.5L17 17" />
+  </svg>
+);
+
+export const IconWaveSrc = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 12, height: 12, ...p })}>
+    <path d="M5 10v4M9 7v10M12 4v16M15 8v8M19 11v2" />
+  </svg>
+);
+
+export const IconRecordSrc = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 12, height: 12, ...p })}>
+    <rect x="4" y="5" width="16" height="14" rx="2" />
+    <path d="M4 9h16" />
+  </svg>
+);

@@ -1,9 +1,12 @@
-/* The calm briefing — the home. Mostly empty for now;
-   the two flows will land their decision cards here. */
-import type { Substrate } from "../data/types";
+/* The calm briefing — the home. The Flow 1 decision card lands here
+   once the voice note is processed; otherwise it stays quiet. */
+import { useDemo } from "../state/DemoContext";
+import { DecisionCard } from "./flow1/DecisionCard";
 
-export function Briefing({ substrate }: { substrate: Substrate }) {
+export function Briefing() {
+  const { substrate, phase } = useDemo();
   const { agent } = substrate;
+  const hasCard = phase === "ready" || phase === "approved";
 
   return (
     <main className="briefing" aria-label="Briefing">
@@ -21,13 +24,17 @@ export function Briefing({ substrate }: { substrate: Substrate }) {
       </header>
 
       <section className="briefing__cards">
-        <div className="briefing__empty">
-          <div className="kicker">The briefing</div>
-          <p>
-            Quiet for the moment. Decision cards will land here as the day's
-            work is prepared for your review.
-          </p>
-        </div>
+        {hasCard ? (
+          <DecisionCard />
+        ) : (
+          <div className="briefing__empty">
+            <div className="kicker">The briefing</div>
+            <p>
+              Quiet for the moment. Decision cards will land here as the day's
+              work is prepared for your review.
+            </p>
+          </div>
+        )}
       </section>
     </main>
   );

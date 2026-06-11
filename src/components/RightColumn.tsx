@@ -1,8 +1,9 @@
 /* Right column — next-visit block + Assistant activity summary.
-   Calm and quiet at this stage. */
-import type { Substrate } from "../data/types";
+   The activity log fills in as Flow 1 actions are approved. */
+import { useDemo } from "../state/DemoContext";
 
-export function RightColumn({ substrate }: { substrate: Substrate }) {
+export function RightColumn() {
+  const { substrate, activity } = useDemo();
   const roquette = substrate.biens.find((b) => b.id === "bien-roquette")!;
 
   return (
@@ -38,10 +39,30 @@ export function RightColumn({ substrate }: { substrate: Substrate }) {
           <span className="panel__title">Assistant activity</span>
           <span className="kicker">Today</span>
         </div>
-        <p className="activity__empty">
-          Nothing logged yet. Approved actions and handled work will appear
-          here.
-        </p>
+        {activity.length === 0 ? (
+          <p className="activity__empty">
+            Nothing logged yet. Approved actions and handled work will appear
+            here.
+          </p>
+        ) : (
+          <div>
+            {activity.map((entry) => (
+              <div className="activity__row" key={entry.id}>
+                <span
+                  className={`activity__dot ${
+                    entry.tier === "drafted" ? "activity__dot--drafted" : ""
+                  }`}
+                />
+                <span className="activity__text">
+                  {entry.text}
+                  <span className="activity__time">
+                    {entry.tag} · {entry.time}
+                  </span>
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </aside>
   );

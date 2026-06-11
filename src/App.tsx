@@ -1,14 +1,14 @@
-import { useMemo } from "react";
-import { loadSubstrate } from "./data/fixtures";
+import { useDemo } from "./state/DemoContext";
 import { LeftRail } from "./components/LeftRail";
 import { Briefing } from "./components/Briefing";
 import { RightColumn } from "./components/RightColumn";
 import { ConversationBar } from "./components/ConversationBar";
+import { VoiceCapture } from "./components/flow1/VoiceCapture";
+import { ReviewSheet } from "./components/flow1/ReviewSheet";
 import { IconReplay } from "./components/icons";
 
 export default function App() {
-  // In-memory substrate, cloned from the frozen seed — resettable later.
-  const substrate = useMemo(() => loadSubstrate(), []);
+  const { substrate, replay } = useDemo();
   const { agency, agent } = substrate;
 
   return (
@@ -22,7 +22,7 @@ export default function App() {
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-            <button className="replay" aria-label="Replay the scene">
+            <button className="replay" aria-label="Replay the scene" onClick={replay}>
               <IconReplay />
               Replay the scene
             </button>
@@ -41,12 +41,15 @@ export default function App() {
 
         <div className="shell__body">
           <LeftRail />
-          <Briefing substrate={substrate} />
-          <RightColumn substrate={substrate} />
+          <Briefing />
+          <RightColumn />
         </div>
 
+        <VoiceCapture />
         <ConversationBar />
       </div>
+
+      <ReviewSheet />
     </div>
   );
 }

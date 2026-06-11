@@ -327,3 +327,45 @@ export const seed: Substrate = {
 export function loadSubstrate(): Substrate {
   return structuredClone(seed);
 }
+
+/* ============================================================
+   Flow 1 — the Mercier moment
+   The dictated voice note, the processing beat, and the four
+   prepared outputs (in review order). Deterministic; the
+   "transcript" is a fixture, not real transcription.
+   ============================================================ */
+
+export const flow1 = {
+  bienId: "bien-lamartine",
+  contactId: "contact-mercier",
+  visitId: "visit-mercier-lamartine",
+  durationLabel: "0:31",
+
+  /** ~30s post-visit dictation. Streams in word by word from here. */
+  transcript:
+    "Bon, je sors de la visite du 12 rue Lamartine avec Monsieur Mercier. " +
+    "Préviens Madame Fontaine que la visite s'est très bien passée, il a vraiment accroché. " +
+    "Mercier était emballé par la lumière, un peu freiné par le prix — " +
+    "il a tiqué sur les 845, et sur la cuisine à refaire. " +
+    "Prépare-lui un mot de suivi, qu'on garde le contact pour une deuxième visite. " +
+    "Ah, et au fait : lui aussi a un bien à vendre, un trois-pièces vers République. " +
+    "Note-le, il faudra lui proposer une estimation.",
+
+  /** The assistant visibly doing the work. */
+  processingSteps: [
+    "Transcribing the voice note",
+    "Matching against the Mercier visit · 12 rue Lamartine",
+    "Drafting the owner update",
+    "Preparing the buyer follow-up",
+    "Logging objections",
+    "Detecting a second transaction",
+  ],
+
+  /** The four outputs, in the review-sheet order. */
+  outputIds: [
+    "comm-owner-update",
+    "comm-buyer-followup",
+    "comm-objection",
+    "comm-second-tx",
+  ],
+} as const;

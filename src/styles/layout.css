@@ -349,6 +349,10 @@
   background: var(--terra-deep);
   transform: translateY(-1px);
 }
+.convo__mic:disabled {
+  cursor: default;
+  animation: pulse 1.2s ease-in-out infinite;
+}
 .convo__send {
   display: grid;
   place-items: center;

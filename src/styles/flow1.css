@@ -1,0 +1,496 @@
+/* ============================================================
+   Flow 1 — the Mercier moment
+   Voice capture · processing beat · decision card · review sheet
+   ============================================================ */
+
+/* --- Property photography + gradient fallback ------------- */
+.photo {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #cdb79a 0%, #b98a64 48%, #9c6a48 100%);
+}
+.photo[data-seed="1"] {
+  background: linear-gradient(135deg, #c9b596 0%, #a98a6a 50%, #7e8a5c 120%);
+}
+.photo[data-seed="2"] {
+  background: linear-gradient(135deg, #d6c2a4 0%, #c0855f 55%, #8c4f33 120%);
+}
+.photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.photo--fallback::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 60% at 25% 20%, rgba(247, 242, 232, 0.35), rgba(247, 242, 232, 0) 60%),
+    linear-gradient(180deg, rgba(33, 28, 22, 0) 40%, rgba(33, 28, 22, 0.28) 100%);
+}
+
+/* ============================================================
+   Voice capture sheet — rises above the conversation bar
+   ============================================================ */
+.capture {
+  margin: 0 0 -2px;
+  padding: 22px 24px 26px;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  background: var(--card);
+  box-shadow: 0 -22px 60px -34px rgba(33, 28, 22, 0.5), var(--shadow-inset-line);
+  animation: rise 0.5s var(--ease-calm) both;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.capture__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.capture__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--terra-deep);
+}
+.capture__pulse {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--terra);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(192, 94, 58, 0.4);
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 0 7px rgba(192, 94, 58, 0);
+  }
+}
+.capture__duration {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--ink-45);
+}
+
+/* Waveform — calm animated bars */
+.wave {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 34px;
+  margin-bottom: 16px;
+}
+.wave span {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--terra);
+  opacity: 0.55;
+  animation: wave 1.1s ease-in-out infinite;
+}
+@keyframes wave {
+  0%, 100% {
+    height: 20%;
+  }
+  50% {
+    height: 100%;
+  }
+}
+
+/* Streaming transcript */
+.capture__transcript {
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--ink);
+  min-height: 3.5em;
+}
+.capture__caret {
+  display: inline-block;
+  width: 2px;
+  height: 0.95em;
+  margin-left: 2px;
+  vertical-align: -0.08em;
+  background: var(--terra);
+  animation: blink 1s steps(2) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Processing checklist */
+.capture__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.step {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 9px 2px;
+  font-size: 14.5px;
+  color: var(--ink-45);
+  transition: color var(--reveal);
+}
+.step--active {
+  color: var(--ink);
+}
+.step--done {
+  color: var(--ink-70);
+}
+.step__icon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  flex: none;
+  box-shadow: inset 0 0 0 1.5px var(--line);
+  color: var(--moss);
+  transition: box-shadow var(--reveal), background var(--reveal);
+}
+.step--active .step__icon {
+  box-shadow: inset 0 0 0 1.5px rgba(192, 94, 58, 0.5);
+}
+.step--done .step__icon {
+  background: rgba(126, 138, 92, 0.16);
+  box-shadow: inset 0 0 0 1.5px rgba(126, 138, 92, 0.4);
+}
+.step__spinner {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.6px solid var(--terra-soft);
+  border-top-color: var(--terra);
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================
+   Decision card — hero treatment for the live decision
+   ============================================================ */
+.decision {
+  position: relative;
+  overflow: hidden;
+  animation: land 0.6s var(--ease-calm) both;
+}
+@keyframes land {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+/* Soft flash on land — a gentle wash, not a bounce. */
+.decision::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(192, 94, 58, 0.16), rgba(192, 94, 58, 0));
+  animation: flash 1.5s var(--ease-calm) both;
+}
+@keyframes flash {
+  0% {
+    opacity: 0;
+  }
+  22% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.decision__banner {
+  height: 150px;
+}
+.decision__body {
+  padding: 20px 22px 22px;
+}
+.decision__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.decision__title {
+  font-family: var(--serif);
+  font-size: 25px;
+  line-height: 1.16;
+  margin-bottom: 8px;
+}
+.decision__summary {
+  font-size: 14px;
+  color: var(--ink-70);
+  max-width: 52ch;
+  margin-bottom: 18px;
+}
+.decision__outputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.out-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--ink-70);
+  padding: 7px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(33, 28, 22, 0.035);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.out-chip__n {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-45);
+}
+.decision__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 11px 18px;
+  border-radius: var(--radius-pill);
+  transition: transform var(--reveal), background var(--reveal), box-shadow var(--reveal);
+}
+.btn--primary {
+  background: var(--terra);
+  color: var(--paper);
+  box-shadow: 0 12px 26px -14px rgba(192, 94, 58, 0.8);
+}
+.btn--primary:hover {
+  background: var(--terra-deep);
+  transform: translateY(-1px);
+}
+.btn--ghost {
+  color: var(--ink-70);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.btn--ghost:hover {
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(33, 28, 22, 0.26);
+}
+
+/* Resolved state */
+.decision--resolved .decision__resolved {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--moss);
+}
+.decision__check {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(126, 138, 92, 0.16);
+  color: var(--moss);
+}
+
+/* ============================================================
+   Review slide-over sheet
+   ============================================================ */
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(33, 28, 22, 0.32);
+  backdrop-filter: blur(2px);
+  animation: fade 0.45s var(--ease-calm) both;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.sheet {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 41;
+  height: 100%;
+  width: min(560px, 94vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  box-shadow: -30px 0 80px -40px rgba(33, 28, 22, 0.6);
+  animation: slide-in 0.5s var(--ease-calm) both;
+}
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.sheet__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 26px 26px 18px;
+  border-bottom: 1px solid var(--line);
+}
+.sheet__title {
+  font-family: var(--serif);
+  font-size: 24px;
+  line-height: 1.15;
+  margin-top: 8px;
+}
+.sheet__close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--ink-45);
+  box-shadow: inset 0 0 0 1px var(--line);
+  flex: none;
+}
+.sheet__close:hover {
+  color: var(--ink);
+}
+.sheet__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 26px 26px;
+}
+.output {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+.output:last-child {
+  border-bottom: none;
+}
+.output__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.output__label {
+  font-size: 15px;
+  font-weight: 500;
+}
+.output__channel {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-45);
+}
+.output__recipient {
+  font-size: 12.5px;
+  color: var(--ink-45);
+  margin-bottom: 12px;
+}
+.output__body {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-70);
+  white-space: pre-wrap;
+  padding: 14px 16px;
+  border-radius: var(--radius-soft);
+  background: var(--card);
+  box-shadow: var(--shadow-inset-line);
+}
+.output__cites {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+/* Citation chip */
+.cite {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--terra-deep);
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--terra-soft);
+  cursor: help;
+}
+.cite svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0.8;
+}
+
+.sheet__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 26px 22px;
+  border-top: 1px solid var(--line);
+  background: var(--paper-2);
+}
+.sheet__foot-note {
+  font-size: 12px;
+  color: var(--ink-45);
+  max-width: 26ch;
+}
+.btn--lg {
+  padding: 13px 24px;
+  font-size: 14px;
+}
+.btn--done {
+  background: rgba(126, 138, 92, 0.16);
+  color: var(--moss);
+  box-shadow: inset 0 0 0 1px rgba(126, 138, 92, 0.4);
+  cursor: default;
+}
