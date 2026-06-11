@@ -64,6 +64,21 @@ export function RightColumn() {
           </div>
         )}
       </section>
+
+      <div className="keys">
+        <span className="keys__label">Presenter keys</span>
+        <ul>
+          <li>
+            <kbd>1</kbd> Voice note
+          </li>
+          <li>
+            <kbd>2</kbd> Lead Lens
+          </li>
+          <li>
+            <kbd>R</kbd> Replay the scene
+          </li>
+        </ul>
+      </div>
     </aside>
   );
 }

@@ -1,42 +1,58 @@
 /* ============================================================
    Omnicasa — design tokens
-   The elevated art direction. Matches the philosophy deck.
+   Clean, light, functional SaaS aesthetic. White surfaces on a
+   faint gray canvas, hairline borders, one indigo accent for
+   every primary action. The interface recedes; data is the UI.
    ============================================================ */
 
 :root {
-  /* --- Colour ------------------------------------------------ */
-  --paper: #f2ebdd;
-  --paper-2: #ece3d1;
-  --card: #f7f2e8;
-  --ink: #211c16;
-  --ink-70: #4d463b;
-  --ink-45: rgba(33, 28, 22, 0.46);
-  --terra: #c05e3a;
-  --terra-deep: #a44e2e;
-  --terra-soft: rgba(192, 94, 58, 0.12);
-  --moss: #7e8a5c;
-  --line: rgba(33, 28, 22, 0.14);
+  /* --- Neutrals --------------------------------------------- */
+  --canvas: #f7f7f8;
+  --surface: #ffffff;
+  --border: #ececec; /* panels, cards */
+  --border-2: #e5e7eb; /* form-row separators */
+  --text: #1a1a1a;
+  --text-2: #6b7280;
+  --text-3: #9ca3af;
 
-  /* --- Type -------------------------------------------------- */
-  --serif: "Instrument Serif", "Times New Roman", serif;
-  --sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* --- Accent ----------------------------------------------- */
+  --accent: #4263eb;
+  --accent-hover: #3654d1;
+  --accent-tint: rgba(66, 99, 235, 0.08);
 
-  /* --- Shape & elevation ------------------------------------- */
-  --radius-card: 20px;
-  --radius-soft: 16px;
-  --radius-pill: 999px;
-  --shadow-warm: 0 18px 50px -22px rgba(33, 28, 22, 0.42);
-  --shadow-warm-lift: 0 26px 70px -28px rgba(33, 28, 22, 0.5);
-  --shadow-inset-line: inset 0 0 0 1px var(--line);
+  /* --- Functional ------------------------------------------- */
+  --success: #22c55e;
 
-  /* --- Motion ------------------------------------------------ */
-  --ease-calm: cubic-bezier(0.22, 0.61, 0.36, 1);
-  --reveal: 0.55s var(--ease-calm);
+  /* --- Avatar pastels --------------------------------------- */
+  --pastel-lavender: #e8e6fb;
+  --pastel-lavender-ink: #5b53b8;
+  --pastel-mint: #def3e6;
+  --pastel-mint-ink: #2f8559;
+  --pastel-peach: #fce8df;
+  --pastel-peach-ink: #b46a47;
+  --pastel-sky: #e0eefb;
+  --pastel-sky-ink: #3d6fa6;
 
-  /* --- Rhythm ------------------------------------------------ */
-  --gap: 22px;
-  --rail-w: 232px;
+  /* --- Type ------------------------------------------------- */
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+
+  /* --- Shape ------------------------------------------------ */
+  --r-btn: 8px;
+  --r-input: 8px;
+  --r-card: 12px;
+  --r-thumb: 10px;
+  --r-pill: 999px;
+
+  /* --- A whisper of shadow, floating elements only ---------- */
+  --shadow-pop: 0 8px 24px -12px rgba(17, 24, 39, 0.18);
+
+  /* --- Motion (instant state changes + subtle hovers) ------- */
+  --t: 0.12s ease;
+
+  /* --- Rhythm ----------------------------------------------- */
+  --gap: 18px;
+  --rail-w: 48px;
   --right-w: 320px;
 }
 
@@ -60,10 +76,11 @@ body,
 body {
   font-family: var(--sans);
   font-weight: 400;
-  color: var(--ink);
-  background: var(--paper);
+  color: var(--text);
+  background: var(--canvas);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -76,72 +93,94 @@ button {
 }
 
 /* ============================================================
-   Ambient canvas — the warm gradient + faint grain
+   Canvas — flat light gray, no gradient, no grain
    ============================================================ */
 .canvas {
   position: relative;
   min-height: 100%;
-  background:
-    radial-gradient(120% 90% at 12% 0%, rgba(192, 94, 58, 0.10) 0%, rgba(192, 94, 58, 0) 46%),
-    radial-gradient(90% 80% at 100% 8%, rgba(126, 138, 92, 0.12) 0%, rgba(126, 138, 92, 0) 50%),
-    linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
-}
-
-/* Faint grain overlay — deterministic inline SVG noise, no network. */
-.canvas::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.4;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
+  background: var(--canvas);
 }
 
 /* ============================================================
-   Type utilities
+   Type utilities (class names kept; restyled to the new system)
+   Hierarchy comes from weight and gray-value, not size jumps.
    ============================================================ */
 .kicker {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-45);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-2);
 }
 
 .serif {
-  font-family: var(--serif);
-  font-weight: 400;
-  letter-spacing: 0.005em;
+  font-family: var(--sans);
+  font-weight: 600;
+  letter-spacing: 0;
 }
 
 /* ============================================================
-   Card — the shared surface
+   Buttons
    ============================================================ */
-.card {
-  background: var(--card);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-warm), var(--shadow-inset-line);
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: var(--r-btn);
+  transition: background var(--t), border-color var(--t), color var(--t);
+}
+.btn--primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn--primary:hover {
+  background: var(--accent-hover);
+}
+.btn--ghost {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-2);
+}
+.btn--ghost:hover {
+  border-color: var(--text-3);
+}
+.btn--lg {
+  height: 36px;
+  padding: 0 18px;
+  font-size: 14px;
+}
+.btn--done {
+  background: var(--surface);
+  color: var(--success);
+  border: 1px solid var(--border-2);
+  cursor: default;
+}
+.btn:disabled {
+  cursor: default;
 }
 
 /* ============================================================
-   Trust-tier badges
+   Trust-tier badges — outline pills. Indigo dot = "this is the
+   action" (drafted, needs you); green dot = handled.
    ============================================================ */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font-family: var(--mono);
-  font-size: 10.5px;
+  gap: 6px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 5px 11px;
-  border-radius: var(--radius-pill);
-  white-space: nowrap;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border-2);
+  background: var(--surface);
+  color: var(--text-2);
 }
 .badge::before {
   content: "";
@@ -149,40 +188,34 @@ button {
   height: 6px;
   border-radius: 50%;
 }
-.badge--auto {
-  color: var(--moss);
-  background: rgba(126, 138, 92, 0.12);
-  box-shadow: inset 0 0 0 1px rgba(126, 138, 92, 0.28);
-}
 .badge--auto::before {
-  background: var(--moss);
+  background: var(--success);
 }
 .badge--drafted {
-  color: var(--terra-deep);
-  background: var(--terra-soft);
-  box-shadow: inset 0 0 0 1px rgba(192, 94, 58, 0.3);
+  color: var(--accent);
+  border-color: rgba(66, 99, 235, 0.28);
 }
 .badge--drafted::before {
-  background: var(--terra);
+  background: var(--accent);
 }
 
-/* Keyboard cue chip — used in the rail's presenter hints */
+/* Keyboard cue chip */
 kbd {
   display: inline-grid;
   place-items: center;
-  min-width: 17px;
-  height: 17px;
+  min-width: 18px;
+  height: 18px;
   padding: 0 4px;
-  border-radius: 5px;
-  background: var(--card);
-  box-shadow: inset 0 0 0 1px var(--line);
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--ink-70);
+  border-radius: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--text-2);
 }
 
 /* ============================================================
-   Reduced motion — respect the agent's system preference
+   Reduced motion
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *,

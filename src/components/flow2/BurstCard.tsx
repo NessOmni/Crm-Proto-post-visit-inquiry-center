@@ -28,7 +28,7 @@ export function BurstCard() {
       </p>
 
       <div className="burst__preview">
-        <Avatar initials={top.initials} warmth={top.warmth} size="sm" />
+        <Avatar initials={top.initials} size="sm" />
         <div style={{ flex: 1, minWidth: 0 }}>
           <span className="burst__preview-label">Warmest lead</span>
           <div>

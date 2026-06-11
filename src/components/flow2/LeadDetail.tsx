@@ -47,7 +47,7 @@ export function LeadDetail({ lead }: { lead: Lead }) {
   return (
     <div className="lead-detail">
       <div className="lead-detail__head">
-        <Avatar initials={lead.initials} warmth={lead.warmth} size="lg" />
+        <Avatar initials={lead.initials} size="lg" />
         <div>
           <div className="lead-detail__name">
             {lead.firstName} {lead.lastName}

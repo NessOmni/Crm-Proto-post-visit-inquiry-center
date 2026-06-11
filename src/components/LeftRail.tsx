@@ -1,4 +1,5 @@
-/* Left rail — depth nav. Present but inert for now. */
+/* Left rail — a narrow icon rail. Present but inert for now.
+   Labels surface as tooltips; icon-only is the back-office idiom. */
 import { IconBiens, IconContacts, IconAgenda, IconPerformance } from "./icons";
 
 const items = [
@@ -11,30 +12,20 @@ const items = [
 export function LeftRail() {
   return (
     <nav className="rail" aria-label="Depth">
-      <div className="kicker rail__label">Atelier</div>
       {items.map(({ label, Icon }) => (
-        <button key={label} className="rail__item" aria-disabled="true" tabIndex={-1}>
+        <button
+          key={label}
+          className="rail__item"
+          aria-label={label}
+          title={label}
+          aria-disabled="true"
+          tabIndex={-1}
+        >
           <Icon className="rail__item-icon" />
           <span className="rail__item-text">{label}</span>
         </button>
       ))}
       <div className="rail__spacer" />
-      <div className="rail__foot">
-        <span className="kicker" style={{ display: "block", marginBottom: 10 }}>
-          Presenter keys
-        </span>
-        <ul className="rail__keys">
-          <li>
-            <kbd>1</kbd> Voice note
-          </li>
-          <li>
-            <kbd>2</kbd> Lead Lens
-          </li>
-          <li>
-            <kbd>R</kbd> Replay the scene
-          </li>
-        </ul>
-      </div>
     </nav>
   );
 }

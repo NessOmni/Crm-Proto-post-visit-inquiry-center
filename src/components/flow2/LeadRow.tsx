@@ -32,7 +32,7 @@ export function LeadRow({
         className={`lead-row__dot ${dotClass}`}
         title={`Status: ${lead.status}`}
       />
-      <Avatar initials={lead.initials} warmth={lead.warmth} size="sm" />
+      <Avatar initials={lead.initials} size="sm" />
       <span className="lead-row__main">
         <span className="lead-row__name">
           {lead.firstName} {lead.lastName}
