@@ -20,9 +20,20 @@ export function LeftRail() {
       ))}
       <div className="rail__spacer" />
       <div className="rail__foot">
-        Omnicasa
-        <br />
-        Briefing du jour
+        <span className="kicker" style={{ display: "block", marginBottom: 10 }}>
+          Presenter keys
+        </span>
+        <ul className="rail__keys">
+          <li>
+            <kbd>1</kbd> Voice note
+          </li>
+          <li>
+            <kbd>2</kbd> Lead Lens
+          </li>
+          <li>
+            <kbd>R</kbd> Replay the scene
+          </li>
+        </ul>
       </div>
     </nav>
   );

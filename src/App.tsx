@@ -1,4 +1,5 @@
 import { useDemo } from "./state/DemoContext";
+import { useKeyboardNav } from "./state/useKeyboardNav";
 import { LeftRail } from "./components/LeftRail";
 import { Briefing } from "./components/Briefing";
 import { RightColumn } from "./components/RightColumn";
@@ -11,6 +12,7 @@ import { IconReplay } from "./components/icons";
 export default function App() {
   const { substrate, replay } = useDemo();
   const { agency, agent } = substrate;
+  useKeyboardNav();
 
   return (
     <div className="canvas">

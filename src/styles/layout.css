@@ -143,12 +143,19 @@
   margin: 0 12px;
   padding-top: 14px;
   border-top: 1px solid var(--line);
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+}
+.rail__keys {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.rail__keys li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
   color: var(--ink-45);
-  line-height: 1.7;
 }
 
 /* --- Briefing (centre, the home) -------------------------- */
