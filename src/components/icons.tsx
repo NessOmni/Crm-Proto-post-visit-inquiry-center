@@ -80,6 +80,38 @@ export const IconArrow = (p: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+export const IconUsers = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <circle cx="9" cy="8" r="3" />
+    <path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 6a3 3 0 0 1 0 5.6M16.5 13.4A5.5 5.5 0 0 1 20.5 19" />
+  </svg>
+);
+
+export const IconBold = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 15, height: 15, ...p })}>
+    <path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z" />
+  </svg>
+);
+
+export const IconItalic = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 15, height: 15, ...p })}>
+    <path d="M14 5h-4M14 19h-4M14.5 5 9.5 19" />
+  </svg>
+);
+
+export const IconList = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 15, height: 15, ...p })}>
+    <path d="M9 7h11M9 12h11M9 17h11M4.5 7h.01M4.5 12h.01M4.5 17h.01" />
+  </svg>
+);
+
+export const IconLink = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 15, height: 15, ...p })}>
+    <path d="M10 14a4 4 0 0 0 5.66 0l2.5-2.5a4 4 0 0 0-5.66-5.66L11 7.3" />
+    <path d="M14 10a4 4 0 0 0-5.66 0l-2.5 2.5a4 4 0 0 0 5.66 5.66L13 16.7" />
+  </svg>
+);
+
 /* Citation source markers */
 export const IconQuote = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base({ width: 12, height: 12, ...p })}>

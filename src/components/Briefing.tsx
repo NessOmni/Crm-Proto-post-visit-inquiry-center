@@ -2,6 +2,7 @@
    once the voice note is processed; otherwise it stays quiet. */
 import { useDemo } from "../state/DemoContext";
 import { DecisionCard } from "./flow1/DecisionCard";
+import { BurstCard } from "./flow2/BurstCard";
 
 export function Briefing() {
   const { substrate, phase } = useDemo();
@@ -24,17 +25,8 @@ export function Briefing() {
       </header>
 
       <section className="briefing__cards">
-        {hasCard ? (
-          <DecisionCard />
-        ) : (
-          <div className="briefing__empty">
-            <div className="kicker">The briefing</div>
-            <p>
-              Quiet for the moment. Decision cards will land here as the day's
-              work is prepared for your review.
-            </p>
-          </div>
-        )}
+        {hasCard && <DecisionCard />}
+        <BurstCard />
       </section>
     </main>
   );

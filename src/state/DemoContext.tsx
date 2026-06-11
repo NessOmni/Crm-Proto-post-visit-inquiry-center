@@ -41,11 +41,20 @@ interface DemoState {
 
   activity: ActivityEntry[];
 
+  // Flow 2 — the Lead Lens
+  lensOpen: boolean;
+  selectedLeadId: string | null;
+  repliedLeadIds: Record<string, boolean>;
+
   // actions
   startVoiceNote: () => void;
   openReview: () => void;
   closeReview: () => void;
   approve: () => void;
+  openLens: () => void;
+  closeLens: () => void;
+  selectLead: (id: string) => void;
+  sendReply: (id: string) => void;
   replay: () => void;
 }
 
@@ -84,6 +93,11 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [activity, setActivity] = useState<ActivityEntry[]>([]);
+
+  // Flow 2
+  const [lensOpen, setLensOpen] = useState(false);
+  const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
+  const [repliedLeadIds, setRepliedLeadIds] = useState<Record<string, boolean>>({});
 
   const tokens = useMemo(() => flow1.transcript.split(" "), []);
   const approveTimer = useRef<number | null>(null);
@@ -137,6 +151,25 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     approveTimer.current = window.setTimeout(() => setReviewOpen(false), 680);
   }, [substrate]);
 
+  // --- Flow 2 actions ---
+  const openLens = useCallback(() => {
+    setSelectedLeadId((prev) => prev ?? substrate.leads[0]?.id ?? null);
+    setLensOpen(true);
+  }, [substrate.leads]);
+
+  const closeLens = useCallback(() => setLensOpen(false), []);
+  const selectLead = useCallback((id: string) => setSelectedLeadId(id), []);
+
+  const sendReply = useCallback((id: string) => {
+    setRepliedLeadIds((prev) => ({ ...prev, [id]: true }));
+    setSubstrate((prev) => ({
+      ...prev,
+      leads: prev.leads.map((l) =>
+        l.id === id ? { ...l, status: "active" } : l,
+      ),
+    }));
+  }, []);
+
   const replay = useCallback(() => {
     if (approveTimer.current) window.clearTimeout(approveTimer.current);
     setSubstrate(loadSubstrate());
@@ -145,6 +178,9 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     setStepIndex(0);
     setReviewOpen(false);
     setActivity([]);
+    setLensOpen(false);
+    setSelectedLeadId(null);
+    setRepliedLeadIds({});
   }, []);
 
   const transcriptText = useMemo(
@@ -160,10 +196,17 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     stepIndex,
     reviewOpen,
     activity,
+    lensOpen,
+    selectedLeadId,
+    repliedLeadIds,
     startVoiceNote,
     openReview,
     closeReview,
     approve,
+    openLens,
+    closeLens,
+    selectLead,
+    sendReply,
     replay,
   };
 

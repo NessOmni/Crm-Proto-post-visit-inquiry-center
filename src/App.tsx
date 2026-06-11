@@ -5,6 +5,7 @@ import { RightColumn } from "./components/RightColumn";
 import { ConversationBar } from "./components/ConversationBar";
 import { VoiceCapture } from "./components/flow1/VoiceCapture";
 import { ReviewSheet } from "./components/flow1/ReviewSheet";
+import { LeadLens } from "./components/flow2/LeadLens";
 import { IconReplay } from "./components/icons";
 
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
       </div>
 
       <ReviewSheet />
+      <LeadLens />
     </div>
   );
 }

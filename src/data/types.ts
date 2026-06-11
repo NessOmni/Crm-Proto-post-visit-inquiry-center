@@ -141,6 +141,18 @@ export interface Citation {
   quote: string;
 }
 
+/** One step in a lead's activity timeline (Flow 2). */
+export interface LeadEvent {
+  id: ID;
+  tier: TrustTier;
+  /** English UI label, e.g. "Auto-acknowledged". */
+  label: string;
+  /** Optional supporting detail. */
+  detail?: string;
+  /** Clock label, e.g. "01:14". */
+  time: string;
+}
+
 /** The full seed substrate both flows read. */
 export interface Substrate {
   agency: Agency;

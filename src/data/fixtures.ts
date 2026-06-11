@@ -8,7 +8,7 @@
    (names, streets, property details) is authentic French.
    ============================================================ */
 
-import type { Substrate } from "./types";
+import type { Substrate, LeadEvent } from "./types";
 
 /* --- Agency & agent --------------------------------------- */
 const agency: Substrate["agency"] = {
@@ -368,4 +368,89 @@ export const flow1 = {
     "comm-objection",
     "comm-second-tx",
   ],
+} as const;
+
+/* ============================================================
+   Flow 2 — the overnight burst
+   Leads arrived overnight, were deduplicated, acknowledged, and
+   ranked by warmth — all Automatic · handled. The Lead Lens is a
+   depth view the agent chooses to open. Deterministic & offline.
+   ============================================================ */
+
+/** Clock label HH:MM from an ISO time, optionally offset by minutes. */
+function clock(iso: string, addMin = 0): string {
+  const hh = Number(iso.slice(11, 13));
+  const mm = Number(iso.slice(14, 16));
+  const total = hh * 60 + mm + addMin;
+  const h = Math.floor(total / 60) % 24;
+  const m = ((total % 60) + 60) % 60;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+}
+
+/** Automatic-tier timeline the overnight assistant produced per lead. */
+function buildTimeline(leadId: string): LeadEvent[] {
+  const lead = leads.find((l) => l.id === leadId)!;
+  const events: LeadEvent[] = [
+    {
+      id: `${leadId}-recv`,
+      tier: "automatic",
+      label: "Lead received",
+      detail: `${lead.portal} · ${lead.bienId === "bien-roquette" ? "24 rue de la Roquette" : ""}`,
+      time: clock(lead.arrivedAt),
+    },
+    {
+      id: `${leadId}-ack`,
+      tier: "automatic",
+      label: "Auto-acknowledged",
+      detail: "Confirmation reply sent",
+      time: clock(lead.arrivedAt, 1),
+    },
+  ];
+  if (lead.dedupedFrom) {
+    events.push({
+      id: `${leadId}-dedup`,
+      tier: "automatic",
+      label: "Duplicate merged",
+      detail: lead.dedupedFrom,
+      time: clock(lead.arrivedAt, 2),
+    });
+  }
+  events.push({
+    id: `${leadId}-rank`,
+    tier: "automatic",
+    label: `Ranked ${lead.warmth}`,
+    detail: `Warmth score ${lead.score}`,
+    time: clock(lead.arrivedAt, 3),
+  });
+  return events;
+}
+
+/** Assistant-drafted reply for a lead — French, in the agent's voice. */
+function draftReply(firstName: string): string {
+  return (
+    `Bonjour ${firstName},\n\n` +
+    "Merci pour votre message concernant le 24 rue de la Roquette. " +
+    "L'appartement est toujours disponible et je serais ravie de vous le faire visiter. " +
+    "Seriez-vous disponible jeudi ou vendredi en fin de journée ?\n\n" +
+    "Pour présenter votre dossier au propriétaire, pourriez-vous me confirmer vos justificatifs " +
+    "de revenus et votre garant ?\n\n" +
+    "Bien à vous,\nCamille Roussel"
+  );
+}
+
+export const flow2 = {
+  bienId: "bien-roquette",
+  mandateId: "mandate-roquette",
+  /** What the assistant did overnight, for the burst-card summary. */
+  arrivedCount: 7,
+  dedupedCount: 1,
+  rankedCount: 6,
+  acknowledgedAt: "Overnight · 01:12–05:47",
+  draftSubject: "Votre demande — 24 rue de la Roquette",
+  replies: Object.fromEntries(
+    leads.map((l) => [l.id, draftReply(l.firstName)]),
+  ) as Record<string, string>,
+  timelines: Object.fromEntries(
+    leads.map((l) => [l.id, buildTimeline(l.id)]),
+  ) as Record<string, LeadEvent[]>,
 } as const;
