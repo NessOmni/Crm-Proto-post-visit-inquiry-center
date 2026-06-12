@@ -82,7 +82,14 @@ function buildActivity(substrate: Substrate): ActivityEntry[] {
       default:
         text = `Estimation opportunity flagged · ${who}`;
     }
-    return { id, text, tier: comm.tier, tag: "Approved", time: "Just now" };
+    // Concrete clock timestamp from the action's record.
+    return {
+      id,
+      text,
+      tier: comm.tier,
+      tag: "Approved",
+      time: comm.createdAt.slice(11, 16),
+    };
   });
 }
 

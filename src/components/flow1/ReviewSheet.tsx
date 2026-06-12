@@ -64,7 +64,8 @@ export function ReviewSheet() {
                   </span>
                 </div>
                 <div className="output__recipient">
-                  To {outputRecipient(substrate, comm)}
+                  {comm.channel === "internal" ? "Linked to: " : "To "}
+                  {outputRecipient(substrate, comm)}
                   {comm.subject ? ` · ${comm.subject}` : ""}
                 </div>
                 <div className="output__body">{comm.body}</div>

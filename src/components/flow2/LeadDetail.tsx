@@ -94,7 +94,7 @@ export function LeadDetail({ lead }: { lead: Lead }) {
           <div className="mandate-card__addr">{bien.address}</div>
           <div className="mandate-card__meta">
             {bien.postalCode} {bien.city} · {bien.surfaceM2} m² · {bien.rooms}{" "}
-            pièces · réf. {bien.reference}
+            rooms · ref. {bien.reference}
           </div>
           <div className="mandate-card__row">
             <span className="mandate-badge">
@@ -102,7 +102,7 @@ export function LeadDetail({ lead }: { lead: Lead }) {
               {mandate.active ? " · active" : ""}
             </span>
             <span className="mandate-card__price">
-              {bien.priceEur.toLocaleString("fr-FR")} € <small>/ mois</small>
+              {bien.priceEur.toLocaleString("fr-FR")} € <small>/ month</small>
             </span>
           </div>
         </div>

@@ -21,14 +21,14 @@ export function RightColumn() {
         <dl className="next-visit__meta">
           <div>
             <dt>Type</dt>
-            <dd>Location</dd>
+            <dd>Rental</dd>
           </div>
           <div>
             <dt>Surface</dt>
             <dd>{roquette.surfaceM2} m²</dd>
           </div>
           <div>
-            <dt>Loyer</dt>
+            <dt>Rent</dt>
             <dd>{roquette.priceEur.toLocaleString("fr-FR")} €</dd>
           </div>
         </dl>

@@ -7,13 +7,15 @@ import { BurstCard } from "./flow2/BurstCard";
 export function Briefing() {
   const { substrate, phase } = useDemo();
   const { agent } = substrate;
-  const hasCard = phase === "ready" || phase === "approved";
+  // Approval resolves the card out of the briefing; the four actions
+  // land in the Assistant activity panel instead.
+  const hasCard = phase === "ready";
 
   return (
     <main className="briefing" aria-label="Briefing">
       <header className="briefing__greeting">
         <div className="kicker" style={{ marginBottom: 12 }}>
-          Mercredi 10 juin · {substrate.agency.kicker}
+          Wednesday 10 June · {substrate.agency.kicker}
         </div>
         <h1 className="briefing__hello">
           Good morning, <em>{agent.firstName}</em>.
