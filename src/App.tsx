@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useDemo } from "./state/DemoContext";
 import { useKeyboardNav } from "./state/useKeyboardNav";
 import { LeftRail } from "./components/LeftRail";
@@ -13,6 +14,9 @@ export default function App() {
   const { substrate, replay } = useDemo();
   const { agency, agent } = substrate;
   useKeyboardNav();
+
+  // UI preference, kept out of the demo scene (not reset by Replay).
+  const [railCollapsed, setRailCollapsed] = useState(false);
 
   return (
     <div className="canvas">
@@ -42,8 +46,13 @@ export default function App() {
           </div>
         </header>
 
-        <div className="shell__body">
-          <LeftRail />
+        <div
+          className={`shell__body ${railCollapsed ? "shell__body--rail-collapsed" : ""}`}
+        >
+          <LeftRail
+            collapsed={railCollapsed}
+            onToggle={() => setRailCollapsed((c) => !c)}
+          />
           <Briefing />
           <RightColumn />
         </div>

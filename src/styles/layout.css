@@ -85,51 +85,101 @@
   color: var(--text-2);
 }
 
-/* --- Body: rail · briefing · right ------------------------ */
+/* --- Body: sidebar · briefing · right --------------------- */
 .shell__body {
+  --rail-w: 232px; /* expanded sidebar width */
   flex: 1;
   display: grid;
   grid-template-columns: var(--rail-w) minmax(0, 1fr) var(--right-w);
   min-height: 0;
+  transition: grid-template-columns 0.16s ease;
+}
+.shell__body--rail-collapsed {
+  --rail-w: 56px; /* retracted to a narrow icon rail */
 }
 
-/* --- Icon rail -------------------------------------------- */
-.rail {
+/* --- Sidebar (retractable) -------------------------------- */
+.sidebar {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 12px 0;
+  gap: 2px;
+  padding: 10px 10px 12px;
+  min-width: 0;
+  overflow: hidden;
   background: var(--surface);
   border-right: 1px solid var(--border);
 }
-.rail__label {
-  display: none;
+.sidebar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  padding: 0 4px;
+  margin-bottom: 6px;
 }
-.rail__item {
+.sidebar__title {
+  font-size: 12px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.sidebar__toggle {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   border-radius: var(--r-btn);
   color: var(--text-2);
+  flex: none;
   transition: background var(--t), color var(--t);
 }
-.rail__item:hover {
+.sidebar__toggle:hover {
   background: var(--canvas);
   color: var(--text);
 }
-.rail__item-icon {
+.sidebar__items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: var(--r-btn);
+  color: var(--text-2);
+  white-space: nowrap;
+  transition: background var(--t), color var(--t);
+}
+.sidebar__item:hover {
+  background: var(--canvas);
+  color: var(--text);
+}
+.sidebar__item-icon {
   width: 18px;
   height: 18px;
+  flex: none;
 }
-.rail__item-text {
-  display: none;
+.sidebar__item-text {
+  font-size: 14px;
 }
-.rail__spacer {
-  flex: 1;
+
+/* Collapsed — icon-only rail */
+.sidebar--collapsed {
+  padding: 10px 8px 12px;
 }
-.rail__foot {
+.sidebar--collapsed .sidebar__head {
+  justify-content: center;
+  padding: 0;
+}
+.sidebar--collapsed .sidebar__item {
+  justify-content: center;
+  gap: 0;
+  padding: 0;
+}
+.sidebar--collapsed .sidebar__item-text {
   display: none;
 }
 

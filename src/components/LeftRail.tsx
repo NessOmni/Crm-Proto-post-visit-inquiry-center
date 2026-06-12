@@ -1,6 +1,7 @@
-/* Left rail — a narrow icon rail. Present but inert for now.
-   Labels surface as tooltips; icon-only is the back-office idiom. */
+/* Left sidebar — Attio-style: labelled nav that retracts to a
+   narrow icon rail. Nav items are present but inert for now. */
 import { IconBiens, IconContacts, IconAgenda, IconPerformance } from "./icons";
+import { IconSidebar, IconChevronLeft } from "./icons";
 
 const items = [
   { label: "Biens", Icon: IconBiens },
@@ -9,23 +10,46 @@ const items = [
   { label: "Performance", Icon: IconPerformance },
 ];
 
-export function LeftRail() {
+export function LeftRail({
+  collapsed,
+  onToggle,
+}: {
+  collapsed: boolean;
+  onToggle: () => void;
+}) {
   return (
-    <nav className="rail" aria-label="Depth">
-      {items.map(({ label, Icon }) => (
+    <nav
+      className={`sidebar ${collapsed ? "sidebar--collapsed" : ""}`}
+      aria-label="Navigation"
+    >
+      <div className="sidebar__head">
+        {!collapsed && <span className="sidebar__title">Navigate</span>}
         <button
-          key={label}
-          className="rail__item"
-          aria-label={label}
-          title={label}
-          aria-disabled="true"
-          tabIndex={-1}
+          className="sidebar__toggle"
+          onClick={onToggle}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-expanded={!collapsed}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
-          <Icon className="rail__item-icon" />
-          <span className="rail__item-text">{label}</span>
+          {collapsed ? <IconSidebar /> : <IconChevronLeft />}
         </button>
-      ))}
-      <div className="rail__spacer" />
+      </div>
+
+      <div className="sidebar__items">
+        {items.map(({ label, Icon }) => (
+          <button
+            key={label}
+            className="sidebar__item"
+            aria-label={label}
+            title={collapsed ? label : undefined}
+            aria-disabled="true"
+            tabIndex={-1}
+          >
+            <Icon className="sidebar__item-icon" />
+            <span className="sidebar__item-text">{label}</span>
+          </button>
+        ))}
+      </div>
     </nav>
   );
 }

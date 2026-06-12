@@ -87,6 +87,19 @@ export const IconUsers = (p: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+export const IconSidebar = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <rect x="3.5" y="5" width="17" height="14" rx="2.5" />
+    <path d="M9.5 5v14" />
+  </svg>
+);
+
+export const IconChevronLeft = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 16, height: 16, ...p })}>
+    <path d="M14.5 6 8.5 12l6 6" />
+  </svg>
+);
+
 export const IconBold = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base({ width: 15, height: 15, ...p })}>
     <path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z" />
