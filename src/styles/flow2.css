@@ -16,6 +16,19 @@
   gap: 12px;
   margin-bottom: 12px;
 }
+.burst__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.burst__heading {
+  flex: 1;
+  min-width: 0;
+}
+.burst__heading .card-eyebrow {
+  margin-bottom: 4px;
+}
 .burst__title {
   font-size: 16px;
   font-weight: 600;

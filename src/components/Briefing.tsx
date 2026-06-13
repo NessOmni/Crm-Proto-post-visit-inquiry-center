@@ -4,6 +4,11 @@ import { useDemo } from "../state/DemoContext";
 import { DecisionCard } from "./flow1/DecisionCard";
 import { BurstCard } from "./flow2/BurstCard";
 import { AmbientCard } from "./AmbientCard";
+import { IconFileText, IconFileSignature, IconGauge } from "./icons";
+
+// Listing photo for the Sedaine mandate (gradient fallback when offline).
+const SEDAINE_PHOTO =
+  "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=400&q=70";
 
 export function Briefing() {
   const { substrate, phase } = useDemo();
@@ -35,19 +40,26 @@ export function Briefing() {
         {/* Tier 2 — ambient breadth cards. Compact, subordinate, inert
             CTAs. They show where the product is heading. */}
         <AmbientCard
-          eyebrow="Owner reporting · 3 mandates"
+          Icon={IconFileText}
+          workflow="Owner reporting"
+          subject="Hélène Fontaine, Marc Lefèvre +1"
           title="Monthly owner reports — 3 ready to send"
           body="Hélène Fontaine, Marc Lefèvre, +1 — each in your voice, comps included."
           cta="Review 3"
         />
         <AmbientCard
-          eyebrow="Mandate · 8 rue Sedaine"
+          Icon={IconFileSignature}
+          workflow="Mandate"
+          subject="8 rue Sedaine"
+          thumbUrl={SEDAINE_PHOTO}
           title="Mandate expires in 19 days"
           body="Renewal brief prepared — owner's satisfied, comparables support holding the price."
           cta="Review"
         />
         <AmbientCard
-          eyebrow="Estimation · 14 avenue Parmentier"
+          Icon={IconGauge}
+          workflow="Estimation"
+          subject="14 avenue Parmentier"
           title="New estimation request"
           body="Comparables pulled, valuation band ready, appointment proposed for Thursday."
           cta="Review"

@@ -277,6 +277,49 @@
   cursor: default;
 }
 
+/* ----- Card recognition channels (shared) -------------------
+   SUBJECT  → .cardthumb (52px photo or workflow-icon tile)
+   WORK-TYPE → .card-eyebrow ([icon] WORKFLOW · SUBJECT)
+   Colour is reserved for the autonomy tier (accent line + tag). */
+.cardthumb {
+  width: 52px;
+  height: 52px;
+  flex: none;
+  border-radius: var(--r-thumb);
+}
+.cardthumb--tile {
+  display: grid;
+  place-items: center;
+  background: var(--canvas); /* neutral grey, never a tier colour */
+  border: 1px solid var(--border-2);
+  color: var(--text-2);
+}
+.cardthumb--tile svg {
+  width: 22px;
+  height: 22px;
+}
+.card-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.card-eyebrow__icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--text-3);
+}
+.card-eyebrow__wf {
+  color: var(--text-2);
+}
+.card-eyebrow__subject {
+  color: var(--text);
+  font-weight: 500;
+}
+
 /* Ambient breadth card — compact variant of the hero card. Same card
    language + 3px trust-tier accent line, ~40% less padding, no image,
    a ghost/text CTA. Subordinate to the two hero cards. */
@@ -287,12 +330,18 @@
   border-radius: var(--r-card);
   padding: 12px 16px;
 }
-.ambient__head {
+.ambient__top {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
   gap: 12px;
-  margin-bottom: 7px;
+  margin-bottom: 8px;
+}
+.ambient__heading {
+  flex: 1;
+  min-width: 0;
+}
+.ambient__heading .card-eyebrow {
+  margin-bottom: 3px;
 }
 .ambient__title {
   font-size: 15px;

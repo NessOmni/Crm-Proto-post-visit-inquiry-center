@@ -121,6 +121,31 @@ export const IconUsers = (p: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+/* Workflow icons — one fixed icon per workflow (work-type channel). */
+export const IconFileText = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+    <path d="M14 3v5h5" />
+    <path d="M9 13h6M9 17h6" />
+  </svg>
+);
+
+export const IconFileSignature = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+    <path d="M14 3v5h5" />
+    <path d="M8 16c1-1.3 2-1.3 3 0s2 1.3 3 0" />
+  </svg>
+);
+
+export const IconGauge = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M4 15a8 8 0 1 1 16 0" />
+    <path d="M12 15l4-3" />
+    <circle cx="12" cy="15" r="1.1" />
+  </svg>
+);
+
 export const IconSidebar = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base(p)}>
     <rect x="3.5" y="5" width="17" height="14" rx="2.5" />

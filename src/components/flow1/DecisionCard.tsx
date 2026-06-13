@@ -5,7 +5,7 @@ import { useDemo } from "../../state/DemoContext";
 import { flow1 } from "../../data/fixtures";
 import { commById, outputLabel } from "../../data/selectors";
 import { Photo } from "../Photo";
-import { IconArrow, IconCheck } from "../icons";
+import { IconArrow, IconCheck, IconMic } from "../icons";
 
 export function DecisionCard() {
   const { substrate, phase, openReview } = useDemo();
@@ -40,7 +40,11 @@ export function DecisionCard() {
       />
       <div className="decision__body">
         <div className="decision__top">
-          <span className="kicker">Post-visit · {bien.address}</span>
+          <span className="card-eyebrow">
+            <IconMic className="card-eyebrow__icon" />
+            <span className="card-eyebrow__wf">Post-visit ·</span>
+            <span className="card-eyebrow__subject">{bien.address}</span>
+          </span>
           <span className="badge badge--drafted">Drafted · to approve</span>
         </div>
 
