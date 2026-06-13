@@ -3,6 +3,7 @@
 import { useDemo } from "../state/DemoContext";
 import { DecisionCard } from "./flow1/DecisionCard";
 import { BurstCard } from "./flow2/BurstCard";
+import { AmbientCard } from "./AmbientCard";
 
 export function Briefing() {
   const { substrate, phase } = useDemo();
@@ -27,15 +28,42 @@ export function Briefing() {
       </header>
 
       <section className="briefing__cards">
+        {/* Tier 1 — hero cards (the demo click-path). */}
         {hasCard && <DecisionCard />}
         <BurstCard />
 
-        {/* A calm, subordinate note — makes the morning feel real.
-            Not part of the demo click-path. */}
+        {/* Tier 2 — ambient breadth cards. Compact, subordinate, inert
+            CTAs. They show where the product is heading. */}
+        <AmbientCard
+          eyebrow="Owner reporting · 3 mandates"
+          title="Monthly owner reports — 3 ready to send"
+          body="Hélène Fontaine, Marc Lefèvre, +1 — each in your voice, comps included."
+          cta="Review 3"
+        />
+        <AmbientCard
+          eyebrow="Mandate · 8 rue Sedaine"
+          title="Mandate expires in 19 days"
+          body="Renewal brief prepared — owner's satisfied, comparables support holding the price."
+          cta="Review"
+        />
+        <AmbientCard
+          eyebrow="Estimation · 14 avenue Parmentier"
+          title="New estimation request"
+          body="Comparables pulled, valuation band ready, appointment proposed for Thursday."
+          cta="Review"
+        />
+
+        {/* Tier 3 — informational handled rows. Quietest, no CTA. */}
         <div className="calm-row">
           <span className="badge badge--auto">Automatic · handled</span>
           <span className="calm-row__text">
             Visit confirmed for today · Sarah Petit, 11:30 — added to your day.
+          </span>
+        </div>
+        <div className="calm-row">
+          <span className="badge badge--auto">Automatic · handled</span>
+          <span className="calm-row__text">
+            Compromis Bertin · notaire confirmed signing for 18 June.
           </span>
         </div>
       </section>
