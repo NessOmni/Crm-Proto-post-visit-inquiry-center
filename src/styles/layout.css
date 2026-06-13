@@ -320,43 +320,111 @@
   font-weight: 500;
 }
 
-/* Ambient breadth card — compact variant of the hero card. Same card
-   language + 3px trust-tier accent line, ~40% less padding, no image,
-   a ghost/text CTA. Subordinate to the two hero cards. */
-.ambient {
-  background: var(--surface);
+/* ============================================================
+   Briefing card — the one shell. `variant` drives leading media +
+   title size; the tier (accent) drives the accent line + tag. All
+   other anatomy is shared. Values reproduce the prior cards exactly.
+   ============================================================ */
+.bcard {
+  overflow: hidden;
   border: 1px solid var(--border);
-  border-left: 3px solid var(--accent); /* drafted trust-tier accent */
   border-radius: var(--r-card);
+  background: var(--surface);
+}
+/* Standard secondary (drafted) cards carry the compact accent treatment. */
+.bcard--standard.bcard--drafted {
+  border-left: 3px solid var(--accent);
+}
+
+.bcard__banner {
+  height: 120px;
+}
+
+.bcard__body {
+  padding: 16px;
+}
+.bcard--standard.bcard--drafted .bcard__body {
   padding: 12px 16px;
 }
-.ambient__top {
+
+.bcard__top {
   display: flex;
-  align-items: flex-start;
   gap: 12px;
+}
+.bcard--spotlight .bcard__top {
+  align-items: center;
+  margin-bottom: 10px;
+}
+.bcard--standard .bcard__top {
+  align-items: flex-start;
+}
+.bcard--standard.bcard--automatic .bcard__top {
+  margin-bottom: 12px;
+}
+.bcard--standard.bcard--drafted .bcard__top {
   margin-bottom: 8px;
 }
-.ambient__heading {
+/* Spotlight: eyebrow fills the row so the tag sits hard right. */
+.bcard--spotlight .bcard__top .card-eyebrow {
   flex: 1;
   min-width: 0;
 }
-.ambient__heading .card-eyebrow {
-  margin-bottom: 3px;
+
+.bcard__heading {
+  flex: 1;
+  min-width: 0;
 }
-.ambient__title {
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.3;
+.bcard__heading .card-eyebrow {
   margin-bottom: 4px;
 }
-.ambient__body {
+
+.bcard__title {
+  font-weight: 600;
+  line-height: 1.3;
+}
+.bcard--spotlight .bcard__title {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+.bcard--standard.bcard--automatic .bcard__title {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+.bcard--standard.bcard--drafted .bcard__title {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.bcard__text {
   font-size: 13px;
-  line-height: 1.45;
   color: var(--text-2);
+  max-width: 60ch;
+  margin-bottom: 14px;
+}
+.bcard--standard.bcard--drafted .bcard__text {
   max-width: 62ch;
   margin-bottom: 10px;
+  line-height: 1.45;
 }
-.ambient__cta {
+
+.card-outputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+/* Footer — CTA(s) + meta. Per-card CTA styles preserved. */
+.bcard__footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.bcard--automatic .bcard__footer {
+  gap: 14px;
+}
+/* Ghost/text CTA (standard secondary cards) */
+.bcard__cta {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -364,10 +432,10 @@
   font-weight: 500;
   color: var(--accent);
 }
-.ambient__cta:hover {
+.bcard__cta:hover {
   color: var(--accent-hover);
 }
-.ambient__cta svg {
+.bcard__cta svg {
   width: 14px;
   height: 14px;
 }

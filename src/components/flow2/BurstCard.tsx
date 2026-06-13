@@ -1,13 +1,13 @@
-/* The overnight-burst card — calm, Automatic · handled. A small
-   listing thumbnail (subject) + users workflow icon (work-type).
-   "See the 6" opens the Lead Lens on demand. */
+/* The overnight-burst card — a standard card via the shared shell.
+   Keeps its internal warmest-lead row; not a second spotlight. */
+import type { CardVariant } from "../BriefingCard";
+import { BriefingCard } from "../BriefingCard";
 import { useDemo } from "../../state/DemoContext";
 import { flow2 } from "../../data/fixtures";
 import { Avatar } from "./Avatar";
-import { CardThumb } from "../CardThumb";
 import { IconUsers, IconArrow } from "../icons";
 
-export function BurstCard() {
+export function BurstCard({ variant }: { variant: CardVariant }) {
   const { substrate, openLens } = useDemo();
   const bien = substrate.biens.find((b) => b.id === flow2.bienId)!;
   // Ranked warmest-first; the preview shows the top lead.
@@ -17,28 +17,28 @@ export function BurstCard() {
   const heldFor = ranked.filter((l) => l.disposition === "held").length;
 
   return (
-    <article className="card burst" aria-label="Overnight lead burst">
-      <div className="burst__head">
-        <CardThumb url={bien.photoUrl} Icon={IconUsers} alt={bien.address} seed={1} />
-        <div className="burst__heading">
-          <span className="card-eyebrow">
-            <IconUsers className="card-eyebrow__icon" />
-            <span className="card-eyebrow__wf">Overnight ·</span>
-            <span className="card-eyebrow__subject">{bien.address}</span>
-          </span>
-          <h2 className="burst__title">
-            {flow2.rankedCount} new leads, sorted before you woke up.
-          </h2>
-        </div>
-        <span className="badge badge--auto">Automatic · handled</span>
-      </div>
-
-      <p className="burst__summary">
-        {flow2.arrivedCount} enquiries arrived overnight. Your assistant
-        deduplicated {flow2.dedupedCount}, answered {autoSent} warm leads on its
-        own, and held {heldFor} for your call — ranked and ready to review.
-      </p>
-
+    <BriefingCard
+      variant={variant}
+      accent="automatic"
+      tag="Automatic · handled"
+      Icon={IconUsers}
+      workflow="Overnight"
+      subject={bien.address}
+      photoUrl={bien.photoUrl}
+      title={`${flow2.rankedCount} new leads, sorted before you woke up.`}
+      body={`${flow2.arrivedCount} enquiries arrived overnight. Your assistant deduplicated ${flow2.dedupedCount}, answered ${autoSent} warm leads on its own, and held ${heldFor} for your call — ranked and ready to review.`}
+      ariaLabel="Overnight lead burst"
+      footer={
+        <>
+          <button className="btn btn--primary" onClick={openLens}>
+            <IconUsers width={16} height={16} />
+            See the {flow2.rankedCount}
+            <IconArrow />
+          </button>
+          <span className="kicker">{flow2.acknowledgedAt}</span>
+        </>
+      }
+    >
       <div className="burst__preview">
         <Avatar initials={top.initials} size="sm" />
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -52,15 +52,6 @@ export function BurstCard() {
         </div>
         <span className="lead-row__score">{top.score}</span>
       </div>
-
-      <div className="burst__actions">
-        <button className="btn btn--primary" onClick={openLens}>
-          <IconUsers width={16} height={16} />
-          See the {flow2.rankedCount}
-          <IconArrow />
-        </button>
-        <span className="kicker">{flow2.acknowledgedAt}</span>
-      </div>
-    </article>
+    </BriefingCard>
   );
 }

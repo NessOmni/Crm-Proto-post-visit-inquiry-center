@@ -1,6 +1,7 @@
-/* The calm briefing — the home. The Flow 1 decision card lands here
-   once the voice note is processed; otherwise it stays quiet. */
+/* The calm briefing — the home. Every card flows through the shared
+   BriefingCard shell; a single rule picks exactly one "spotlight". */
 import { useDemo } from "../state/DemoContext";
+import type { CardVariant } from "./BriefingCard";
 import { DecisionCard } from "./flow1/DecisionCard";
 import { BurstCard } from "./flow2/BurstCard";
 import { AmbientCard } from "./AmbientCard";
@@ -16,6 +17,26 @@ export function Briefing() {
   // The card is present from the moment it lands and stays after approval —
   // collapsing to a slim resolved row rather than disappearing.
   const hasCard = phase === "ready" || phase === "approved";
+
+  // The spotlight rule: at most ONE spotlight at a time, chosen by the
+  // highest-priority *present* card that carries the spotlight flag — a
+  // property of importance, not of workflow type. Recency wins: the
+  // freshly-dictated post-visit card outranks everything, so it takes the
+  // spotlight and demotes the rest. If fixtures ever flag more than one,
+  // only the highest-priority renders spotlight; the others are standard.
+  const registry = [
+    { id: "mercier", present: phase === "ready", priority: 100, spotlight: true },
+    { id: "burst", present: true, priority: 60, spotlight: false },
+    { id: "owner", present: true, priority: 40, spotlight: false },
+    { id: "mandate", present: true, priority: 30, spotlight: false },
+    { id: "estimation", present: true, priority: 20, spotlight: false },
+  ];
+  const spotlightId =
+    registry
+      .filter((c) => c.present && c.spotlight)
+      .sort((a, b) => b.priority - a.priority)[0]?.id ?? null;
+  const variantOf = (id: string): CardVariant =>
+    id === spotlightId ? "spotlight" : "standard";
 
   return (
     <main className="briefing" aria-label="Briefing">
@@ -33,13 +54,12 @@ export function Briefing() {
       </header>
 
       <section className="briefing__cards">
-        {/* Tier 1 — hero cards (the demo click-path). */}
-        {hasCard && <DecisionCard />}
-        <BurstCard />
+        {/* Tier 1/2 — decision cards, one spotlight, the rest standard. */}
+        {hasCard && <DecisionCard variant={variantOf("mercier")} />}
+        <BurstCard variant={variantOf("burst")} />
 
-        {/* Tier 2 — ambient breadth cards. Compact, subordinate, inert
-            CTAs. They show where the product is heading. */}
         <AmbientCard
+          variant={variantOf("owner")}
           Icon={IconFileText}
           workflow="Owner reporting"
           subject="Hélène Fontaine, Marc Lefèvre +1"
@@ -48,6 +68,7 @@ export function Briefing() {
           cta="Review 3"
         />
         <AmbientCard
+          variant={variantOf("mandate")}
           Icon={IconFileSignature}
           workflow="Mandate"
           subject="8 rue Sedaine"
@@ -57,6 +78,7 @@ export function Briefing() {
           cta="Review"
         />
         <AmbientCard
+          variant={variantOf("estimation")}
           Icon={IconGauge}
           workflow="Estimation"
           subject="14 avenue Parmentier"
