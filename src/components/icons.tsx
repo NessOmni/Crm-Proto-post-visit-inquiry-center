@@ -13,6 +13,40 @@ const base = (props: SVGProps<SVGSVGElement>) => ({
   ...props,
 });
 
+export const IconSearch = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 16, height: 16, ...p })}>
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-3.2-3.2" />
+  </svg>
+);
+
+export const IconSliders = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 16, height: 16, ...p })}>
+    <path d="M4 7h10M18 7h2M4 12h2M10 12h10M4 17h7M15 17h5" />
+    <circle cx="16" cy="7" r="2" />
+    <circle cx="8" cy="12" r="2" />
+    <circle cx="13" cy="17" r="2" />
+  </svg>
+);
+
+export const IconFilter = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 15, height: 15, ...p })}>
+    <path d="M4 5h16l-6 7v6l-4 2v-8L4 5Z" />
+  </svg>
+);
+
+export const IconPlus = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 15, height: 15, ...p })}>
+    <path d="M12 5v14M5 12h14" />
+  </svg>
+);
+
+export const IconChevronDown = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 14, height: 14, ...p })}>
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+);
+
 export const IconBiens = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base(p)}>
     <path d="M3 10.5 12 4l9 6.5" />

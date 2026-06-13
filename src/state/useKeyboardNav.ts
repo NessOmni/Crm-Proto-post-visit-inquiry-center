@@ -27,6 +27,7 @@ export function useKeyboardNav() {
     phase,
     reviewOpen,
     lensOpen,
+    view,
     substrate,
     selectedLeadId,
     repliedLeadIds,
@@ -84,6 +85,10 @@ export function useKeyboardNav() {
 
       if (editing) return;
 
+      // The briefing shortcuts only apply on the home surface — never
+      // behind the Contacts database view.
+      if (view !== "briefing") return;
+
       // --- Briefing scope: jump to either demo moment ---
       if (e.key === "1") {
         e.preventDefault();
@@ -101,6 +106,7 @@ export function useKeyboardNav() {
     phase,
     reviewOpen,
     lensOpen,
+    view,
     substrate,
     selectedLeadId,
     repliedLeadIds,

@@ -8,7 +8,7 @@
    (names, streets, property details) is authentic French.
    ============================================================ */
 
-import type { Substrate, LeadEvent } from "./types";
+import type { Substrate, LeadEvent, ContactRow } from "./types";
 
 /* --- Agency & agent --------------------------------------- */
 const agency: Substrate["agency"] = {
@@ -454,3 +454,77 @@ export const flow2 = {
     leads.map((l) => [l.id, buildTimeline(l.id)]),
   ) as Record<string, LeadEvent[]>,
 } as const;
+
+/* ============================================================
+   Contacts directory — the classic CRM "All contacts" table.
+   Derived from the same substrate people so the database view
+   shares one world with the two flows. The owning manager is
+   Camille Roussel (the agent) plus a couple of colleagues.
+   ============================================================ */
+
+const mgr = {
+  CR: { name: "Camille Roussel", initials: "CR" },
+  LM: { name: "Luc Maes", initials: "LM" },
+  SC: { name: "Sofie Claes", initials: "SC" },
+} as const;
+
+/** Phone + email for the six leads (they share the prototype's world
+ *  but only carry portal signals in the substrate). */
+const leadContact: Record<string, { phone: string; email: string; civ: string }> = {
+  "lead-bonnet": { phone: "+33 6 22 14 88 03", email: "margaux.bonnet@gmail.com", civ: "Mme" },
+  "lead-david": { phone: "+33 6 51 09 77 42", email: "antoine.david@orange.fr", civ: "M." },
+  "lead-leroy": { phone: "+33 6 88 31 20 56", email: "camille.leroy@free.fr", civ: "Mme" },
+  "lead-petit": { phone: "+33 6 14 76 33 90", email: "sarah.petit@gmail.com", civ: "Mme" },
+  "lead-morel": { phone: "+33 6 77 45 12 88", email: "thomas.morel@outlook.fr", civ: "M." },
+  "lead-girard": { phone: "+33 6 39 62 41 07", email: "ines.girard@gmail.com", civ: "Mme" },
+};
+
+const leadManagers: Record<string, (typeof mgr)[keyof typeof mgr]> = {
+  "lead-bonnet": mgr.CR,
+  "lead-david": mgr.SC,
+  "lead-leroy": mgr.CR,
+  "lead-petit": mgr.LM,
+  "lead-morel": mgr.CR,
+  "lead-girard": mgr.SC,
+};
+
+export const contactDirectory: ContactRow[] = [
+  // The Mercier buyer (Flow 1).
+  {
+    id: "#10231",
+    name: `M. ${contacts[0].firstName} ${contacts[0].lastName}`,
+    phone: contacts[0].phone ?? "",
+    email: contacts[0].email ?? "",
+    category: "Buyer",
+    manager: mgr.CR,
+  },
+  // The two property owners.
+  {
+    id: "#10232",
+    name: `Mme ${owners[0].firstName} ${owners[0].lastName}`,
+    phone: owners[0].phone ?? "",
+    email: owners[0].email ?? "",
+    category: "Owner",
+    manager: mgr.CR,
+  },
+  {
+    id: "#10233",
+    name: `M. ${owners[1].firstName} ${owners[1].lastName}`,
+    phone: owners[1].phone ?? "",
+    email: owners[1].email ?? "",
+    category: "Owner",
+    manager: mgr.LM,
+  },
+  // The six rental leads (the Lead Lens), as prospective tenants.
+  ...leads.map((l, i): ContactRow => {
+    const extra = leadContact[l.id];
+    return {
+      id: `#${10234 + i}`,
+      name: `${extra.civ} ${l.firstName} ${l.lastName}`,
+      phone: extra.phone,
+      email: extra.email,
+      category: "Tenant",
+      manager: leadManagers[l.id],
+    };
+  }),
+];
