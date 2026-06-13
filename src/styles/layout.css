@@ -183,14 +183,23 @@
   display: none;
 }
 
+/* --- Centre column: briefing (scrolls) + docked conversation --- */
+.center {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  border-right: 1px solid var(--border);
+}
+
 /* --- Briefing (centre) ------------------------------------ */
 .briefing {
+  flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow-y: auto;
   padding: 24px clamp(20px, 4vw, 40px);
-  border-right: 1px solid var(--border);
 }
 .briefing__greeting {
   padding: 0 0 22px;
@@ -215,6 +224,53 @@
   flex-direction: column;
   gap: 16px;
   max-width: 720px;
+}
+
+/* Resolved row — the approved Mercier card, collapsed in place. */
+.resolved-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid rgba(66, 99, 235, 0.35); /* dimmed trust-tier accent */
+}
+.resolved-row__check {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex: none;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--success);
+}
+.resolved-row__text {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.resolved-row__link {
+  font-size: 13px;
+  color: var(--text-3);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: default;
+}
+
+/* Calm subordinate row — informational, beneath the two hero cards. */
+.calm-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 2px 2px;
+}
+.calm-row__text {
+  font-size: 13px;
+  color: var(--text-2);
 }
 
 /* --- Right column ----------------------------------------- */
@@ -282,15 +338,20 @@
 }
 
 /* Assistant activity summary */
+.activity__eyebrow {
+  margin: 12px 0 6px;
+}
+.activity__eyebrow:first-child {
+  margin-top: 0;
+}
 .activity__row {
   display: flex;
   gap: 10px;
   padding: 10px 0;
-  border-top: 1px solid var(--border-2);
 }
-.activity__row:first-of-type {
-  border-top: none;
-  padding-top: 0;
+/* Hairline only between consecutive rows; an eyebrow is its own divider. */
+.activity__row + .activity__row {
+  border-top: 1px solid var(--border-2);
 }
 .activity__dot {
   width: 7px;
@@ -343,12 +404,14 @@
   color: var(--text-2);
 }
 
-/* --- Conversation bar ------------------------------------- */
+/* --- Conversation bar — a persistent bottom dock, aligned to the
+   briefing content column (same left edge + width as the cards). --- */
 .convo {
   flex: none;
-  padding: 12px clamp(20px, 4vw, 40px);
+  padding: 16px clamp(20px, 4vw, 40px);
   background: var(--surface);
   border-top: 1px solid var(--border);
+  box-shadow: 0 -10px 24px -18px rgba(17, 24, 39, 0.18);
 }
 .convo__inner {
   display: flex;

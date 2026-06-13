@@ -7,9 +7,9 @@ import { BurstCard } from "./flow2/BurstCard";
 export function Briefing() {
   const { substrate, phase } = useDemo();
   const { agent } = substrate;
-  // Approval resolves the card out of the briefing; the four actions
-  // land in the Assistant activity panel instead.
-  const hasCard = phase === "ready";
+  // The card is present from the moment it lands and stays after approval —
+  // collapsing to a slim resolved row rather than disappearing.
+  const hasCard = phase === "ready" || phase === "approved";
 
   return (
     <main className="briefing" aria-label="Briefing">
@@ -29,6 +29,15 @@ export function Briefing() {
       <section className="briefing__cards">
         {hasCard && <DecisionCard />}
         <BurstCard />
+
+        {/* A calm, subordinate note — makes the morning feel real.
+            Not part of the demo click-path. */}
+        <div className="calm-row">
+          <span className="badge badge--auto">Automatic · handled</span>
+          <span className="calm-row__text">
+            Visit confirmed for today · Sarah Petit, 11:30 — added to your day.
+          </span>
+        </div>
       </section>
     </main>
   );

@@ -27,6 +27,8 @@ export interface ActivityEntry {
   tier: TrustTier;
   tag: string;
   time: string;
+  /** Which session the entry belongs to — drives the "Overnight" eyebrow. */
+  group: "overnight" | "approved";
 }
 
 interface DemoState {
@@ -64,6 +66,53 @@ const DemoContext = createContext<DemoState | null>(null);
 const TOKEN_MS = 68;
 const PROCESS_STEP_MS = 480;
 
+/* What the assistant handled overnight, shown in the activity rail on
+   load (newest-ish first; the lead-ranking item leads). These span the
+   product's range: lead handling, email triage, dedup, market veille,
+   and listing monitoring. All Automatic · handled. */
+const OVERNIGHT_ACTIVITY: ActivityEntry[] = [
+  {
+    id: "ov-leads",
+    text: "6 enquiries ranked by likelihood to convert · 24 rue de la Roquette",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "05:47",
+    group: "overnight",
+  },
+  {
+    id: "ov-emails",
+    text: "Overnight emails sorted · 5 logged, none need you",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "06:04",
+    group: "overnight",
+  },
+  {
+    id: "ov-dedup",
+    text: "1 duplicate enquiry merged",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "03:18",
+    group: "overnight",
+  },
+  {
+    id: "ov-market",
+    text: "Market scan complete · 3 active sectors, no price alerts",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "02:30",
+    group: "overnight",
+  },
+  {
+    id: "ov-listing",
+    text: "Listing health checked · 12 rue Lamartine, on track",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "01:40",
+    group: "overnight",
+  },
+];
+
 function buildActivity(substrate: Substrate): ActivityEntry[] {
   return flow1.outputIds.map((id) => {
     const comm = commById(substrate, id);
@@ -89,6 +138,7 @@ function buildActivity(substrate: Substrate): ActivityEntry[] {
       tier: comm.tier,
       tag: "Approved",
       time: comm.createdAt.slice(11, 16),
+      group: "approved" as const,
     };
   });
 }
@@ -99,7 +149,8 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   const [revealCount, setRevealCount] = useState(0);
   const [stepIndex, setStepIndex] = useState(0);
   const [reviewOpen, setReviewOpen] = useState(false);
-  const [activity, setActivity] = useState<ActivityEntry[]>([]);
+  // The rail starts populated with the overnight session — never empty.
+  const [activity, setActivity] = useState<ActivityEntry[]>(OVERNIGHT_ACTIVITY);
 
   // Flow 2
   const [lensOpen, setLensOpen] = useState(false);
@@ -153,7 +204,8 @@ export function DemoProvider({ children }: { children: ReactNode }) {
 
   const approve = useCallback(() => {
     setPhase("approved");
-    setActivity(buildActivity(substrate));
+    // Prepend the four approved actions; the overnight feed remains below.
+    setActivity([...buildActivity(substrate), ...OVERNIGHT_ACTIVITY]);
     if (approveTimer.current) window.clearTimeout(approveTimer.current);
     approveTimer.current = window.setTimeout(() => setReviewOpen(false), 680);
   }, [substrate]);
@@ -184,7 +236,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     setRevealCount(0);
     setStepIndex(0);
     setReviewOpen(false);
-    setActivity([]);
+    setActivity(OVERNIGHT_ACTIVITY); // back to the overnight state, not empty
     setLensOpen(false);
     setSelectedLeadId(null);
     setRepliedLeadIds({});

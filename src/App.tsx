@@ -53,12 +53,15 @@ export default function App() {
             collapsed={railCollapsed}
             onToggle={() => setRailCollapsed((c) => !c)}
           />
-          <Briefing />
+          {/* The centre column: briefing scrolls; the voice/conversation
+              dock is anchored to its bottom, aligned to the content column. */}
+          <div className="center">
+            <Briefing />
+            <VoiceCapture />
+            <ConversationBar />
+          </div>
           <RightColumn />
         </div>
-
-        <VoiceCapture />
-        <ConversationBar />
       </div>
 
       <ReviewSheet />

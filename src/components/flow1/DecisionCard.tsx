@@ -12,14 +12,26 @@ export function DecisionCard() {
   if (phase !== "ready" && phase !== "approved") return null;
 
   const bien = substrate.biens.find((b) => b.id === flow1.bienId)!;
-  const resolved = phase === "approved";
   const outputs = flow1.outputIds.map((id) => commById(substrate, id));
 
+  // Once approved, the card collapses to a slim resolved row in place —
+  // the work didn't vanish, it resolved.
+  if (phase === "approved") {
+    return (
+      <div className="resolved-row" role="status" aria-label="Mercier visit resolved">
+        <span className="resolved-row__check">
+          <IconCheck />
+        </span>
+        <span className="resolved-row__text">
+          The Mercier visit — 4 outputs approved
+        </span>
+        <span className="resolved-row__link">View in activity</span>
+      </div>
+    );
+  }
+
   return (
-    <article
-      className={`card decision ${resolved ? "decision--resolved" : ""}`}
-      aria-label="Post-visit decision card"
-    >
+    <article className="card decision" aria-label="Post-visit decision card">
       <Photo
         url={bien.photoUrl}
         alt={`${bien.address}, ${bien.city}`}
@@ -29,11 +41,7 @@ export function DecisionCard() {
       <div className="decision__body">
         <div className="decision__top">
           <span className="kicker">Post-visit · {bien.address}</span>
-          {resolved ? (
-            <span className="badge badge--auto">Approved · handled</span>
-          ) : (
-            <span className="badge badge--drafted">Drafted · to approve</span>
-          )}
+          <span className="badge badge--drafted">Drafted · to approve</span>
         </div>
 
         <h2 className="decision__title">The Mercier visit, written up.</h2>
@@ -51,22 +59,13 @@ export function DecisionCard() {
           ))}
         </div>
 
-        {resolved ? (
-          <div className="decision__resolved">
-            <span className="decision__check">
-              <IconCheck />
-            </span>
-            Approved — four actions written to the activity log.
-          </div>
-        ) : (
-          <div className="decision__actions">
-            <button className="btn btn--primary" onClick={openReview}>
-              Review &amp; approve
-              <IconArrow />
-            </button>
-            <span className="kicker">4 outputs prepared</span>
-          </div>
-        )}
+        <div className="decision__actions">
+          <button className="btn btn--primary" onClick={openReview}>
+            Review &amp; approve
+            <IconArrow />
+          </button>
+          <span className="kicker">4 outputs prepared</span>
+        </div>
       </div>
     </article>
   );

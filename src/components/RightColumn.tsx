@@ -1,5 +1,6 @@
 /* Right column — next-visit block + Assistant activity summary.
-   The activity log fills in as Flow 1 actions are approved. */
+   Pre-populated with the overnight session; grows on approval. */
+import { Fragment } from "react";
 import { useDemo } from "../state/DemoContext";
 
 export function RightColumn() {
@@ -37,32 +38,37 @@ export function RightColumn() {
       <section className="panel card activity">
         <div className="panel__head">
           <span className="panel__title">Assistant activity</span>
-          <span className="kicker">Today</span>
         </div>
-        {activity.length === 0 ? (
-          <p className="activity__empty">
-            Nothing logged yet. Approved actions and handled work will appear
-            here.
-          </p>
-        ) : (
-          <div>
-            {activity.map((entry) => (
-              <div className="activity__row" key={entry.id}>
-                <span
-                  className={`activity__dot ${
-                    entry.tier === "drafted" ? "activity__dot--drafted" : ""
-                  }`}
-                />
-                <span className="activity__text">
-                  {entry.text}
-                  <span className="activity__time">
-                    {entry.tag} · {entry.time}
+        <div className="activity__feed">
+          {activity.map((entry, i) => {
+            // The "Overnight" eyebrow precedes the first overnight item —
+            // so it sits under the header on load, and below the approved
+            // actions once the feed has grown.
+            const firstOvernight =
+              entry.group === "overnight" &&
+              (i === 0 || activity[i - 1].group !== "overnight");
+            return (
+              <Fragment key={entry.id}>
+                {firstOvernight && (
+                  <div className="activity__eyebrow kicker">Overnight</div>
+                )}
+                <div className="activity__row">
+                  <span
+                    className={`activity__dot ${
+                      entry.tier === "drafted" ? "activity__dot--drafted" : ""
+                    }`}
+                  />
+                  <span className="activity__text">
+                    {entry.text}
+                    <span className="activity__time">
+                      {entry.tag} · {entry.time}
+                    </span>
                   </span>
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
+                </div>
+              </Fragment>
+            );
+          })}
+        </div>
       </section>
 
       <div className="keys">
