@@ -10,6 +10,8 @@ export function BurstCard() {
   // Ranked warmest-first; the preview shows the top lead.
   const ranked = [...substrate.leads].sort((a, b) => b.score - a.score);
   const top = ranked[0];
+  const autoSent = ranked.filter((l) => l.disposition === "auto-sent").length;
+  const heldFor = ranked.filter((l) => l.disposition === "held").length;
 
   return (
     <article className="card burst" aria-label="Overnight lead burst">
@@ -23,8 +25,8 @@ export function BurstCard() {
       </h2>
       <p className="burst__summary">
         {flow2.arrivedCount} enquiries arrived overnight. Your assistant
-        deduplicated {flow2.dedupedCount}, acknowledged each one, and ranked the{" "}
-        {flow2.rankedCount} warmest by likelihood to convert.
+        deduplicated {flow2.dedupedCount}, answered {autoSent} warm leads on its
+        own, and held {heldFor} for your call — ranked and ready to review.
       </p>
 
       <div className="burst__preview">

@@ -22,6 +22,9 @@
 
   /* --- Functional ------------------------------------------- */
   --success: #22c55e;
+  /* Amber — the "held / needs you" attention state. Used sparingly. */
+  --warn: #b9740c;
+  --warn-tint: rgba(185, 116, 12, 0.1);
 
   /* --- Avatar pastels --------------------------------------- */
   --pastel-lavender: #e8e6fb;
@@ -197,6 +200,14 @@ button {
 }
 .badge--drafted::before {
   background: var(--accent);
+}
+.badge--held {
+  color: var(--warn);
+  border-color: rgba(185, 116, 12, 0.3);
+  background: var(--warn-tint);
+}
+.badge--held::before {
+  background: var(--warn);
 }
 
 /* Keyboard cue chip */
