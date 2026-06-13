@@ -1,7 +1,8 @@
-/* Right column — next-visit block + Assistant activity summary.
-   Pre-populated with the overnight session; grows on approval. */
+/* Right column — a full "Today" agenda + Assistant activity summary.
+   The agenda emphasises the imminent next visit; the rest is quiet. */
 import { Fragment } from "react";
 import { useDemo } from "../state/DemoContext";
+import { IconCheck } from "./icons";
 
 export function RightColumn() {
   const { substrate, activity } = useDemo();
@@ -9,30 +10,88 @@ export function RightColumn() {
 
   return (
     <aside className="aside" aria-label="Day context">
-      <section className="panel card next-visit">
+      <section className="panel card agenda" aria-label="Today's agenda">
         <div className="panel__head">
-          <span className="panel__title">Next visit</span>
-          <span className="kicker">Today</span>
+          <span className="panel__title">Today</span>
+          <span className="kicker">4 to come</span>
         </div>
-        <div className="next-visit__when">11:30 · in 2h</div>
-        <div className="next-visit__who serif">Sarah Petit</div>
-        <div className="next-visit__where">
-          {roquette.address}, {roquette.postalCode} {roquette.city}
+
+        <div className="agenda__list">
+          {/* Past — dimmed, done */}
+          <div className="agenda-row agenda-row--past">
+            <span className="agenda-row__time">08:30</span>
+            <div className="agenda-row__body">
+              <span className="agenda-row__eyebrow">Owner call</span>
+              <div className="agenda-row__title">M. Bertin</div>
+              <div className="agenda-row__done">
+                <IconCheck /> Done
+              </div>
+            </div>
+          </div>
+
+          {/* Now indicator — where the agent is in the day */}
+          <div className="agenda-now" aria-label="Current time">
+            <span className="agenda-now__label">09:30 · now</span>
+            <span className="agenda-now__line" />
+          </div>
+
+          {/* Next — highlighted + expanded */}
+          <div className="agenda-row agenda-row--next">
+            <span className="agenda-row__time">11:30</span>
+            <div className="agenda-row__body">
+              <span className="agenda-row__eyebrow">
+                Visit · <em className="agenda-row__soon">in 2h</em>
+              </span>
+              <div className="agenda-row__title agenda-row__title--lg">
+                Sarah Petit
+              </div>
+              <div className="agenda-row__sub">
+                {roquette.address}, {roquette.postalCode} {roquette.city}
+              </div>
+              <dl className="agenda-detail">
+                <div>
+                  <dt>Type</dt>
+                  <dd>Rental</dd>
+                </div>
+                <div>
+                  <dt>Surface</dt>
+                  <dd>{roquette.surfaceM2} m²</dd>
+                </div>
+                <div>
+                  <dt>Rent</dt>
+                  <dd>{roquette.priceEur.toLocaleString("fr-FR")} €</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+
+          {/* Upcoming — quiet single lines */}
+          <div className="agenda-row">
+            <span className="agenda-row__time">14:00</span>
+            <div className="agenda-row__body">
+              <span className="agenda-row__eyebrow">Estimation</span>
+              <div className="agenda-row__title">9 rue des Martyrs, Paris 9ᵉ</div>
+            </div>
+          </div>
+          <div className="agenda-row">
+            <span className="agenda-row__time">16:00</span>
+            <div className="agenda-row__body">
+              <span className="agenda-row__eyebrow">Visit</span>
+              <div className="agenda-row__title">12 rue Lamartine</div>
+            </div>
+          </div>
+          <div className="agenda-row">
+            <span className="agenda-row__time">17:30</span>
+            <div className="agenda-row__body">
+              <span className="agenda-row__eyebrow">Buyer follow-up</span>
+              <div className="agenda-row__title">Calls (3)</div>
+            </div>
+          </div>
         </div>
-        <dl className="next-visit__meta">
-          <div>
-            <dt>Type</dt>
-            <dd>Rental</dd>
-          </div>
-          <div>
-            <dt>Surface</dt>
-            <dd>{roquette.surfaceM2} m²</dd>
-          </div>
-          <div>
-            <dt>Rent</dt>
-            <dd>{roquette.priceEur.toLocaleString("fr-FR")} €</dd>
-          </div>
-        </dl>
+
+        <button type="button" className="agenda__more">
+          Open agenda →
+        </button>
       </section>
 
       <section className="panel card activity">
