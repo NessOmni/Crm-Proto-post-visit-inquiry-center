@@ -31,7 +31,9 @@ export function LeadRow({
       <Avatar initials={lead.initials} size="sm" />
       <span className="lead-row__main">
         <span className="lead-row__name">
-          {lead.firstName} {lead.lastName}
+          <span className="lead-row__person">
+            {lead.firstName} {lead.lastName}
+          </span>
           <span className="portal">{lead.portal}</span>
         </span>
         <span className="lead-row__sig">{lead.signals.join(" · ")}</span>
