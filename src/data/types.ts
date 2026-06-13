@@ -95,6 +95,39 @@ export interface Visit {
 export type LeadStatus = "new" | "acknowledged" | "active";
 export type Warmth = "hot" | "warm" | "tepid";
 
+/** Did the assistant send the first substantive reply on its own,
+ *  or hold the lead for the agent's decision? */
+export type LeadDisposition = "auto-sent" | "held";
+
+/** A structured fact the assistant extracted from the raw enquiry.
+ *  "found" facts came from the prose; "gap" facts are what's missing. */
+export interface ExtractedFact {
+  label: string;
+  status: "found" | "gap";
+}
+
+/** Why a lead was held for the agent rather than auto-handled. */
+export interface HeldReason {
+  signal: string;
+  reasoning: string;
+  suggestedAction: string;
+}
+
+/** The assistant's reading of one lead: the raw message, the facts it
+ *  pulled out, and the reply it wrote against the detected gap. */
+export interface LeadInsight {
+  /** Raw inbound portal enquiry, free text (French). */
+  inbound: string;
+  /** Facts extracted from the prose — each ties back to the message. */
+  facts: ExtractedFact[];
+  /** The reply, written against the gap (sent, or drafted if held). */
+  reply: string;
+  /** Clock label for an auto-sent reply. */
+  replyAt?: string;
+  /** Present only on the held lead. */
+  held?: HeldReason;
+}
+
 export interface Lead {
   id: ID;
   firstName: string;
@@ -103,6 +136,8 @@ export interface Lead {
   portal: Portal;
   status: LeadStatus;
   warmth: Warmth;
+  /** Whether the assistant auto-sent the first reply or held the lead. */
+  disposition: LeadDisposition;
   /** Ranking score, deterministic. Higher = warmer. */
   score: number;
   /** Bien the lead enquired about. */
@@ -151,6 +186,8 @@ export interface LeadEvent {
   detail?: string;
   /** Clock label, e.g. "01:14". */
   time: string;
+  /** The "held for you" decision point — styled distinctly (amber). */
+  held?: boolean;
 }
 
 /** The full seed substrate both flows read. */

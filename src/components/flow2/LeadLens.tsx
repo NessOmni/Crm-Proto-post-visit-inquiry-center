@@ -27,6 +27,9 @@ export function LeadLens() {
   const selected =
     ranked.find((l) => l.id === selectedLeadId) ?? ranked[0];
 
+  const autoSent = ranked.filter((l) => l.disposition === "auto-sent").length;
+  const heldFor = ranked.filter((l) => l.disposition === "held").length;
+
   return (
     <section className="lens" role="dialog" aria-modal="true" aria-label="Lead Lens">
       <header className="lens__bar">
@@ -35,6 +38,9 @@ export function LeadLens() {
           <h2 className="lens__heading">
             {flow2.rankedCount} warm leads, ranked
           </h2>
+          <span className="lens__split">
+            {autoSent} replied automatically · {heldFor} held for your call
+          </span>
         </div>
         <button className="lens__close" onClick={closeLens}>
           <IconClose />
@@ -44,7 +50,7 @@ export function LeadLens() {
 
       <div className="lens__grid">
         <div className="lens__list">
-          <div className="kicker lens__list-label">Ranked by warmth</div>
+          <div className="kicker lens__list-label">Ranked</div>
           {ranked.map((lead, i) => (
             <LeadRow
               key={lead.id}

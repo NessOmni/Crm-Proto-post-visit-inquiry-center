@@ -8,7 +8,7 @@
    (names, streets, property details) is authentic French.
    ============================================================ */
 
-import type { Substrate, LeadEvent } from "./types";
+import type { Substrate, LeadEvent, LeadInsight } from "./types";
 
 /* --- Agency & agent --------------------------------------- */
 const agency: Substrate["agency"] = {
@@ -139,6 +139,7 @@ const leads: Substrate["leads"] = [
     portal: "SeLoger",
     status: "acknowledged",
     warmth: "hot",
+    disposition: "auto-sent",
     score: 94,
     bienId: "bien-roquette",
     signals: ["A répondu en 4 min", "Dossier complet joint", "Disponible cette semaine"],
@@ -152,6 +153,7 @@ const leads: Substrate["leads"] = [
     portal: "Bien'ici",
     status: "acknowledged",
     warmth: "hot",
+    disposition: "auto-sent",
     score: 88,
     bienId: "bien-roquette",
     signals: ["Budget confirmé", "Garant en CDI", "Cherche pour le 1er juillet"],
@@ -165,6 +167,7 @@ const leads: Substrate["leads"] = [
     portal: "Leboncoin",
     status: "acknowledged",
     warmth: "warm",
+    disposition: "auto-sent",
     score: 79,
     bienId: "bien-roquette",
     signals: ["Visite demandée", "Quartier ciblé"],
@@ -179,6 +182,7 @@ const leads: Substrate["leads"] = [
     portal: "PAP",
     status: "acknowledged",
     warmth: "warm",
+    disposition: "held",
     score: 72,
     bienId: "bien-roquette",
     signals: ["Revenus 3× le loyer", "Sans animaux"],
@@ -192,6 +196,7 @@ const leads: Substrate["leads"] = [
     portal: "Logic-Immo",
     status: "acknowledged",
     warmth: "warm",
+    disposition: "auto-sent",
     score: 68,
     bienId: "bien-roquette",
     signals: ["Mutation professionnelle", "Flexible sur la date"],
@@ -205,6 +210,7 @@ const leads: Substrate["leads"] = [
     portal: "SeLoger",
     status: "acknowledged",
     warmth: "tepid",
+    disposition: "auto-sent",
     score: 61,
     bienId: "bien-roquette",
     signals: ["Première prise de contact", "À qualifier"],
@@ -387,7 +393,9 @@ function clock(iso: string, addMin = 0): string {
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
 
-/** Automatic-tier timeline the overnight assistant produced per lead. */
+/** The activity timeline the overnight assistant produced per lead.
+ *  Auto-sent leads gain a third automatic "Reply sent" entry; the
+ *  held lead instead shows a distinct "Held for your decision" point. */
 function buildTimeline(leadId: string): LeadEvent[] {
   const lead = leads.find((l) => l.id === leadId)!;
   const events: LeadEvent[] = [
@@ -395,15 +403,8 @@ function buildTimeline(leadId: string): LeadEvent[] {
       id: `${leadId}-recv`,
       tier: "automatic",
       label: "Lead received",
-      detail: `${lead.portal} · ${lead.bienId === "bien-roquette" ? "24 rue de la Roquette" : ""}`,
+      detail: `${lead.portal} · 24 rue de la Roquette`,
       time: clock(lead.arrivedAt),
-    },
-    {
-      id: `${leadId}-ack`,
-      tier: "automatic",
-      label: "Auto-acknowledged",
-      detail: "Confirmation reply sent",
-      time: clock(lead.arrivedAt, 1),
     },
   ];
   if (lead.dedupedFrom) {
@@ -412,31 +413,187 @@ function buildTimeline(leadId: string): LeadEvent[] {
       tier: "automatic",
       label: "Duplicate merged",
       detail: lead.dedupedFrom,
-      time: clock(lead.arrivedAt, 2),
+      time: clock(lead.arrivedAt, 1),
     });
   }
   events.push({
-    id: `${leadId}-rank`,
+    id: `${leadId}-ack`,
     tier: "automatic",
-    label: `Ranked ${lead.warmth}`,
-    detail: `Warmth score ${lead.score}`,
-    time: clock(lead.arrivedAt, 3),
+    label: "Auto-acknowledged",
+    detail: "Confirmation reply sent",
+    time: clock(lead.arrivedAt, 2),
   });
+
+  if (lead.disposition === "held") {
+    events.push({
+      id: `${leadId}-held`,
+      tier: "drafted",
+      held: true,
+      label: "Held for your decision",
+      detail: "Competing deadline — needs a human call",
+      time: clock(lead.arrivedAt, 3),
+    });
+  } else {
+    events.push({
+      id: `${leadId}-sent`,
+      tier: "automatic",
+      label: "Reply sent",
+      detail: "Substantive reply — no approval needed",
+      time: clock(lead.arrivedAt, 4),
+    });
+  }
   return events;
 }
 
-/** Assistant-drafted reply for a lead — French, in the agent's voice. */
-function draftReply(firstName: string): string {
-  return (
-    `Bonjour ${firstName},\n\n` +
-    "Merci pour votre message concernant le 24 rue de la Roquette. " +
-    "L'appartement est toujours disponible et je serais ravie de vous le faire visiter. " +
-    "Seriez-vous disponible jeudi ou vendredi en fin de journée ?\n\n" +
-    "Pour présenter votre dossier au propriétaire, pourriez-vous me confirmer vos justificatifs " +
-    "de revenus et votre garant ?\n\n" +
-    "Bien à vous,\nCamille Roussel"
-  );
-}
+/* Per-lead insight: the raw enquiry, the facts the assistant pulled
+   from it, and a reply written against the detected gap. The reply is
+   specific to each lead's extracted facts — never a tone-graded template. */
+const insights: Record<string, LeadInsight> = {
+  // Rank 1 — income stated, but no guarantor → reply asks for the garant.
+  "lead-bonnet": {
+    inbound:
+      "Bonjour, votre annonce pour le 24 rue de la Roquette m'intéresse beaucoup. " +
+      "Je suis en CDI depuis trois ans et je gagne 3 900 € net par mois. " +
+      "L'appartement est-il toujours disponible ? Je peux me libérer dès cette semaine " +
+      "pour une visite. Merci d'avance.",
+    facts: [
+      { label: "Revenus : 3 900 € net", status: "found" },
+      { label: "Situation : CDI, 3 ans", status: "found" },
+      { label: "Visite : souhaitée cette semaine", status: "found" },
+      { label: "Garant : non précisé", status: "gap" },
+    ],
+    replyAt: "01:15",
+    reply:
+      "Bonjour Margaux,\n\n" +
+      "Merci pour votre message — le 24 rue de la Roquette est toujours disponible. " +
+      "Vos revenus correspondent bien au loyer (environ trois fois). " +
+      "Pour compléter votre dossier, pourriez-vous me préciser si vous disposez d'un garant, " +
+      "et le cas échéant sa situation ?\n\n" +
+      "Je vous propose une visite jeudi ou vendredi en fin de journée.\n\n" +
+      "Bien à vous,\nCamille Roussel",
+  },
+
+  // Rank 2 — guarantor given, but his own income missing → asks for his payslips.
+  "lead-david": {
+    inbound:
+      "Bonjour, je suis très intéressé par le deux-pièces rue de la Roquette. " +
+      "Mon garant est en CDI et mon budget est validé de mon côté. " +
+      "J'aimerais idéalement emménager pour le 1er juillet. Est-ce encore disponible ?",
+    facts: [
+      { label: "Garant : CDI confirmé", status: "found" },
+      { label: "Budget : validé", status: "found" },
+      { label: "Emménagement : 1er juillet", status: "found" },
+      { label: "Revenus du locataire : non précisés", status: "gap" },
+    ],
+    replyAt: "02:06",
+    reply:
+      "Bonjour Antoine,\n\n" +
+      "Merci pour votre message. L'appartement est disponible et le 1er juillet est tout à fait jouable. " +
+      "Un garant en CDI est un vrai atout pour le dossier. " +
+      "Pour le finaliser, pourriez-vous joindre vos propres justificatifs de revenus " +
+      "(vos trois derniers bulletins de salaire) ?\n\n" +
+      "Je peux vous proposer une visite cette semaine si vous le souhaitez.\n\n" +
+      "Bien à vous,\nCamille Roussel",
+  },
+
+  // Rank 3 — strong intent, zero financials → asks for the full dossier.
+  "lead-leroy": {
+    inbound:
+      "Bonjour, je cherche absolument dans le 11e, autour de Bastille, et votre annonce " +
+      "correspond parfaitement à ce que je veux. Serait-il possible de visiter rapidement ? " +
+      "J'ai déjà visité plusieurs biens dans le secteur ces derniers jours.",
+    facts: [
+      { label: "Secteur ciblé : Bastille / 11e", status: "found" },
+      { label: "Visite : demandée rapidement", status: "found" },
+      { label: "Revenus : non précisés", status: "gap" },
+      { label: "Garant : non précisé", status: "gap" },
+    ],
+    replyAt: "03:44",
+    reply:
+      "Bonjour Camille,\n\n" +
+      "Avec plaisir — l'emplacement correspond exactement à votre recherche et le bien est disponible. " +
+      "Je vous propose une visite dès cette semaine. " +
+      "Pour préparer votre dossier en amont, pourriez-vous me transmettre vos justificatifs de revenus " +
+      "ainsi que les coordonnées d'un garant ?\n\n" +
+      "Bien à vous,\nCamille Roussel",
+  },
+
+  // Rank 4 — HELD. Competing deadline + visit-timeline compression.
+  "lead-petit": {
+    inbound:
+      "Bonjour, votre appartement me plaît beaucoup. Je dois vous préciser que je suis aussi " +
+      "en lice sur un autre appartement et que je dois me décider avant vendredi. " +
+      "Serait-il possible d'organiser une visite avant cette date ? " +
+      "Mes revenus sont d'environ trois fois le loyer et je n'ai pas d'animaux.",
+    facts: [
+      { label: "Revenus : ~3× le loyer", status: "found" },
+      { label: "Animaux : aucun", status: "found" },
+      { label: "Concurrence : autre bien en parallèle", status: "found" },
+      { label: "Échéance : décision avant vendredi", status: "found" },
+      { label: "Demande : visite avant vendredi", status: "found" },
+    ],
+    held: {
+      signal:
+        "Sarah mentions a competing flat with a Friday deadline, and asks for a visit before then.",
+      reasoning:
+        "Competing deadline detected (Friday) + request to compress the visit timeline. " +
+        "This needs a scheduling commitment I can't make for you, and likely a call rather than " +
+        "an email. Held for your decision.",
+      suggestedAction:
+        "Call Sarah today to offer a visit slot before Friday. The draft below is a fallback if you'd rather write first.",
+    },
+    reply:
+      "Bonjour Sarah,\n\n" +
+      "Merci pour votre message et votre intérêt pour le 24 rue de la Roquette. " +
+      "Je comprends que vous deviez vous décider avant vendredi. " +
+      "Je vous propose de convenir d'un créneau de visite très rapidement — " +
+      "seriez-vous disponible jeudi ou vendredi ? Indiquez-moi vos disponibilités et " +
+      "je reviens vers vous dans la journée pour confirmer.\n\n" +
+      "Bien à vous,\nCamille Roussel",
+  },
+
+  // Rank 5 — relocation, no financials → asks for employer attestation + income.
+  "lead-morel": {
+    inbound:
+      "Bonjour, je suis muté à Paris pour mon travail et je dois trouver un logement dans le 11e. " +
+      "Je suis assez flexible sur la date d'entrée. Le 24 rue de la Roquette est-il toujours libre ?",
+    facts: [
+      { label: "Motif : mutation professionnelle", status: "found" },
+      { label: "Date d'entrée : flexible", status: "found" },
+      { label: "Revenus / employeur : non précisés", status: "gap" },
+      { label: "Garant : non précisé", status: "gap" },
+    ],
+    replyAt: "05:05",
+    reply:
+      "Bonjour Thomas,\n\n" +
+      "Merci pour votre message — l'appartement est toujours libre et une mutation est tout à fait gérable, " +
+      "votre flexibilité sur la date aide. " +
+      "Pour avancer, une attestation de votre employeur ainsi que vos justificatifs de revenus " +
+      "me permettraient de présenter votre dossier au propriétaire.\n\n" +
+      "Bien à vous,\nCamille Roussel",
+  },
+
+  // Rank 6 — first contact, almost no info → invites her to qualify.
+  "lead-girard": {
+    inbound:
+      "Bonjour, est-ce que l'appartement rue de la Roquette est toujours disponible ? " +
+      "Pourriez-vous m'en dire un peu plus ? Merci.",
+    facts: [
+      { label: "Intérêt : exprimé", status: "found" },
+      { label: "Disponibilité : question posée", status: "found" },
+      { label: "Revenus : non précisés", status: "gap" },
+      { label: "Garant : non précisé", status: "gap" },
+    ],
+    replyAt: "05:50",
+    reply:
+      "Bonjour Inès,\n\n" +
+      "Merci pour votre message. Oui, le bien est disponible : il s'agit d'un deux-pièces de 42 m² " +
+      "à 1 750 € par mois, rue de la Roquette. " +
+      "Pour vérifier que cela correspond à votre situation, pourriez-vous m'indiquer vos revenus " +
+      "et si vous disposez d'un garant ?\n\n" +
+      "Bien à vous,\nCamille Roussel",
+  },
+};
 
 export const flow2 = {
   bienId: "bien-roquette",
@@ -445,11 +602,10 @@ export const flow2 = {
   arrivedCount: 7,
   dedupedCount: 1,
   rankedCount: 6,
+  autoSentCount: leads.filter((l) => l.disposition === "auto-sent").length,
+  heldCount: leads.filter((l) => l.disposition === "held").length,
   acknowledgedAt: "Overnight · 01:12–05:47",
-  draftSubject: "Votre demande — 24 rue de la Roquette",
-  replies: Object.fromEntries(
-    leads.map((l) => [l.id, draftReply(l.firstName)]),
-  ) as Record<string, string>,
+  insights,
   timelines: Object.fromEntries(
     leads.map((l) => [l.id, buildTimeline(l.id)]),
   ) as Record<string, LeadEvent[]>,

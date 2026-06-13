@@ -121,6 +121,22 @@
   font-weight: 600;
   line-height: 1.2;
 }
+.lens__split {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--text-2);
+}
+.lens__split::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  margin-right: 7px;
+  vertical-align: middle;
+}
 .lens__close {
   display: inline-flex;
   align-items: center;
@@ -196,6 +212,12 @@
 .lead-row__dot--tepid {
   background: var(--text-3);
 }
+.lead-row__dot--sent {
+  background: var(--success);
+}
+.lead-row__dot--held {
+  background: var(--warn);
+}
 .lead-row__main {
   flex: 1;
   min-width: 0;
@@ -228,7 +250,28 @@
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
+}
+.lead-row__end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
   flex: none;
+}
+.lead-tag {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+}
+.lead-tag--sent {
+  color: var(--success);
+  background: rgba(34, 197, 94, 0.1);
+}
+.lead-tag--held {
+  color: var(--warn);
+  background: var(--warn-tint);
 }
 
 /* ============================================================
@@ -438,6 +481,9 @@
 .tl-dot--drafted {
   background: var(--accent);
 }
+.tl-dot--held {
+  background: var(--warn);
+}
 .tl-body__label {
   font-size: 14px;
   font-weight: 500;
@@ -456,6 +502,163 @@
 .tl-time {
   font-size: 12px;
   color: var(--text-2);
+}
+
+/* ============================================================
+   "What the assistant read" — raw message → extracted facts
+   ============================================================ */
+.read {
+  margin-bottom: 24px;
+}
+.read__message {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text);
+  padding: 12px 14px;
+  border-radius: var(--r-input);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-2);
+}
+.read__extracted {
+  margin-top: 12px;
+}
+.read__extracted-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-2);
+  margin-bottom: 8px;
+}
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.fact {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+}
+.fact::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+/* A gap — what the enquiry did NOT say (dashed, muted). */
+.fact--gap {
+  color: var(--text-2);
+  border-style: dashed;
+  border-color: var(--text-3);
+}
+.fact--gap::before {
+  background: transparent;
+  border: 1px solid var(--text-3);
+}
+
+/* ============================================================
+   Reply section — sent record vs held draft
+   ============================================================ */
+.reply-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+/* Sent record — read-only, the work is already done */
+.sent-record {
+  border-radius: var(--r-card);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.sent-record__body {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+  white-space: pre-wrap;
+  padding: 14px 16px;
+}
+.sent-record__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--border-2);
+}
+.link-quiet {
+  font-size: 12px;
+  color: var(--text-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.link-quiet:hover {
+  color: var(--text);
+}
+.composer__hint {
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+/* Held block — the one lead held for the agent */
+.held-block {
+  border-radius: var(--r-card);
+  background: var(--warn-tint);
+  border: 1px solid rgba(185, 116, 12, 0.28);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.held-block__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.held-block__pill {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--warn);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  border: 1px solid rgba(185, 116, 12, 0.3);
+}
+.held-block__why {
+  font-size: 13px;
+  color: var(--text-2);
+}
+.held-reason {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.held-reason > div {
+  display: grid;
+  grid-template-columns: 116px 1fr;
+  gap: 12px;
+  align-items: baseline;
+}
+.held-reason dt {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--warn);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.held-reason dd {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text);
 }
 
 /* Responsive — stack the lens on narrow screens */
