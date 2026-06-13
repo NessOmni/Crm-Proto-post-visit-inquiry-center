@@ -1,13 +1,15 @@
 /* Left sidebar — Attio-style: labelled nav that retracts to a
-   narrow icon rail. Nav items are present but inert for now. */
+   narrow icon rail. "Contacts" opens the database view; the other
+   items are present but inert for now. */
+import { useDemo } from "../state/DemoContext";
 import { IconBiens, IconContacts, IconAgenda, IconPerformance } from "./icons";
 import { IconSidebar, IconChevronLeft } from "./icons";
 
 const items = [
-  { label: "Biens", Icon: IconBiens },
-  { label: "Contacts", Icon: IconContacts },
-  { label: "Agenda", Icon: IconAgenda },
-  { label: "Performance", Icon: IconPerformance },
+  { id: "biens", label: "Biens", Icon: IconBiens, live: false },
+  { id: "contacts", label: "Contacts", Icon: IconContacts, live: true },
+  { id: "agenda", label: "Agenda", Icon: IconAgenda, live: false },
+  { id: "performance", label: "Performance", Icon: IconPerformance, live: false },
 ];
 
 export function LeftRail({
@@ -17,6 +19,8 @@ export function LeftRail({
   collapsed: boolean;
   onToggle: () => void;
 }) {
+  const { view, openContacts } = useDemo();
+
   return (
     <nav
       className={`sidebar ${collapsed ? "sidebar--collapsed" : ""}`}
@@ -36,19 +40,24 @@ export function LeftRail({
       </div>
 
       <div className="sidebar__items">
-        {items.map(({ label, Icon }) => (
-          <button
-            key={label}
-            className="sidebar__item"
-            aria-label={label}
-            title={collapsed ? label : undefined}
-            aria-disabled="true"
-            tabIndex={-1}
-          >
-            <Icon className="sidebar__item-icon" />
-            <span className="sidebar__item-text">{label}</span>
-          </button>
-        ))}
+        {items.map(({ id, label, Icon, live }) => {
+          const active = live && id === "contacts" && view === "contacts";
+          return (
+            <button
+              key={id}
+              className={`sidebar__item ${active ? "sidebar__item--active" : ""}`}
+              aria-label={label}
+              title={collapsed ? label : undefined}
+              aria-disabled={live ? undefined : "true"}
+              aria-current={active ? "page" : undefined}
+              tabIndex={live ? 0 : -1}
+              onClick={live && id === "contacts" ? openContacts : undefined}
+            >
+              <Icon className="sidebar__item-icon" />
+              <span className="sidebar__item-text">{label}</span>
+            </button>
+          );
+        })}
       </div>
     </nav>
   );

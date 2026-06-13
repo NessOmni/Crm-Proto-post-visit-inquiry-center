@@ -21,6 +21,9 @@ import { commById, outputRecipient } from "../data/selectors";
 /** Flow 1 progresses through these phases. */
 export type Flow1Phase = "idle" | "recording" | "processing" | "ready" | "approved";
 
+/** The home briefing, or the deep Contacts database view. */
+export type AppView = "briefing" | "contacts";
+
 export interface ActivityEntry {
   id: string;
   text: string;
@@ -48,6 +51,9 @@ interface DemoState {
   selectedLeadId: string | null;
   repliedLeadIds: Record<string, boolean>;
 
+  // Navigation — which surface is showing
+  view: AppView;
+
   // actions
   startVoiceNote: () => void;
   openReview: () => void;
@@ -57,6 +63,8 @@ interface DemoState {
   closeLens: () => void;
   selectLead: (id: string) => void;
   sendReply: (id: string) => void;
+  openContacts: () => void;
+  goHome: () => void;
   replay: () => void;
 }
 
@@ -157,6 +165,9 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
   const [repliedLeadIds, setRepliedLeadIds] = useState<Record<string, boolean>>({});
 
+  // Navigation
+  const [view, setView] = useState<AppView>("briefing");
+
   const tokens = useMemo(() => flow1.transcript.split(" "), []);
   const approveTimer = useRef<number | null>(null);
 
@@ -219,6 +230,10 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   const closeLens = useCallback(() => setLensOpen(false), []);
   const selectLead = useCallback((id: string) => setSelectedLeadId(id), []);
 
+  // --- Navigation ---
+  const openContacts = useCallback(() => setView("contacts"), []);
+  const goHome = useCallback(() => setView("briefing"), []);
+
   const sendReply = useCallback((id: string) => {
     setRepliedLeadIds((prev) => ({ ...prev, [id]: true }));
     setSubstrate((prev) => ({
@@ -240,6 +255,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     setLensOpen(false);
     setSelectedLeadId(null);
     setRepliedLeadIds({});
+    setView("briefing"); // back to the home briefing; Contacts filters unmount
   }, []);
 
   const transcriptText = useMemo(
@@ -258,6 +274,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     lensOpen,
     selectedLeadId,
     repliedLeadIds,
+    view,
     startVoiceNote,
     openReview,
     closeReview,
@@ -266,6 +283,8 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     closeLens,
     selectLead,
     sendReply,
+    openContacts,
+    goHome,
     replay,
   };
 

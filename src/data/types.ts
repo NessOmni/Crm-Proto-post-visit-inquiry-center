@@ -166,3 +166,35 @@ export interface Substrate {
   communications: Communication[];
   citations: Citation[];
 }
+
+/* ============================================================
+   Contacts view — the classic CRM table, reproduced.
+   A flat directory derived from the same substrate people.
+   ============================================================ */
+
+export type ContactCategory = "Owner" | "Buyer" | "Tenant";
+
+/** The manager who owns the relationship (initials drive the avatar). */
+export interface ManagerRef {
+  name: string;
+  initials: string;
+}
+
+/** One row in the All-contacts table. */
+export interface ContactRow {
+  id: string; // display reference, e.g. "#10231"
+  name: string; // honorific + full name, e.g. "M. Julien Mercier"
+  phone: string;
+  email: string;
+  category?: ContactCategory;
+  manager: ManagerRef;
+}
+
+/** The filterable columns, in table order. */
+export type ContactColumn =
+  | "name"
+  | "id"
+  | "phone"
+  | "email"
+  | "category"
+  | "manager";

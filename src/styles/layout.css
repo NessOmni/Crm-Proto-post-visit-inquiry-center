@@ -97,6 +97,16 @@
 .shell__body--rail-collapsed {
   --rail-w: 56px; /* retracted to a narrow icon rail */
 }
+/* Contacts view — sidebar + a single full-width content pane */
+.shell__body--contacts {
+  grid-template-columns: var(--rail-w) minmax(0, 1fr);
+}
+
+/* Brand acts as "home" — reset button chrome */
+.brand {
+  cursor: pointer;
+  text-align: left;
+}
 
 /* --- Sidebar (retractable) -------------------------------- */
 .sidebar {
@@ -156,6 +166,12 @@
 .sidebar__item:hover {
   background: var(--canvas);
   color: var(--text);
+}
+.sidebar__item--active,
+.sidebar__item--active:hover {
+  background: var(--accent-tint);
+  color: var(--accent);
+  font-weight: 500;
 }
 .sidebar__item-icon {
   width: 18px;
