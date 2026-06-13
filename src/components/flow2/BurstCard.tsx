@@ -23,7 +23,7 @@ export function BurstCard({ variant }: { variant: CardVariant }) {
       tag="Automatic · handled"
       Icon={IconUsers}
       workflow="Overnight"
-      subject={bien.address}
+      subject="across your listings"
       photoUrl={bien.photoUrl}
       title={`${flow2.rankedCount} new leads, sorted before you woke up.`}
       body={`${flow2.arrivedCount} enquiries arrived overnight. Your assistant deduplicated ${flow2.dedupedCount}, answered ${autoSent} warm leads on its own, and held ${heldFor} for your call — ranked and ready to review.`}

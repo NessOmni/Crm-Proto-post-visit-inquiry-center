@@ -260,6 +260,13 @@
   border: 1px solid var(--border-2);
   background: var(--surface);
 }
+/* Transaction type — quiet, no border, so the mix reads without crowding. */
+.lead-type {
+  flex: none;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--text-3);
+}
 .lead-row__sig {
   display: block;
   margin-top: 2px;

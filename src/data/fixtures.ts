@@ -95,6 +95,23 @@ const biens: Substrate["biens"] = [
     photoUrl:
       "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=70",
   },
+  {
+    id: "bien-lancry",
+    reference: "OMN-2204",
+    kind: "sale",
+    address: "18 rue de Lancry",
+    postalCode: "75010",
+    city: "Paris",
+    priceEur: 420000,
+    surfaceM2: 68,
+    rooms: 3,
+    bedrooms: 2,
+    blurb:
+      "Trois-pièces traversant proche du canal Saint-Martin, parquet d'origine, cave et belle hauteur sous plafond.",
+    ownerId: "owner-lemaire",
+    photoUrl:
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=70",
+  },
 ];
 
 /* --- Mandates ---------------------------------------------- */
@@ -114,6 +131,14 @@ const mandates: Substrate["mandates"] = [
     kind: "exclusive",
     active: true,
     signedOn: "2026-05-22",
+  },
+  {
+    id: "mandate-lancry",
+    bienId: "bien-lancry",
+    ownerId: "owner-lemaire",
+    kind: "exclusive",
+    active: true,
+    signedOn: "2026-04-30",
   },
 ];
 
@@ -140,6 +165,7 @@ const leads: Substrate["leads"] = [
     status: "acknowledged",
     warmth: "hot",
     disposition: "auto-sent",
+    transactionType: "rental",
     score: 94,
     bienId: "bien-roquette",
     signals: ["A répondu en 4 min", "Dossier complet joint", "Disponible cette semaine"],
@@ -154,10 +180,11 @@ const leads: Substrate["leads"] = [
     status: "acknowledged",
     warmth: "hot",
     disposition: "auto-sent",
+    transactionType: "sale",
     score: 88,
-    bienId: "bien-roquette",
-    signals: ["Budget confirmé", "Garant en CDI", "Cherche pour le 1er juillet"],
-    arrivedAt: "2026-06-10T02:03:00+02:00",
+    bienId: "bien-lancry",
+    signals: ["Budget 420 k€", "Financement en cours"],
+    arrivedAt: "2026-06-10T02:05:00+02:00",
   },
   {
     id: "lead-leroy",
@@ -168,6 +195,7 @@ const leads: Substrate["leads"] = [
     status: "acknowledged",
     warmth: "warm",
     disposition: "auto-sent",
+    transactionType: "rental",
     score: 79,
     bienId: "bien-roquette",
     signals: ["Visite demandée", "Quartier ciblé"],
@@ -183,6 +211,7 @@ const leads: Substrate["leads"] = [
     status: "acknowledged",
     warmth: "warm",
     disposition: "held",
+    transactionType: "rental",
     score: 72,
     bienId: "bien-roquette",
     signals: ["Revenus 3× le loyer", "Sans animaux"],
@@ -197,9 +226,10 @@ const leads: Substrate["leads"] = [
     status: "acknowledged",
     warmth: "warm",
     disposition: "auto-sent",
+    transactionType: "sale",
     score: 68,
-    bienId: "bien-roquette",
-    signals: ["Mutation professionnelle", "Flexible sur la date"],
+    bienId: "bien-lancry",
+    signals: ["Mutation pro", "Achat résidence principale"],
     arrivedAt: "2026-06-10T05:02:00+02:00",
   },
   {
@@ -211,6 +241,7 @@ const leads: Substrate["leads"] = [
     status: "acknowledged",
     warmth: "tepid",
     disposition: "auto-sent",
+    transactionType: "rental",
     score: 61,
     bienId: "bien-roquette",
     signals: ["Première prise de contact", "À qualifier"],
@@ -398,12 +429,13 @@ function clock(iso: string, addMin = 0): string {
  *  held lead instead shows a distinct "Held for your decision" point. */
 function buildTimeline(leadId: string): LeadEvent[] {
   const lead = leads.find((l) => l.id === leadId)!;
+  const listing = biens.find((b) => b.id === lead.bienId)!;
   const events: LeadEvent[] = [
     {
       id: `${leadId}-recv`,
       tier: "automatic",
       label: "Lead received",
-      detail: `${lead.portal} · 24 rue de la Roquette`,
+      detail: `${lead.portal} · ${listing.address}`,
       time: clock(lead.arrivedAt),
     },
   ];
@@ -473,26 +505,28 @@ const insights: Record<string, LeadInsight> = {
       "Bien à vous,\nCamille Roussel",
   },
 
-  // Rank 2 — guarantor given, but his own income missing → asks for his payslips.
+  // Rank 2 — SALE. Budget + apport stated, but loan not yet approved →
+  // reply asks about financing, not a guarantor.
   "lead-david": {
     inbound:
-      "Bonjour, je suis très intéressé par le deux-pièces rue de la Roquette. " +
-      "Mon garant est en CDI et mon budget est validé de mon côté. " +
-      "J'aimerais idéalement emménager pour le 1er juillet. Est-ce encore disponible ?",
+      "Bonjour, je suis très intéressé par votre annonce du 18 rue de Lancry. " +
+      "Mon budget est d'environ 420 000 €, avec un apport de 80 000 €. " +
+      "J'ai une simulation de prêt en cours auprès de ma banque. " +
+      "Serait-il possible de visiter rapidement ? Merci d'avance.",
     facts: [
-      { label: "Garant : CDI confirmé", status: "found" },
-      { label: "Budget : validé", status: "found" },
-      { label: "Emménagement : 1er juillet", status: "found" },
-      { label: "Revenus du locataire : non précisés", status: "gap" },
+      { label: "Budget : 420 000 €", status: "found" },
+      { label: "Apport : 80 000 €", status: "found" },
+      { label: "Financement : simulation en cours", status: "found" },
+      { label: "Visite : souhaitée rapidement", status: "found" },
+      { label: "Accord de prêt : non confirmé", status: "gap" },
     ],
-    replyAt: "02:06",
+    replyAt: "02:08",
     reply:
       "Bonjour Antoine,\n\n" +
-      "Merci pour votre message. L'appartement est disponible et le 1er juillet est tout à fait jouable. " +
-      "Un garant en CDI est un vrai atout pour le dossier. " +
-      "Pour le finaliser, pourriez-vous joindre vos propres justificatifs de revenus " +
-      "(vos trois derniers bulletins de salaire) ?\n\n" +
-      "Je peux vous proposer une visite cette semaine si vous le souhaitez.\n\n" +
+      "Merci pour votre message — le 18 rue de Lancry est toujours disponible. " +
+      "Votre budget correspond au prix affiché. Pour avancer sereinement, pourriez-vous " +
+      "me préciser où en est votre financement (accord de principe, montant validé) ?\n\n" +
+      "Je vous propose une visite jeudi ou vendredi en fin de journée.\n\n" +
       "Bien à vous,\nCamille Roussel",
   },
 
@@ -552,24 +586,28 @@ const insights: Record<string, LeadInsight> = {
       "Bien à vous,\nCamille Roussel",
   },
 
-  // Rank 5 — relocation, no financials → asks for employer attestation + income.
+  // Rank 5 — SALE. Relocation buyer, budget + apport stated, loan not
+  // yet validated → reply asks about financing.
   "lead-morel": {
     inbound:
-      "Bonjour, je suis muté à Paris pour mon travail et je dois trouver un logement dans le 11e. " +
-      "Je suis assez flexible sur la date d'entrée. Le 24 rue de la Roquette est-il toujours libre ?",
+      "Bonjour, je suis muté à Paris et je cherche à acheter ma résidence principale " +
+      "dans le secteur. Mon budget est d'environ 410 000 €, avec un apport de 70 000 €. " +
+      "Mon financement est en cours de validation. Serait-il possible de visiter le 18 rue de Lancry ?",
     facts: [
-      { label: "Motif : mutation professionnelle", status: "found" },
-      { label: "Date d'entrée : flexible", status: "found" },
-      { label: "Revenus / employeur : non précisés", status: "gap" },
-      { label: "Garant : non précisé", status: "gap" },
+      { label: "Projet : résidence principale", status: "found" },
+      { label: "Budget : 410 000 €", status: "found" },
+      { label: "Apport : 70 000 €", status: "found" },
+      { label: "Financement : en cours de validation", status: "found" },
+      { label: "Accord de prêt : non confirmé", status: "gap" },
     ],
     replyAt: "05:05",
     reply:
       "Bonjour Thomas,\n\n" +
-      "Merci pour votre message — l'appartement est toujours libre et une mutation est tout à fait gérable, " +
-      "votre flexibilité sur la date aide. " +
-      "Pour avancer, une attestation de votre employeur ainsi que vos justificatifs de revenus " +
-      "me permettraient de présenter votre dossier au propriétaire.\n\n" +
+      "Merci pour votre message — le 18 rue de Lancry est toujours disponible, et une mutation " +
+      "est tout à fait gérable. Votre budget correspond au prix affiché. " +
+      "Pour avancer, pourriez-vous me préciser où en est votre financement " +
+      "(accord de principe, montant validé) ?\n\n" +
+      "Je vous propose une visite cette semaine.\n\n" +
       "Bien à vous,\nCamille Roussel",
   },
 
@@ -671,7 +709,7 @@ export const contactDirectory: ContactRow[] = [
     category: "Owner",
     manager: mgr.LM,
   },
-  // The six rental leads (the Lead Lens), as prospective tenants.
+  // The six leads (the Lead Lens) — tenants (rental) or buyers (sale).
   ...leads.map((l, i): ContactRow => {
     const extra = leadContact[l.id];
     return {
@@ -679,7 +717,7 @@ export const contactDirectory: ContactRow[] = [
       name: `${extra.civ} ${l.firstName} ${l.lastName}`,
       phone: extra.phone,
       email: extra.email,
-      category: "Tenant",
+      category: l.transactionType === "sale" ? "Buyer" : "Tenant",
       manager: leadManagers[l.id],
     };
   }),

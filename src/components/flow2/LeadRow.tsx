@@ -35,6 +35,9 @@ export function LeadRow({
             {lead.firstName} {lead.lastName}
           </span>
           <span className="portal">{lead.portal}</span>
+          <span className="lead-type">
+            {lead.transactionType === "sale" ? "Vente" : "Location"}
+          </span>
         </span>
         <span className="lead-row__sig">{lead.signals.join(" · ")}</span>
       </span>

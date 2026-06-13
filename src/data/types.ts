@@ -99,6 +99,10 @@ export type Warmth = "hot" | "warm" | "tepid";
  *  or hold the lead for the agent's decision? */
 export type LeadDisposition = "auto-sent" | "held";
 
+/** Whether the enquiry is a rental or a sale (buying) case — drives
+ *  the detail panel's vocabulary (signals, mandate card, reply). */
+export type TransactionType = "rental" | "sale";
+
 /** A structured fact the assistant extracted from the raw enquiry.
  *  "found" facts came from the prose; "gap" facts are what's missing. */
 export interface ExtractedFact {
@@ -138,9 +142,11 @@ export interface Lead {
   warmth: Warmth;
   /** Whether the assistant auto-sent the first reply or held the lead. */
   disposition: LeadDisposition;
+  /** Rental or sale — adapts the detail panel's vocabulary. */
+  transactionType: TransactionType;
   /** Ranking score, deterministic. Higher = warmer. */
   score: number;
-  /** Bien the lead enquired about. */
+  /** Bien (listing) the lead enquired about. */
   bienId: ID;
   /** Short warmth signals, e.g. "Replied within 4 min". */
   signals: string[];

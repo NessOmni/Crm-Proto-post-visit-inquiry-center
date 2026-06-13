@@ -21,8 +21,11 @@ import {
 
 export function LeadDetail({ lead }: { lead: Lead }) {
   const { substrate, repliedLeadIds, sendReply } = useDemo();
-  const bien = substrate.biens.find((b) => b.id === flow2.bienId)!;
-  const mandate = substrate.mandates.find((m) => m.id === flow2.mandateId)!;
+  // The listing (and its active mandate) the lead enquired about — which
+  // may be a rental or a sale. The panel reads its type to adapt.
+  const bien = substrate.biens.find((b) => b.id === lead.bienId)!;
+  const mandate = substrate.mandates.find((m) => m.bienId === lead.bienId)!;
+  const sale = lead.transactionType === "sale";
   const insight = flow2.insights[lead.id];
   const held = lead.disposition === "held";
   const replied = Boolean(repliedLeadIds[lead.id]);
@@ -129,15 +132,17 @@ export function LeadDetail({ lead }: { lead: Lead }) {
           <div className="mandate-card__addr">{bien.address}</div>
           <div className="mandate-card__meta">
             {bien.postalCode} {bien.city} · {bien.surfaceM2} m² · {bien.rooms}{" "}
-            rooms · ref. {bien.reference}
+            pièces · ref. {bien.reference}
           </div>
           <div className="mandate-card__row">
             <span className="mandate-badge">
-              {mandate.kind === "exclusive" ? "Exclusive mandate" : "Simple mandate"}
-              {mandate.active ? " · active" : ""}
+              Mandat {sale ? "de vente" : "de location"} ·{" "}
+              {mandate.kind === "exclusive" ? "exclusif" : "simple"}
+              {mandate.active ? " · actif" : ""}
             </span>
             <span className="mandate-card__price">
-              {bien.priceEur.toLocaleString("fr-FR")} € <small>/ month</small>
+              {bien.priceEur.toLocaleString("fr-FR")} €
+              {sale ? null : <small> / month</small>}
             </span>
           </div>
         </div>
