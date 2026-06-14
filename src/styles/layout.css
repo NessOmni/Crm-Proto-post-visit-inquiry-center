@@ -297,6 +297,18 @@
   line-height: 1.45;
   color: var(--text-2);
 }
+.brief-row__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+.brief-row__head:hover {
+  color: var(--text);
+}
 .brief-row__icon {
   width: 15px;
   height: 15px;
@@ -307,6 +319,38 @@
 .brief-row__cat {
   color: var(--text);
   font-weight: 500;
+}
+.brief-row__chev {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 5px;
+  vertical-align: -1px;
+  color: var(--text-3);
+  transition: transform var(--t);
+}
+.brief-row__chev--open {
+  transform: rotate(180deg);
+}
+/* Disclosed specifics — indented, lighter, scannable; not boxes. */
+.brief-sub {
+  list-style: none;
+  margin: 4px 0 2px;
+  padding-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.brief-sub__link {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--text-2);
+  text-align: left;
+}
+.brief-sub__link:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 .brief__priority {
   margin-top: 16px;
@@ -340,6 +384,12 @@
 }
 .brief__replay:hover {
   color: var(--text);
+}
+.brief__controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  flex: none;
 }
 .brief__toggle {
   display: inline-flex;

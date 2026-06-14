@@ -114,14 +114,6 @@ const OVERNIGHT_ACTIVITY: ActivityEntry[] = [
     group: "overnight",
   },
   {
-    id: "ov-emails",
-    text: "Overnight emails sorted · 5 logged, none need you",
-    tier: "automatic",
-    tag: "Automatic",
-    time: "06:04",
-    group: "overnight",
-  },
-  {
     id: "ov-enrich-contact",
     text: "Contact enriched · Margaux Bonnet — employer + 2nd phone added",
     tier: "automatic",
