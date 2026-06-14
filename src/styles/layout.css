@@ -151,6 +151,20 @@
   flex-direction: column;
   gap: 2px;
 }
+/* Grouped section header — same muted style as the "Navigate" eyebrow. */
+.sidebar__group-label {
+  font-size: 12px;
+  color: var(--text-3);
+  white-space: nowrap;
+  padding: 0 10px;
+  margin: 14px 0 4px;
+}
+/* Collapsed: a hairline stands in for the group header. */
+.sidebar__divider {
+  height: 1px;
+  background: var(--border-2);
+  margin: 10px 8px;
+}
 .sidebar__item {
   display: flex;
   align-items: center;

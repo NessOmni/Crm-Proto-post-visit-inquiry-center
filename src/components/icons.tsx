@@ -55,6 +55,40 @@ export const IconBiens = (p: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+/* Nav icons */
+export const IconHome = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M3 10.5 12 4l9 6.5" />
+    <path d="M5 9.8V20h14V9.8" />
+    <path d="M9.5 20v-5.5h5V20" />
+  </svg>
+);
+
+export const IconActivity = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M3 12h4l2.5-7 4 14 2.5-7H21" />
+  </svg>
+);
+
+export const IconBuilding2 = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M3 21h18" />
+    <path d="M5 21V5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v16" />
+    <path d="M13 21V9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v12" />
+    <path d="M8 7h2M8 11h2M8 15h2M16 12h.01M16 16h.01" />
+  </svg>
+);
+
+export const IconHandshake = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="m11 17 2 2a1 1 0 1 0 3-3" />
+    <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.8 5.8 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />
+    <path d="m21 3 1 11h-2" />
+    <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />
+    <path d="M3 4h8" />
+  </svg>
+);
+
 export const IconContacts = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base(p)}>
     <circle cx="12" cy="8" r="3.4" />

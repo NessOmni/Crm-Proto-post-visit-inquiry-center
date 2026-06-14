@@ -1,16 +1,29 @@
-/* Left sidebar — Attio-style: labelled nav that retracts to a
-   narrow icon rail. "Contacts" opens the database view; the other
-   items are present but inert for now. */
+/* Left sidebar — Attio-style: labelled nav that retracts to a narrow
+   icon rail. Two groups in French domain language. Nav items are inert
+   placeholders for the demo except the live routes: Accueil (the
+   briefing home) and Contacts (the existing database view). */
+import type { ComponentType, SVGProps } from "react";
 import { useDemo } from "../state/DemoContext";
-import { IconBiens, IconContacts, IconAgenda, IconPerformance } from "./icons";
-import { IconSidebar, IconChevronLeft } from "./icons";
+import {
+  IconHome,
+  IconAgenda,
+  IconActivity,
+  IconPerformance,
+  IconBuilding2,
+  IconFileSignature,
+  IconUsers,
+  IconHandshake,
+  IconSidebar,
+  IconChevronLeft,
+} from "./icons";
 
-const items = [
-  { id: "biens", label: "Biens", Icon: IconBiens, live: false },
-  { id: "contacts", label: "Contacts", Icon: IconContacts, live: true },
-  { id: "agenda", label: "Agenda", Icon: IconAgenda, live: false },
-  { id: "performance", label: "Performance", Icon: IconPerformance, live: false },
-];
+interface NavItem {
+  id: string;
+  label: string;
+  Icon: ComponentType<SVGProps<SVGSVGElement>>;
+  active?: boolean;
+  onClick?: () => void;
+}
 
 export function LeftRail({
   collapsed,
@@ -19,7 +32,42 @@ export function LeftRail({
   collapsed: boolean;
   onToggle: () => void;
 }) {
-  const { view, openContacts } = useDemo();
+  const { view, goHome, openContacts } = useDemo();
+
+  // Group 1 — surfaces.
+  const surfaces: NavItem[] = [
+    { id: "accueil", label: "Accueil", Icon: IconHome, active: view === "briefing", onClick: goHome },
+    { id: "agenda", label: "Agenda", Icon: IconAgenda },
+    { id: "activite", label: "Activité", Icon: IconActivity },
+    { id: "performance", label: "Performance", Icon: IconPerformance },
+  ];
+
+  // Group 2 — objects (Portefeuille).
+  const portfolio: NavItem[] = [
+    { id: "biens", label: "Biens", Icon: IconBuilding2 },
+    { id: "mandats", label: "Mandats", Icon: IconFileSignature },
+    { id: "contacts", label: "Contacts", Icon: IconUsers, active: view === "contacts", onClick: openContacts },
+    { id: "transactions", label: "Transactions", Icon: IconHandshake },
+  ];
+
+  const renderItem = (item: NavItem) => {
+    const live = Boolean(item.onClick);
+    return (
+      <button
+        key={item.id}
+        className={`sidebar__item ${item.active ? "sidebar__item--active" : ""}`}
+        aria-label={item.label}
+        title={collapsed ? item.label : undefined}
+        aria-disabled={live ? undefined : "true"}
+        aria-current={item.active ? "page" : undefined}
+        tabIndex={live ? 0 : -1}
+        onClick={item.onClick}
+      >
+        <item.Icon className="sidebar__item-icon" />
+        <span className="sidebar__item-text">{item.label}</span>
+      </button>
+    );
+  };
 
   return (
     <nav
@@ -39,26 +87,15 @@ export function LeftRail({
         </button>
       </div>
 
-      <div className="sidebar__items">
-        {items.map(({ id, label, Icon, live }) => {
-          const active = live && id === "contacts" && view === "contacts";
-          return (
-            <button
-              key={id}
-              className={`sidebar__item ${active ? "sidebar__item--active" : ""}`}
-              aria-label={label}
-              title={collapsed ? label : undefined}
-              aria-disabled={live ? undefined : "true"}
-              aria-current={active ? "page" : undefined}
-              tabIndex={live ? 0 : -1}
-              onClick={live && id === "contacts" ? openContacts : undefined}
-            >
-              <Icon className="sidebar__item-icon" />
-              <span className="sidebar__item-text">{label}</span>
-            </button>
-          );
-        })}
-      </div>
+      <div className="sidebar__items">{surfaces.map(renderItem)}</div>
+
+      {collapsed ? (
+        <div className="sidebar__divider" />
+      ) : (
+        <div className="sidebar__group-label">Portefeuille</div>
+      )}
+
+      <div className="sidebar__items">{portfolio.map(renderItem)}</div>
     </nav>
   );
 }
