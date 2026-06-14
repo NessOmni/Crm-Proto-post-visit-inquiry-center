@@ -1,0 +1,195 @@
+/* ============================================================
+   Voice moment — the generalized post-visit sequence. The
+   Understood strip is the emphasis, not the transcript.
+   ============================================================ */
+.voice-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(17, 24, 39, 0.3);
+  animation: fade 0.14s ease both;
+}
+.voice {
+  position: fixed;
+  z-index: 61;
+  left: 50%;
+  bottom: clamp(16px, 6vh, 64px);
+  transform: translateX(-50%);
+  width: min(640px, 94vw);
+  max-height: 82vh;
+  overflow-y: auto;
+  padding: 20px 22px 22px;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-pop);
+  animation: voice-rise 0.22s ease both;
+}
+@keyframes voice-rise {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+.voice__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.voice__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+}
+.voice__pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+.voice__file {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+.voice__file svg {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+}
+.voice__close {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-btn);
+  color: var(--text-2);
+  border: 1px solid var(--border-2);
+  flex: none;
+}
+.voice__close:hover {
+  color: var(--text);
+}
+.voice__frame {
+  font-size: 12.5px;
+  color: var(--text-2);
+  margin-bottom: 10px;
+}
+.voice__transcript {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text);
+  min-height: 2.6em;
+}
+.voice__caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--accent);
+  animation: blink 1s steps(2) infinite;
+}
+
+/* Understood — the emphasis */
+.voice__understood {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-2);
+  animation: fade 0.3s ease both;
+}
+.voice__label {
+  display: block;
+  margin-bottom: 10px;
+}
+.voice__intents {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.uintent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 10px 12px;
+  border-radius: var(--r-input);
+  background: var(--accent-tint);
+  border: 1px solid rgba(66, 99, 235, 0.18);
+}
+.uchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  padding: 4px 9px;
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  border: 1px dashed var(--text-3); /* correctable-looking */
+  cursor: text;
+}
+.uchip__label {
+  color: var(--text-2);
+}
+.uchip__value {
+  color: var(--text);
+  font-weight: 500;
+}
+.uchip__edit {
+  width: 12px;
+  height: 12px;
+  color: var(--text-3);
+}
+
+/* Drafted outputs / field updates */
+.voice__outputs {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fade 0.3s ease both;
+}
+.voutput {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--r-input);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.voutput--field {
+  border-left: 3px solid var(--success);
+}
+.voutput__title {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.voutput__detail {
+  color: var(--success);
+  font-weight: 600;
+}
+.voutput__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+.voutput__btn {
+  height: 30px;
+  padding: 0 12px;
+  font-size: 12.5px;
+}

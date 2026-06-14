@@ -177,6 +177,12 @@ export function RightColumn() {
             <kbd>2</kbd> Lead Lens
           </li>
           <li>
+            <kbd>3</kbd> Dictate (global)
+          </li>
+          <li>
+            <kbd>4</kbd> Upload recording
+          </li>
+          <li>
             <kbd>R</kbd> Replay the scene
           </li>
         </ul>

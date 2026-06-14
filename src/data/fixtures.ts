@@ -15,6 +15,7 @@ import type {
   LeadEnrichment,
   SuggestedMatch,
   ContactRow,
+  VoiceScenario,
 } from "./types";
 
 /* --- Agency & agent --------------------------------------- */
@@ -693,6 +694,115 @@ export const flow2 = {
     ],
   } as Record<string, SuggestedMatch[]>,
 } as const;
+
+/* ============================================================
+   Voice scenarios — scripted "voice moments". The emphasis is the
+   Understood strip (comprehension + routing), not the transcript.
+   ============================================================ */
+
+export const voiceScenarios: Record<string, VoiceScenario> = {
+  // C — global multi-intent: one free sentence → two contacts, a
+  // listing, two actions, routed and drafted. No fields typed.
+  global: {
+    id: "global",
+    context: "global",
+    transcript:
+      "Envoie le DPE à Mme Fontaine pour le 12 rue Lamartine, et propose à " +
+      "Antoine David une visite jeudi en fin de journée.",
+    intents: [
+      {
+        chips: [
+          { label: "Contact", value: "Hélène Fontaine" },
+          { label: "Listing", value: "12 rue Lamartine" },
+          { label: "Action", value: "envoyer le DPE" },
+        ],
+      },
+      {
+        chips: [
+          { label: "Contact", value: "Antoine David" },
+          { label: "Action", value: "proposer une visite" },
+          { label: "When", value: "jeudi, fin de journée" },
+        ],
+      },
+    ],
+    outputs: [
+      {
+        id: "global-out-1",
+        kind: "card",
+        title: "Email to Hélène Fontaine — DPE, 12 rue Lamartine",
+      },
+      {
+        id: "global-out-2",
+        kind: "card",
+        title: "Visit proposal to Antoine David — Thursday, late afternoon",
+      },
+    ],
+  },
+
+  // D — upload a recording ("I wasn't on the app").
+  upload: {
+    id: "upload",
+    context: "upload",
+    fileName: "rdv-durand.m4a",
+    frameCopy: "Recorded on your phone during the meeting — dropped in here.",
+    transcript:
+      "Bon, finalement Mme Durand peut monter jusqu'à 460 000 euros, et elle " +
+      "aimerait visiter assez rapidement.",
+    intents: [
+      {
+        chips: [
+          { label: "Contact", value: "Mme Durand" },
+          { label: "Updated budget", value: "460 k€" },
+          { label: "Wants", value: "visite rapide" },
+        ],
+      },
+    ],
+    outputs: [
+      {
+        id: "upload-out-1",
+        kind: "field",
+        title: "Mme Durand · Budget",
+        detail: "→ 460 000 €",
+      },
+      {
+        id: "upload-out-2",
+        kind: "card",
+        title: "Follow-up to Mme Durand — visit options",
+      },
+    ],
+  },
+
+  // E — record-scoped dictation on Antoine David's contact record.
+  "record-david": {
+    id: "record-david",
+    context: "record",
+    scopedTo: "Antoine David",
+    transcript:
+      "Il a confirmé son apport de 80 000 € et veut visiter rapidement.",
+    intents: [
+      {
+        chips: [
+          { label: "Contact", value: "Antoine David · scoped" },
+          { label: "Apport", value: "80 000 €" },
+          { label: "Wants", value: "visite rapide" },
+        ],
+      },
+    ],
+    outputs: [
+      {
+        id: "record-david-out-1",
+        kind: "field",
+        title: "Antoine David · Apport",
+        detail: "→ 80 000 €",
+      },
+      {
+        id: "record-david-out-2",
+        kind: "card",
+        title: "Next step — propose a viewing to Antoine David",
+      },
+    ],
+  },
+};
 
 /* ============================================================
    Contacts directory — the classic CRM "All contacts" table.

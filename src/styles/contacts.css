@@ -185,17 +185,27 @@
   box-shadow: var(--shadow-pop);
 }
 .menu__item {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 9px;
   width: 100%;
   text-align: left;
   font-size: 13px;
   color: var(--text);
-  padding: 7px 10px;
+  padding: 8px 10px;
   border-radius: 6px;
 }
 .menu__item:hover {
   background: var(--accent-tint);
   color: var(--accent);
+}
+/* Opens upward, anchored to the mic. */
+.menu--up {
+  top: auto;
+  bottom: calc(100% + 8px);
+  right: 0;
+  left: auto;
+  min-width: 184px;
 }
 
 .filterbar__right {

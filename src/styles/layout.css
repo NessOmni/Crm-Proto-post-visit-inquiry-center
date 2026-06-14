@@ -774,6 +774,10 @@
   background: var(--canvas);
   color: var(--text);
 }
+.convo__micwrap {
+  position: relative;
+  flex: none;
+}
 .convo__mic {
   display: grid;
   place-items: center;

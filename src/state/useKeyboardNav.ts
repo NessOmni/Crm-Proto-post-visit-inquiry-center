@@ -31,12 +31,15 @@ export function useKeyboardNav() {
     substrate,
     selectedLeadId,
     repliedLeadIds,
+    voiceScenario,
     startVoiceNote,
     openReview,
     approve,
     openLens,
     selectLead,
     sendReply,
+    startVoice,
+    closeVoice,
     replay,
   } = useDemo();
 
@@ -48,6 +51,15 @@ export function useKeyboardNav() {
       if (!editing && (e.key === "r" || e.key === "R")) {
         e.preventDefault();
         replay();
+        return;
+      }
+
+      // A voice moment is modal: Esc closes it; nothing else fires behind it.
+      if (voiceScenario) {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          closeVoice();
+        }
         return;
       }
 
@@ -97,6 +109,12 @@ export function useKeyboardNav() {
       } else if (e.key === "2") {
         e.preventDefault();
         openLens();
+      } else if (e.key === "3") {
+        e.preventDefault();
+        startVoice("global");
+      } else if (e.key === "4") {
+        e.preventDefault();
+        startVoice("upload");
       }
     };
 
@@ -110,12 +128,15 @@ export function useKeyboardNav() {
     substrate,
     selectedLeadId,
     repliedLeadIds,
+    voiceScenario,
     startVoiceNote,
     openReview,
     approve,
     openLens,
     selectLead,
     sendReply,
+    startVoice,
+    closeVoice,
     replay,
   ]);
 }

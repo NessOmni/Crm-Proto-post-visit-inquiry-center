@@ -9,10 +9,11 @@ import { VoiceCapture } from "./components/flow1/VoiceCapture";
 import { ReviewSheet } from "./components/flow1/ReviewSheet";
 import { LeadLens } from "./components/flow2/LeadLens";
 import { ContactsView } from "./components/contacts/ContactsView";
+import { VoiceMoment } from "./components/voice/VoiceMoment";
 import { IconReplay } from "./components/icons";
 
 export default function App() {
-  const { substrate, replay, view, goHome } = useDemo();
+  const { substrate, replay, view, goHome, startVoice } = useDemo();
   const { agency, agent } = substrate;
   useKeyboardNav();
 
@@ -67,7 +68,11 @@ export default function App() {
               <div className="center">
                 <Briefing />
                 <VoiceCapture />
-                <ConversationBar />
+                <ConversationBar
+                  placeholder="Ask your assistant, or hold to dictate…"
+                  onDictate={() => startVoice("global")}
+                  onUpload={() => startVoice("upload")}
+                />
               </div>
               <RightColumn />
             </>
@@ -77,6 +82,7 @@ export default function App() {
 
       <ReviewSheet />
       <LeadLens />
+      <VoiceMoment />
     </div>
   );
 }

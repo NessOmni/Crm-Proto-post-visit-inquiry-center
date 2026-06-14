@@ -14,12 +14,15 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { Substrate, TrustTier } from "../data/types";
-import { loadSubstrate, flow1 } from "../data/fixtures";
+import type { Substrate, TrustTier, VoiceScenario } from "../data/types";
+import { loadSubstrate, flow1, voiceScenarios } from "../data/fixtures";
 import { commById, outputRecipient } from "../data/selectors";
 
 /** Flow 1 progresses through these phases. */
 export type Flow1Phase = "idle" | "recording" | "processing" | "ready" | "approved";
+
+/** A generalized "voice moment" plays through these beats. */
+export type VoicePhase = "transcribing" | "understood" | "drafted";
 
 /** The home briefing, or the deep Contacts database view. */
 export type AppView = "briefing" | "contacts";
@@ -64,6 +67,13 @@ interface DemoState {
   // Navigation — which surface is showing
   view: AppView;
 
+  // Voice — the generalized "voice moment"
+  voiceScenario: VoiceScenario | null;
+  voicePhase: VoicePhase;
+  voiceTranscript: string;
+  voiceTranscriptDone: boolean;
+  approvedVoice: Record<string, boolean>;
+
   // actions
   startVoiceNote: () => void;
   openReview: () => void;
@@ -75,6 +85,9 @@ interface DemoState {
   sendReply: (id: string) => void;
   openContacts: () => void;
   goHome: () => void;
+  startVoice: (id: string) => void;
+  closeVoice: () => void;
+  approveVoiceOutput: (outputId: string) => void;
   replay: () => void;
 }
 
@@ -242,8 +255,65 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   // Navigation
   const [view, setView] = useState<AppView>("briefing");
 
+  // Voice — the generalized voice moment (global / upload / record).
+  const [voiceId, setVoiceId] = useState<string | null>(null);
+  const [voicePhase, setVoicePhase] = useState<VoicePhase>("transcribing");
+  const [voiceReveal, setVoiceReveal] = useState(0);
+  const [approvedVoice, setApprovedVoice] = useState<Record<string, boolean>>({});
+
   const tokens = useMemo(() => flow1.transcript.split(" "), []);
   const approveTimer = useRef<number | null>(null);
+
+  const voiceScenario = voiceId ? voiceScenarios[voiceId] : null;
+  const voiceTokens = useMemo(
+    () => (voiceId ? voiceScenarios[voiceId].transcript.split(" ") : []),
+    [voiceId],
+  );
+
+  // --- Voice: stream the transcript, then reveal Understood, then drafts.
+  useEffect(() => {
+    if (!voiceId || voicePhase !== "transcribing") return;
+    setVoiceReveal(0);
+    const timers: number[] = [];
+    let i = 0;
+    const interval = window.setInterval(() => {
+      i += 1;
+      setVoiceReveal(i);
+      if (i >= voiceTokens.length) {
+        window.clearInterval(interval);
+        timers.push(window.setTimeout(() => setVoicePhase("understood"), 520));
+      }
+    }, 58);
+    return () => {
+      window.clearInterval(interval);
+      timers.forEach(window.clearTimeout);
+    };
+  }, [voiceId, voicePhase, voiceTokens.length]);
+
+  useEffect(() => {
+    if (!voiceId || voicePhase !== "understood") return;
+    const t = window.setTimeout(() => setVoicePhase("drafted"), 1100);
+    return () => window.clearTimeout(t);
+  }, [voiceId, voicePhase]);
+
+  const startVoice = useCallback((id: string) => {
+    if (!voiceScenarios[id]) return;
+    setVoiceId(id);
+    setVoicePhase("transcribing");
+    setVoiceReveal(0);
+    setApprovedVoice({});
+  }, []);
+
+  const closeVoice = useCallback(() => setVoiceId(null), []);
+
+  const approveVoiceOutput = useCallback((outputId: string) => {
+    setApprovedVoice((prev) => ({ ...prev, [outputId]: true }));
+  }, []);
+
+  const voiceTranscript = useMemo(
+    () => voiceTokens.slice(0, voiceReveal).join(" "),
+    [voiceTokens, voiceReveal],
+  );
 
   // --- Recording: stream the transcript, then move to processing ---
   useEffect(() => {
@@ -330,6 +400,10 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     setSelectedLeadId(null);
     setRepliedLeadIds({});
     setView("briefing"); // back to the home briefing; Contacts filters unmount
+    setVoiceId(null);
+    setVoicePhase("transcribing");
+    setVoiceReveal(0);
+    setApprovedVoice({});
   }, []);
 
   const transcriptText = useMemo(
@@ -349,6 +423,11 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     selectedLeadId,
     repliedLeadIds,
     view,
+    voiceScenario,
+    voicePhase,
+    voiceTranscript,
+    voiceTranscriptDone: voiceReveal >= voiceTokens.length && voiceTokens.length > 0,
+    approvedVoice,
     startVoiceNote,
     openReview,
     closeReview,
@@ -359,6 +438,9 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     sendReply,
     openContacts,
     goHome,
+    startVoice,
+    closeVoice,
+    approveVoiceOutput,
     replay,
   };
 

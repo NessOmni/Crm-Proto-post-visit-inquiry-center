@@ -195,6 +195,26 @@ export const IconBellRing = (p: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+export const IconEdit = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 12, height: 12, ...p })}>
+    <path d="M12 20h9" />
+    <path d="M16.5 3.5a2 2 0 0 1 3 3L7 19l-4 1 1-4Z" />
+  </svg>
+);
+
+export const IconUpload = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 16, height: 16, ...p })}>
+    <path d="M12 15V4M8 8l4-4 4 4" />
+    <path d="M5 16v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2" />
+  </svg>
+);
+
+export const IconWaveform = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M5 9v6M9 5v14M12 8v8M15 6v12M19 10v4" />
+  </svg>
+);
+
 export const IconSidebar = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base(p)}>
     <rect x="3.5" y="5" width="17" height="14" rx="2.5" />

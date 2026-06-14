@@ -103,6 +103,50 @@ export type LeadDisposition = "auto-sent" | "held";
  *  the detail panel's vocabulary (signals, mandate card, reply). */
 export type TransactionType = "rental" | "sale";
 
+/* ============================================================
+   Voice — scripted "voice moment" scenarios. The showcased value
+   is comprehension + routing (resolving who/which/what from
+   natural speech), not transcription. Deterministic fixtures.
+   ============================================================ */
+
+export type VoiceContext = "global" | "upload" | "record";
+
+/** One resolved fact the assistant pulled from the speech. */
+export interface VoiceChip {
+  label: string;
+  value: string;
+}
+
+/** One intent resolved from the sentence (a sentence may carry several). */
+export interface VoiceIntent {
+  chips: VoiceChip[];
+}
+
+/** A drafted message card, or an auto-applied record-field update. */
+export type VoiceOutputKind = "card" | "field";
+export interface VoiceOutput {
+  id: string;
+  kind: VoiceOutputKind;
+  title: string;
+  detail?: string;
+}
+
+export interface VoiceScenario {
+  id: string;
+  context: VoiceContext;
+  /** Upload case only. */
+  fileName?: string;
+  frameCopy?: string;
+  /** Record case: the contact the dictation is pre-scoped to. */
+  scopedTo?: string;
+  /** The spoken words (French), streamed in. */
+  transcript: string;
+  /** Resolved entities + intent — the trust beat, the emphasis. */
+  intents: VoiceIntent[];
+  /** Drafted outputs / field updates. */
+  outputs: VoiceOutput[];
+}
+
 /** A structured fact the assistant extracted from the raw enquiry.
  *  "found" facts came from the prose; "gap" facts are what's missing. */
 export interface ExtractedFact {

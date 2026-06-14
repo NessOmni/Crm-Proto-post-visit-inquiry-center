@@ -3,23 +3,32 @@
    Closing returns to the calm briefing. It is not an inbox. */
 import { useEffect } from "react";
 import { useDemo } from "../../state/DemoContext";
-import { flow2 } from "../../data/fixtures";
+import { flow2, voiceScenarios } from "../../data/fixtures";
 import { LeadRow } from "./LeadRow";
 import { LeadDetail } from "./LeadDetail";
+import { ConversationBar } from "../ConversationBar";
 import { IconClose } from "../icons";
 
 export function LeadLens() {
-  const { substrate, lensOpen, selectedLeadId, selectLead, closeLens } = useDemo();
+  const {
+    substrate,
+    lensOpen,
+    selectedLeadId,
+    selectLead,
+    closeLens,
+    voiceScenario,
+    startVoice,
+  } = useDemo();
 
-  // Esc returns to the briefing.
+  // Esc returns to the briefing — unless a voice moment is open over it.
   useEffect(() => {
     if (!lensOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeLens();
+      if (e.key === "Escape" && !voiceScenario) closeLens();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [lensOpen, closeLens]);
+  }, [lensOpen, closeLens, voiceScenario]);
 
   if (!lensOpen) return null;
 
@@ -64,6 +73,17 @@ export function LeadLens() {
 
         <LeadDetail key={selected.id} lead={selected} />
       </div>
+
+      {/* Record-scoped voice — pre-scoped to the selected lead. The
+          scripted dictation is wired for Antoine David. */}
+      <ConversationBar
+        placeholder={`Dictate a note or update for ${selected.firstName} ${selected.lastName}…`}
+        onDictate={
+          voiceScenarios[`record-${selected.id.replace("lead-", "")}`]
+            ? () => startVoice(`record-${selected.id.replace("lead-", "")}`)
+            : undefined
+        }
+      />
     </section>
   );
 }
