@@ -694,6 +694,15 @@
   font-size: 13px;
   color: var(--text-2);
 }
+.activity__more {
+  display: block;
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+.activity__more:hover {
+  color: var(--text);
+}
 
 /* Presenter keys — quiet footer in the right column */
 .keys {

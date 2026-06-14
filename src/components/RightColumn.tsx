@@ -1,14 +1,50 @@
 /* Right column — a full "Today" agenda + Assistant activity summary.
    The agenda emphasises the imminent next visit; the rest is quiet. */
-import { Fragment } from "react";
+import { useState } from "react";
+import type { ActivityEntry } from "../state/DemoContext";
 import { useDemo } from "../state/DemoContext";
 import { SourceChip } from "./SourceChip";
 import { Attribution } from "./Attribution";
 import { IconCheck } from "./icons";
 
+// How many overnight items show before the rail tucks the rest away.
+const OVERNIGHT_PREVIEW = 5;
+
+function ActivityRow({ entry }: { entry: ActivityEntry }) {
+  return (
+    <div className="activity__row">
+      <span
+        className={`activity__dot ${
+          entry.tier === "drafted" ? "activity__dot--drafted" : ""
+        }`}
+      />
+      <span className="activity__text">
+        {entry.text}
+        <span className="activity__time">
+          <span>
+            {entry.tag} · {entry.time}
+          </span>
+          {entry.source && <SourceChip source={entry.source} />}
+          {entry.actor && <Attribution actor={entry.actor} />}
+        </span>
+      </span>
+    </div>
+  );
+}
+
 export function RightColumn() {
   const { substrate, activity } = useDemo();
   const roquette = substrate.biens.find((b) => b.id === "bien-roquette")!;
+
+  // Keep the rail calm: approved actions always show; the overnight feed
+  // previews a few and tucks the rest behind a quiet "Show more".
+  const [expanded, setExpanded] = useState(false);
+  const approved = activity.filter((e) => e.group === "approved");
+  const overnight = activity.filter((e) => e.group === "overnight");
+  const shownOvernight = expanded
+    ? overnight
+    : overnight.slice(0, OVERNIGHT_PREVIEW);
+  const hiddenCount = overnight.length - shownOvernight.length;
 
   return (
     <aside className="aside" aria-label="Day context">
@@ -106,38 +142,28 @@ export function RightColumn() {
           Today · 7 tasks — <strong>4 handled</strong>, 3 need you.
         </div>
         <div className="activity__feed">
-          {activity.map((entry, i) => {
-            // The "Overnight" eyebrow precedes the first overnight item —
-            // so it sits under the header on load, and below the approved
-            // actions once the feed has grown.
-            const firstOvernight =
-              entry.group === "overnight" &&
-              (i === 0 || activity[i - 1].group !== "overnight");
-            return (
-              <Fragment key={entry.id}>
-                {firstOvernight && (
-                  <div className="activity__eyebrow kicker">Overnight</div>
-                )}
-                <div className="activity__row">
-                  <span
-                    className={`activity__dot ${
-                      entry.tier === "drafted" ? "activity__dot--drafted" : ""
-                    }`}
-                  />
-                  <span className="activity__text">
-                    {entry.text}
-                    <span className="activity__time">
-                      <span>
-                        {entry.tag} · {entry.time}
-                      </span>
-                      {entry.source && <SourceChip source={entry.source} />}
-                      {entry.actor && <Attribution actor={entry.actor} />}
-                    </span>
-                  </span>
-                </div>
-              </Fragment>
-            );
-          })}
+          {/* Approved actions (after Flow 1) always show — they're yours. */}
+          {approved.map((entry) => (
+            <ActivityRow key={entry.id} entry={entry} />
+          ))}
+
+          {overnight.length > 0 && (
+            <div className="activity__eyebrow kicker">Overnight</div>
+          )}
+          {shownOvernight.map((entry) => (
+            <ActivityRow key={entry.id} entry={entry} />
+          ))}
+
+          {overnight.length > OVERNIGHT_PREVIEW && (
+            <button
+              type="button"
+              className="activity__more"
+              onClick={() => setExpanded((v) => !v)}
+              aria-expanded={expanded}
+            >
+              {expanded ? "Show less" : `Show ${hiddenCount} more`}
+            </button>
+          )}
         </div>
       </section>
 
