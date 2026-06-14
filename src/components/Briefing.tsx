@@ -5,7 +5,13 @@ import type { CardVariant } from "./BriefingCard";
 import { DecisionCard } from "./flow1/DecisionCard";
 import { BurstCard } from "./flow2/BurstCard";
 import { AmbientCard } from "./AmbientCard";
-import { IconFileText, IconFileSignature, IconGauge, IconPhone } from "./icons";
+import {
+  IconFileText,
+  IconFileSignature,
+  IconGauge,
+  IconPhone,
+  IconBellRing,
+} from "./icons";
 
 // Listing photo for the Sedaine mandate (gradient fallback when offline).
 const SEDAINE_PHOTO =
@@ -96,6 +102,22 @@ export function Briefing() {
           body="8-minute call transcribed and matched to his contact. 3 actions detected — follow-up email drafted, valuation flagged, viewing to schedule."
           cta="Review"
           source="call · 08 Jun"
+        />
+
+        {/* Re-engagement: dormant leads woken by a REAL new trigger — the
+            trigger chips are what separate this from a timed cadence blast. */}
+        <AmbientCard
+          variant={variantOf("reengage")}
+          Icon={IconBellRing}
+          workflow="Re-engagement"
+          subject="2 dormant contacts"
+          title="2 sleeping leads just got a reason to hear from you"
+          body="Julien Caron — quiet since January — a new mandate matches the search he'd given up on. Mme Lefèvre — estimation 8 months cold — now has two active buyers fitting her property. Both notes drafted in your voice, each built on a real new reason."
+          triggers={[
+            "new matching listing",
+            "matching buyers + comparable sold",
+          ]}
+          cta="Review 2"
         />
 
         {/* Tier 3 — informational handled rows. Quietest, no CTA. */}

@@ -186,6 +186,15 @@ export const IconPhone = (p: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+export const IconBellRing = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M10.3 21a2 2 0 0 0 3.4 0" />
+    <path d="M22 8c0-2.3-.8-4.3-2-6" />
+    <path d="M3.26 15.33A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.67C19.41 14 18 12.5 18 8A6 6 0 0 0 6 8c0 4.5-1.41 6-2.74 7.33" />
+    <path d="M4 2C2.8 3.7 2 5.7 2 8" />
+  </svg>
+);
+
 export const IconSidebar = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base(p)}>
     <rect x="3.5" y="5" width="17" height="14" rx="2.5" />

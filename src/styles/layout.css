@@ -428,6 +428,23 @@
   margin-bottom: 16px;
 }
 
+/* Trigger chips — the proof a re-engagement is event-driven, not timed. */
+.trigger-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.trigger-chip {
+  font-size: 11px;
+  color: var(--text-2);
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border-2);
+  background: var(--surface);
+  white-space: nowrap;
+}
+
 /* Footer — CTA(s) + meta. Per-card CTA styles preserved. */
 .bcard__footer {
   display: flex;

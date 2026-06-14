@@ -15,6 +15,7 @@ export function AmbientCard({
   body,
   cta,
   source,
+  triggers,
 }: {
   variant: CardVariant;
   Icon: ComponentType<SVGProps<SVGSVGElement>>;
@@ -25,6 +26,8 @@ export function AmbientCard({
   body: string;
   cta: string;
   source?: string;
+  /** Why each item surfaced now — the proof it's not a timed blast. */
+  triggers?: string[];
 }) {
   return (
     <BriefingCard
@@ -44,6 +47,16 @@ export function AmbientCard({
           {cta} <IconArrow />
         </button>
       }
-    />
+    >
+      {triggers && triggers.length > 0 && (
+        <div className="trigger-chips">
+          {triggers.map((t) => (
+            <span key={t} className="trigger-chip">
+              trigger: {t}
+            </span>
+          ))}
+        </div>
+      )}
+    </BriefingCard>
   );
 }
