@@ -27,11 +27,13 @@ export type VoicePhase = "transcribing" | "understood" | "drafted";
 /** The home briefing, or the deep Contacts database view. */
 export type AppView = "briefing" | "contacts";
 
-/** Who a cross-actor activity item came from — a teammate, or a client
- *  acting through the portal. Drives the attribution element. */
-export type ActivityActor =
-  | { kind: "teammate"; name: string; initials: string }
-  | { kind: "client"; initials: string };
+/** What set off an assistant action that another actor caused. The actor
+ *  of the log line is ALWAYS the assistant; this names the source.
+ *  Three visually distinct kinds make the fold legible. */
+export type TriggerSource =
+  | { kind: "teammate"; name: string; initials: string; detail: string }
+  | { kind: "assistant-of"; name: string; detail: string }
+  | { kind: "client"; detail: string };
 
 export interface ActivityEntry {
   id: string;
@@ -43,8 +45,9 @@ export interface ActivityEntry {
   group: "overnight" | "approved";
   /** Provenance, when the assistant enriched from a source. */
   source?: string;
-  /** Attribution, when the item came from a colleague or a client. */
-  actor?: ActivityActor;
+  /** What triggered this assistant action — a teammate, a colleague's
+   *  assistant, or a client. The action itself is always the assistant's. */
+  triggeredBy?: TriggerSource;
 }
 
 interface DemoState {
@@ -145,42 +148,55 @@ const OVERNIGHT_ACTIVITY: ActivityEntry[] = [
     group: "overnight",
     source: "call · 08 Jun",
   },
-  // Cross-actor: the wider agency humming — logged, attributed, not pushed.
+  // Cross-actor: every line is MY assistant's action; the source that
+  // set it off rides along as a "triggered by" tag.
   {
-    id: "ov-team-mandate",
-    text: "New mandate · 11 rue Oberkampf — added by Karim Benali",
+    id: "ov-resp-karim",
+    text: "Drafted buyer alert · Mme Durand",
     tier: "automatic",
     tag: "Automatic",
-    time: "07:40",
+    time: "07:42",
     group: "overnight",
-    actor: { kind: "teammate", name: "Karim Benali", initials: "KB" },
+    triggeredBy: {
+      kind: "teammate",
+      name: "Karim Benali",
+      initials: "KB",
+      detail: "new mandate, 11 rue Oberkampf",
+    },
   },
   {
-    id: "ov-team-offer",
-    text: "Offer logged · 5 rue de Lancry — by Sophie Marchand",
+    id: "ov-resp-mesh",
+    text: "Drafted price-update note · 9 rue des Martyrs",
     tier: "automatic",
     tag: "Automatic",
-    time: "06:50",
+    time: "04:55",
     group: "overnight",
-    actor: { kind: "teammate", name: "Sophie Marchand", initials: "SM" },
+    triggeredBy: {
+      kind: "assistant-of",
+      name: "Karim",
+      detail: "flagged a new comparable",
+    },
   },
   {
-    id: "ov-client-doc",
-    text: "Document uploaded · M. Mercier added his DPE",
+    id: "ov-resp-mercier",
+    text: "Filed M. Mercier's DPE · 12 rue Lamartine now complete",
     tier: "automatic",
     tag: "Automatic",
-    time: "06:20",
+    time: "06:21",
     group: "overnight",
-    actor: { kind: "client", initials: "JM" },
+    triggeredBy: { kind: "client", detail: "M. Mercier upload" },
   },
   {
-    id: "ov-client-budget",
-    text: "Buyer updated their budget · J. Caron, now 460 k€",
+    id: "ov-resp-caron",
+    text: "Re-checked J. Caron's matches · 1 new fit",
     tier: "automatic",
     tag: "Automatic",
-    time: "05:30",
+    time: "05:31",
     group: "overnight",
-    actor: { kind: "client", initials: "JC" },
+    triggeredBy: {
+      kind: "client",
+      detail: "J. Caron updated budget to 460 k€",
+    },
   },
   {
     id: "ov-dedup",

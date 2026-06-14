@@ -195,6 +195,12 @@ export const IconBellRing = (p: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+export const IconSpark = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 12, height: 12, ...p })}>
+    <path d="M12 3l1.6 5.4L19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6L12 3Z" />
+  </svg>
+);
+
 export const IconEdit = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base({ width: 12, height: 12, ...p })}>
     <path d="M12 20h9" />

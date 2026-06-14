@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { ActivityEntry } from "../state/DemoContext";
 import { useDemo } from "../state/DemoContext";
 import { SourceChip } from "./SourceChip";
-import { Attribution } from "./Attribution";
+import { TriggeredBy } from "./TriggeredBy";
 import { IconCheck } from "./icons";
 
 // How many overnight items show before the rail tucks the rest away.
@@ -25,7 +25,7 @@ function ActivityRow({ entry }: { entry: ActivityEntry }) {
             {entry.tag} · {entry.time}
           </span>
           {entry.source && <SourceChip source={entry.source} />}
-          {entry.actor && <Attribution actor={entry.actor} />}
+          {entry.triggeredBy && <TriggeredBy src={entry.triggeredBy} />}
         </span>
       </span>
     </div>
@@ -135,11 +135,6 @@ export function RightColumn() {
       <section className="panel card activity">
         <div className="panel__head">
           <span className="panel__title">Assistant activity</span>
-        </div>
-        {/* Ties the handled activity + the to-approve cards to the familiar
-            task-list mental model — no new surface. */}
-        <div className="activity__summary">
-          Today · 7 tasks — <strong>4 handled</strong>, 3 need you.
         </div>
         <div className="activity__feed">
           {/* Approved actions (after Flow 1) always show — they're yours. */}

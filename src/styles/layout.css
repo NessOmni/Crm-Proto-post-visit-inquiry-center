@@ -249,6 +249,17 @@
   color: var(--text-2);
   max-width: 56ch;
 }
+/* Day summary — spans the decision cards (need you) + the handled log. */
+.briefing__summary {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text-2);
+  max-width: 60ch;
+}
+.briefing__summary strong {
+  color: var(--text);
+  font-weight: 600;
+}
 .briefing__cards {
   display: flex;
   flex-direction: column;
@@ -639,17 +650,6 @@
 }
 
 /* Assistant activity summary */
-.activity__summary {
-  font-size: 12.5px;
-  color: var(--text-2);
-  margin-bottom: 14px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border-2);
-}
-.activity__summary strong {
-  color: var(--text);
-  font-weight: 600;
-}
 .activity__eyebrow {
   margin: 12px 0 6px;
 }
@@ -702,6 +702,33 @@
 }
 .activity__more:hover {
   color: var(--text);
+}
+
+/* "Triggered by" tag — the source that set off an assistant action. */
+.trig {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-2);
+}
+.trig__by {
+  color: var(--text-3);
+}
+.trig__src {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+  color: var(--text);
+}
+/* A colleague's assistant — the AI fold, set apart with the accent + spark. */
+.trig__src--assist {
+  color: var(--accent);
+}
+.trig__detail {
+  color: var(--text-2);
 }
 
 /* Presenter keys — quiet footer in the right column */
