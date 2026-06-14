@@ -182,7 +182,8 @@
 }
 .lens__list {
   overflow-y: auto;
-  padding: 6px 0 20px;
+  /* Bottom clearance so rows never hide behind the docked bar. */
+  padding: 6px 0 84px;
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border);
@@ -314,7 +315,8 @@
    ============================================================ */
 .lead-detail {
   overflow-y: auto;
-  padding: 24px clamp(20px, 3vw, 36px) 40px;
+  /* Bottom clearance so content clears the docked bar. */
+  padding: 24px clamp(20px, 3vw, 36px) 96px;
   background: var(--canvas);
 }
 .lead-detail__head {

@@ -63,16 +63,18 @@ export default function App() {
             <ContactsView />
           ) : (
             <>
-              {/* The centre column: briefing scrolls; the voice/conversation
-                  dock is anchored to its bottom, aligned to the content column. */}
+              {/* The centre column: briefing scrolls behind a persistent
+                  bottom dock, aligned to the content column. */}
               <div className="center">
                 <Briefing />
-                <VoiceCapture />
-                <ConversationBar
-                  placeholder="Ask your assistant, or hold to dictate…"
-                  onDictate={() => startVoice("global")}
-                  onUpload={() => startVoice("upload")}
-                />
+                <div className="dock">
+                  <VoiceCapture />
+                  <ConversationBar
+                    placeholder="Ask your assistant, or hold to dictate…"
+                    onDictate={() => startVoice("global")}
+                    onUpload={() => startVoice("upload")}
+                  />
+                </div>
               </div>
               <RightColumn />
             </>

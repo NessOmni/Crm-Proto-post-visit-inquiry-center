@@ -96,11 +96,12 @@ button {
 }
 
 /* ============================================================
-   Canvas — flat light gray, no gradient, no grain
+   Canvas — flat light gray, no gradient, no grain. A definite
+   height so the panes scroll internally (not the whole page).
    ============================================================ */
 .canvas {
   position: relative;
-  min-height: 100%;
+  height: 100%;
   background: var(--canvas);
 }
 

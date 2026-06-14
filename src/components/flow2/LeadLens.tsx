@@ -74,16 +74,18 @@ export function LeadLens() {
         <LeadDetail key={selected.id} lead={selected} />
       </div>
 
-      {/* Record-scoped voice — pre-scoped to the selected lead. The
-          scripted dictation is wired for Antoine David. */}
-      <ConversationBar
-        placeholder={`Dictate a note or update for ${selected.firstName} ${selected.lastName}…`}
-        onDictate={
-          voiceScenarios[`record-${selected.id.replace("lead-", "")}`]
-            ? () => startVoice(`record-${selected.id.replace("lead-", "")}`)
-            : undefined
-        }
-      />
+      {/* Record-scoped voice — the same persistent dock, pre-scoped to the
+          selected lead. The scripted dictation is wired for Antoine David. */}
+      <div className="dock">
+        <ConversationBar
+          placeholder={`Dictate a note or update for ${selected.firstName} ${selected.lastName}…`}
+          onDictate={
+            voiceScenarios[`record-${selected.id.replace("lead-", "")}`]
+              ? () => startVoice(`record-${selected.id.replace("lead-", "")}`)
+              : undefined
+          }
+        />
+      </div>
     </section>
   );
 }
