@@ -2,6 +2,7 @@
    BriefingCard shell; a single rule picks exactly one "spotlight". */
 import { useDemo } from "../state/DemoContext";
 import type { CardVariant } from "./BriefingCard";
+import { DailyBrief } from "./DailyBrief";
 import { DecisionCard } from "./flow1/DecisionCard";
 import { BurstCard } from "./flow2/BurstCard";
 import { AmbientCard } from "./AmbientCard";
@@ -18,22 +19,12 @@ import {
 const SEDAINE_PHOTO =
   "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=400&q=70";
 
-// Standard decision cards carrying "Drafted · to approve": owner reporting,
-// mandate, estimation, call follow-up, re-engagement, the cross-actor card.
-const DRAFTED_STANDARD_CARDS = 6;
-
 export function Briefing() {
-  const { substrate, phase, activity } = useDemo();
+  const { substrate, phase } = useDemo();
   const { agent } = substrate;
   // The card is present from the moment it lands and stays after approval —
   // collapsing to a slim resolved row rather than disappearing.
   const hasCard = phase === "ready" || phase === "approved";
-
-  // Day summary — numbers consistent with what's rendered:
-  //   done  = completed assistant actions in the log (the overnight session)
-  //   needYou = "Drafted · to approve" decision cards in the stack
-  const doneOnOwn = activity.filter((e) => e.group === "overnight").length;
-  const needYou = DRAFTED_STANDARD_CARDS + (phase === "ready" ? 1 : 0);
 
   // The spotlight rule: at most ONE spotlight at a time, chosen by the
   // highest-priority *present* card that carries the spotlight flag — a
@@ -64,15 +55,8 @@ export function Briefing() {
         <h1 className="briefing__hello">
           Good morning, <em>{agent.firstName}</em>.
         </h1>
-        <p className="briefing__sub">
-          A calm read of what needs you today. Your assistant has been working
-          overnight — nothing here is an inbox.
-        </p>
-        <p className="briefing__summary">
-          Today · the assistant handled most of your morning —{" "}
-          <strong>{doneOnOwn} done on its own</strong>, {needYou} waiting for
-          your ok.
-        </p>
+        {/* Read me first — the narrative digest, above the act-on-these cards. */}
+        <DailyBrief />
       </header>
 
       <section className="briefing__cards">

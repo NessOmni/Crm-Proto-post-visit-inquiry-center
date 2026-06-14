@@ -247,7 +247,7 @@
   padding: 24px clamp(20px, 4vw, 40px) 92px;
 }
 .briefing__greeting {
-  padding: 0 0 22px;
+  padding: 0;
 }
 .briefing__hello {
   font-size: 20px;
@@ -258,23 +258,94 @@
 .briefing__hello em {
   font-style: normal;
 }
-.briefing__sub {
-  margin-top: 6px;
-  font-size: 14px;
-  color: var(--text-2);
-  max-width: 56ch;
+
+/* ----- Daily brief — a note from the assistant, read first ------------
+   Narrative prose (not a card/dashboard), set off by a quiet accent bar
+   like a received message. Doubles as the morning phone message. */
+.brief {
+  margin: 16px 0 26px;
+  max-width: 66ch;
+  padding-left: 16px;
+  border-left: 3px solid rgba(66, 99, 235, 0.32);
 }
-/* Day summary — spans the decision cards (need you) + the handled log. */
-.briefing__summary {
+.brief__text {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text);
+}
+.brief__text strong {
+  font-weight: 600;
+  color: var(--text);
+}
+.brief__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
   margin-top: 12px;
+}
+.brief__phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.brief__phone svg {
+  width: 13px;
+  height: 13px;
+}
+.brief__replay {
+  color: var(--text-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.brief__replay:hover {
+  color: var(--text);
+}
+.brief__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  color: var(--text-2);
+  flex: none;
+}
+.brief__toggle:hover {
+  color: var(--text);
+}
+.brief__toggle svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* Collapsed — one line; subsumes the old day-summary line. */
+.brief--collapsed {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  margin: 14px 0 24px;
+  padding: 8px 0 8px 16px;
+  border-left: 3px solid rgba(66, 99, 235, 0.32);
+}
+.brief__summary {
+  flex: 1;
+  min-width: 0;
   font-size: 13px;
   color: var(--text-2);
-  max-width: 60ch;
 }
-.briefing__summary strong {
-  color: var(--text);
-  font-weight: 600;
+.brief__read {
+  flex: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
 }
+.brief--collapsed:hover .brief__read {
+  color: var(--accent-hover);
+}
+
 .briefing__cards {
   display: flex;
   flex-direction: column;
