@@ -24,6 +24,12 @@ export type Flow1Phase = "idle" | "recording" | "processing" | "ready" | "approv
 /** The home briefing, or the deep Contacts database view. */
 export type AppView = "briefing" | "contacts";
 
+/** Who a cross-actor activity item came from — a teammate, or a client
+ *  acting through the portal. Drives the attribution element. */
+export type ActivityActor =
+  | { kind: "teammate"; name: string; initials: string }
+  | { kind: "client"; initials: string };
+
 export interface ActivityEntry {
   id: string;
   text: string;
@@ -34,6 +40,8 @@ export interface ActivityEntry {
   group: "overnight" | "approved";
   /** Provenance, when the assistant enriched from a source. */
   source?: string;
+  /** Attribution, when the item came from a colleague or a client. */
+  actor?: ActivityActor;
 }
 
 interface DemoState {
@@ -123,6 +131,43 @@ const OVERNIGHT_ACTIVITY: ActivityEntry[] = [
     time: "04:30",
     group: "overnight",
     source: "call · 08 Jun",
+  },
+  // Cross-actor: the wider agency humming — logged, attributed, not pushed.
+  {
+    id: "ov-team-mandate",
+    text: "New mandate · 11 rue Oberkampf — added by Karim Benali",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "07:40",
+    group: "overnight",
+    actor: { kind: "teammate", name: "Karim Benali", initials: "KB" },
+  },
+  {
+    id: "ov-team-offer",
+    text: "Offer logged · 5 rue de Lancry — by Sophie Marchand",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "06:50",
+    group: "overnight",
+    actor: { kind: "teammate", name: "Sophie Marchand", initials: "SM" },
+  },
+  {
+    id: "ov-client-doc",
+    text: "Document uploaded · M. Mercier added his DPE",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "06:20",
+    group: "overnight",
+    actor: { kind: "client", initials: "JM" },
+  },
+  {
+    id: "ov-client-budget",
+    text: "Buyer updated their budget · J. Caron, now 460 k€",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "05:30",
+    group: "overnight",
+    actor: { kind: "client", initials: "JC" },
   },
   {
     id: "ov-dedup",

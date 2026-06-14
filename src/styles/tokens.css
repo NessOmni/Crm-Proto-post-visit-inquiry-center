@@ -223,6 +223,23 @@ button {
   white-space: nowrap;
 }
 
+/* Cross-actor attribution — teammate (avatar + name) or client portal. */
+.attribution {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.portal-chip {
+  font-size: 10px;
+  color: var(--text-3);
+  background: var(--canvas);
+  padding: 2px 7px;
+  border-radius: var(--r-pill);
+}
+
 /* Keyboard cue chip */
 kbd {
   display: inline-grid;

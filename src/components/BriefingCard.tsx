@@ -10,6 +10,7 @@ import { Photo } from "./Photo";
 import { CardThumb } from "./CardThumb";
 import { CardOutputs, type CardOutput } from "./CardOutputs";
 import { SourceChip } from "./SourceChip";
+import { Avatar } from "./flow2/Avatar";
 
 export type CardVariant = "spotlight" | "standard";
 export type CardAccent = "drafted" | "automatic";
@@ -25,6 +26,8 @@ export interface BriefingCardProps {
    *  (standard). When absent on a standard card, a workflow-icon tile
    *  stands in. */
   photoUrl?: string;
+  /** Teammate-attributed card: an avatar stands in for the leading token. */
+  avatarInitials?: string;
   title: string;
   body?: ReactNode;
   outputs?: CardOutput[];
@@ -59,6 +62,7 @@ export function BriefingCard({
   workflow,
   subject,
   photoUrl,
+  avatarInitials,
   title,
   body,
   outputs,
@@ -92,7 +96,13 @@ export function BriefingCard({
         ) : (
           // Leading token left; eyebrow + title beside it; tag right.
           <div className="bcard__top">
-            <CardThumb url={photoUrl} Icon={Icon} alt={subject} seed={3} />
+            {avatarInitials ? (
+              <span className="bcard__avatar">
+                <Avatar initials={avatarInitials} size="lg" />
+              </span>
+            ) : (
+              <CardThumb url={photoUrl} Icon={Icon} alt={subject} seed={3} />
+            )}
             <div className="bcard__heading">
               <Eyebrow Icon={Icon} workflow={workflow} subject={subject} />
               <h3 className="bcard__title">{title}</h3>

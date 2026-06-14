@@ -11,9 +11,16 @@ export function Avatar({
   size = "md",
 }: {
   initials: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
 }) {
-  const sz = size === "sm" ? "avatar--sm" : size === "lg" ? "avatar--lg" : "";
+  const sz =
+    size === "xs"
+      ? "avatar--xs"
+      : size === "sm"
+        ? "avatar--sm"
+        : size === "lg"
+          ? "avatar--lg"
+          : "";
   return (
     <span className={`avatar avatar--${pastelFor(initials)} ${sz}`}>
       {initials}

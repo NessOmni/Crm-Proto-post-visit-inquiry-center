@@ -11,6 +11,7 @@ import {
   IconGauge,
   IconPhone,
   IconBellRing,
+  IconUsers,
 } from "./icons";
 
 // Listing photo for the Sedaine mandate (gradient fallback when offline).
@@ -118,6 +119,20 @@ export function Briefing() {
             "matching buyers + comparable sold",
           ]}
           cta="Review 2"
+        />
+
+        {/* Cross-actor: a colleague's new listing + a dormant buyer + a
+            match, reasoned across actors. A shared listing in scope. */}
+        <AmbientCard
+          variant={variantOf("team")}
+          Icon={IconUsers}
+          workflow="From your team"
+          subject="Karim Benali"
+          avatarInitials="KB"
+          title="Karim just listed a flat that fits one of your buyers"
+          body="New exclusive mandate on 11 rue Oberkampf — matches Mme Durand's search, quiet since March. Drafted an alert to wake her, with the listing."
+          scope="shared listing"
+          cta="Review"
         />
 
         {/* Tier 3 — informational handled rows. Quietest, no CTA. */}

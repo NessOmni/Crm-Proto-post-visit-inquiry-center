@@ -80,6 +80,11 @@
   width: 34px;
   height: 34px;
 }
+.avatar--xs {
+  width: 18px;
+  height: 18px;
+  font-size: 9px;
+}
 .avatar--sm {
   width: 30px;
   height: 30px;

@@ -3,6 +3,7 @@
 import { Fragment } from "react";
 import { useDemo } from "../state/DemoContext";
 import { SourceChip } from "./SourceChip";
+import { Attribution } from "./Attribution";
 import { IconCheck } from "./icons";
 
 export function RightColumn() {
@@ -130,6 +131,7 @@ export function RightColumn() {
                         {entry.tag} · {entry.time}
                       </span>
                       {entry.source && <SourceChip source={entry.source} />}
+                      {entry.actor && <Attribution actor={entry.actor} />}
                     </span>
                   </span>
                 </div>

@@ -384,6 +384,10 @@
   min-width: 0;
 }
 
+.bcard__avatar {
+  flex: none;
+  display: inline-flex;
+}
 .bcard__heading {
   flex: 1;
   min-width: 0;
