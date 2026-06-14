@@ -207,6 +207,20 @@ export const IconSpark = (p: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+export const IconSparkles = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M12 4l1.4 3.9L17 9.2l-3.6 1.3L12 14l-1.4-3.5L7 9.2l3.6-1.3L12 4Z" />
+    <path d="M18.5 14l.7 1.9 1.8.6-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.6.7-1.9Z" />
+  </svg>
+);
+
+export const IconMail = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="m3.5 7 8.5 6 8.5-6" />
+  </svg>
+);
+
 export const IconEdit = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base({ width: 12, height: 12, ...p })}>
     <path d="M12 20h9" />

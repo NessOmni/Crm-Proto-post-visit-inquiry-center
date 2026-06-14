@@ -259,22 +259,60 @@
   font-style: normal;
 }
 
-/* ----- Daily brief — a note from the assistant, read first ------------
-   Narrative prose (not a card/dashboard), set off by a quiet accent bar
-   like a received message. Doubles as the morning phone message. */
+/* ----- Daily brief — a structured digest from the assistant -----------
+   Work grouped by class; light section labels; clean one-line category
+   rows. Not a dashboard: no boxes/tiles. Set off by a quiet accent bar
+   like a received note. Doubles as the morning phone message. */
 .brief {
   margin: 16px 0 26px;
-  max-width: 66ch;
+  max-width: 68ch;
   padding-left: 16px;
   border-left: 3px solid rgba(66, 99, 235, 0.32);
 }
-.brief__text {
+.brief__lead {
   font-size: 15px;
-  line-height: 1.65;
+  line-height: 1.55;
   color: var(--text);
+  margin-bottom: 16px;
 }
-.brief__text strong {
+.brief__section {
+  margin-bottom: 14px;
+}
+.brief__label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-3);
+  margin-bottom: 7px;
+}
+.brief__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.brief-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+.brief-row__icon {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  margin-top: 2px;
+  color: var(--text-3);
+}
+.brief-row__cat {
+  color: var(--text);
+  font-weight: 500;
+}
+.brief__priority {
+  margin-top: 16px;
+  font-size: 14.5px;
   font-weight: 600;
+  line-height: 1.4;
   color: var(--text);
 }
 .brief__foot {
@@ -282,7 +320,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  margin-top: 12px;
+  margin-top: 14px;
 }
 .brief__phone {
   display: inline-flex;
