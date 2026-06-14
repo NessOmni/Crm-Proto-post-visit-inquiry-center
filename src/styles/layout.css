@@ -290,24 +290,31 @@
   gap: 6px;
 }
 .brief-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: var(--text-2);
+  display: block;
 }
-.brief-row__head {
+/* The summary line — icon + text inline. The disclosed list sits BELOW
+   it in normal flow, never beside it. */
+.brief-row__line {
   display: flex;
   align-items: flex-start;
   gap: 9px;
   width: 100%;
   text-align: left;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+.brief-row__head {
   font: inherit;
   color: inherit;
+  outline: none;
 }
 .brief-row__head:hover {
   color: var(--text);
+}
+.brief-row__head:focus,
+.brief-row__head:focus-visible {
+  outline: none;
 }
 .brief-row__icon {
   width: 15px;

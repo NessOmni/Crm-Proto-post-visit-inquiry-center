@@ -117,31 +117,37 @@ function BriefRow({
   onToggle: () => void;
 }) {
   const { Icon, cat, rest, items } = row;
+  const line = (
+    <>
+      <Icon className="brief-row__icon" />
+      <span>
+        <span className="brief-row__cat">{cat}</span> — {rest}
+        {items?.length ? (
+          <IconChevronDown
+            className={`brief-row__chev ${open ? "brief-row__chev--open" : ""}`}
+          />
+        ) : null}
+      </span>
+    </>
+  );
+
   if (!items?.length) {
     return (
       <div className="brief-row">
-        <Icon className="brief-row__icon" />
-        <span>
-          <span className="brief-row__cat">{cat}</span> — {rest}
-        </span>
+        <div className="brief-row__line">{line}</div>
       </div>
     );
   }
+
   return (
     <div className="brief-row">
       <button
         type="button"
-        className="brief-row__head"
+        className="brief-row__line brief-row__head"
         onClick={onToggle}
         aria-expanded={open}
       >
-        <Icon className="brief-row__icon" />
-        <span>
-          <span className="brief-row__cat">{cat}</span> — {rest}
-          <IconChevronDown
-            className={`brief-row__chev ${open ? "brief-row__chev--open" : ""}`}
-          />
-        </span>
+        {line}
       </button>
       {open && (
         <ul className="brief-sub">
