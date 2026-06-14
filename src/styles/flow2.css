@@ -328,6 +328,85 @@
   font-size: 13px;
   color: var(--text-2);
 }
+/* An assistant-enriched field on the contact, with its provenance. */
+.lead-detail__enriched {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+/* Suggested matches — compact listing mini-rows; the insight row flagged. */
+.matches {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.match-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.match-row--insight {
+  background: var(--accent-tint);
+  border-color: rgba(66, 99, 235, 0.28);
+}
+.match-row__main {
+  min-width: 0;
+}
+.match-row__addr {
+  font-size: 14px;
+  font-weight: 500;
+}
+.match-row__note {
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-2);
+  max-width: 48ch;
+}
+.match-row__main .source-chip {
+  margin-top: 8px;
+  background: var(--surface);
+}
+.match-row__side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex: none;
+}
+.match-tag {
+  font-size: 11px;
+  color: var(--text-2);
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border-2);
+  background: var(--surface);
+  white-space: nowrap;
+}
+.match-tag--insight {
+  color: var(--accent);
+  border-color: rgba(66, 99, 235, 0.3);
+}
+.match-row__cta {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.match-row__cta:hover {
+  color: var(--accent-hover);
+}
 
 /* Stat pills */
 .pills {

@@ -9,6 +9,7 @@ import type { ComponentType, ReactNode, SVGProps } from "react";
 import { Photo } from "./Photo";
 import { CardThumb } from "./CardThumb";
 import { CardOutputs, type CardOutput } from "./CardOutputs";
+import { SourceChip } from "./SourceChip";
 
 export type CardVariant = "spotlight" | "standard";
 export type CardAccent = "drafted" | "automatic";
@@ -31,6 +32,8 @@ export interface BriefingCardProps {
   children?: ReactNode;
   /** Footer content — the CTA(s) + any meta. Styling kept per-card. */
   footer?: ReactNode;
+  /** Provenance chip in the footer, when the card was enriched. */
+  source?: string;
   ariaLabel?: string;
 }
 
@@ -61,6 +64,7 @@ export function BriefingCard({
   outputs,
   children,
   footer,
+  source,
   ariaLabel,
 }: BriefingCardProps) {
   const badgeClass = accent === "drafted" ? "badge--drafted" : "badge--auto";
@@ -100,7 +104,12 @@ export function BriefingCard({
         {body && <div className="bcard__text">{body}</div>}
         {children}
         <CardOutputs outputs={outputs} />
-        {footer && <div className="bcard__footer">{footer}</div>}
+        {(footer || source) && (
+          <div className="bcard__footer">
+            {source && <SourceChip source={source} />}
+            {footer}
+          </div>
+        )}
       </div>
     </article>
   );

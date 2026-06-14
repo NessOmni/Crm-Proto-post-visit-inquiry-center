@@ -8,7 +8,14 @@
    (names, streets, property details) is authentic French.
    ============================================================ */
 
-import type { Substrate, LeadEvent, LeadInsight, ContactRow } from "./types";
+import type {
+  Substrate,
+  LeadEvent,
+  LeadInsight,
+  LeadEnrichment,
+  SuggestedMatch,
+  ContactRow,
+} from "./types";
 
 /* --- Agency & agent --------------------------------------- */
 const agency: Substrate["agency"] = {
@@ -647,6 +654,44 @@ export const flow2 = {
   timelines: Object.fromEntries(
     leads.map((l) => [l.id, buildTimeline(l.id)]),
   ) as Record<string, LeadEvent[]>,
+
+  /** Fields the assistant enriched from an external source (inbox). */
+  enrichments: {
+    "lead-bonnet": {
+      label: "Employer",
+      value: "Cabinet Lefèvre & Associés",
+      source: "inbox",
+    },
+  } as Record<string, LeadEnrichment>,
+
+  /** Suggested listings for a buyer — two on hard criteria, one surfaced
+   *  from a call insight that the criteria alone would have excluded. */
+  matches: {
+    "lead-david": [
+      {
+        id: "match-saintmaur",
+        address: "9 rue Saint-Maur",
+        price: "410 000 €",
+        kind: "criteria",
+      },
+      {
+        id: "match-folie",
+        address: "27 rue de la Folie-Méricourt",
+        price: "398 000 €",
+        kind: "criteria",
+      },
+      {
+        id: "match-oberkampf",
+        address: "16 rue Oberkampf",
+        price: "445 000 €",
+        kind: "insight",
+        note:
+          "Above his stated 420 k€ max — but on the call he said he'd stretch " +
+          "for outdoor space. This one has a terrace.",
+        source: "call · 12 Jun",
+      },
+    ],
+  } as Record<string, SuggestedMatch[]>,
 } as const;
 
 /* ============================================================

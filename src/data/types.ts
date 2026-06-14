@@ -117,6 +117,27 @@ export interface HeldReason {
   suggestedAction: string;
 }
 
+/** A field the assistant enriched from an external source (e.g. inbox). */
+export interface LeadEnrichment {
+  label: string;
+  value: string;
+  source: string;
+}
+
+/** A listing the assistant suggested for a buyer. "criteria" matches the
+ *  hard filters; "insight" is surfaced from a call/context cue that the
+ *  criteria alone would have excluded. */
+export interface SuggestedMatch {
+  id: ID;
+  address: string;
+  price: string;
+  kind: "criteria" | "insight";
+  /** The reasoning for an insight-driven match (assistant chrome, EN). */
+  note?: string;
+  /** Provenance for an insight match. */
+  source?: string;
+}
+
 /** The assistant's reading of one lead: the raw message, the facts it
  *  pulled out, and the reply it wrote against the detected gap. */
 export interface LeadInsight {

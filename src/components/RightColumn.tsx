@@ -2,6 +2,7 @@
    The agenda emphasises the imminent next visit; the rest is quiet. */
 import { Fragment } from "react";
 import { useDemo } from "../state/DemoContext";
+import { SourceChip } from "./SourceChip";
 import { IconCheck } from "./icons";
 
 export function RightColumn() {
@@ -98,6 +99,11 @@ export function RightColumn() {
         <div className="panel__head">
           <span className="panel__title">Assistant activity</span>
         </div>
+        {/* Ties the handled activity + the to-approve cards to the familiar
+            task-list mental model — no new surface. */}
+        <div className="activity__summary">
+          Today · 7 tasks — <strong>4 handled</strong>, 3 need you.
+        </div>
         <div className="activity__feed">
           {activity.map((entry, i) => {
             // The "Overnight" eyebrow precedes the first overnight item —
@@ -120,7 +126,10 @@ export function RightColumn() {
                   <span className="activity__text">
                     {entry.text}
                     <span className="activity__time">
-                      {entry.tag} · {entry.time}
+                      <span>
+                        {entry.tag} · {entry.time}
+                      </span>
+                      {entry.source && <SourceChip source={entry.source} />}
                     </span>
                   </span>
                 </div>

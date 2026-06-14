@@ -9,6 +9,7 @@ import { useDemo } from "../../state/DemoContext";
 import { flow2 } from "../../data/fixtures";
 import { Avatar } from "./Avatar";
 import { Photo } from "../Photo";
+import { SourceChip } from "../SourceChip";
 import { CitationChip } from "../flow1/CitationChip";
 import {
   IconBold,
@@ -27,6 +28,8 @@ export function LeadDetail({ lead }: { lead: Lead }) {
   const mandate = substrate.mandates.find((m) => m.bienId === lead.bienId)!;
   const sale = lead.transactionType === "sale";
   const insight = flow2.insights[lead.id];
+  const enrichment = flow2.enrichments[lead.id];
+  const matches = flow2.matches[lead.id];
   const held = lead.disposition === "held";
   const replied = Boolean(repliedLeadIds[lead.id]);
 
@@ -71,6 +74,12 @@ export function LeadDetail({ lead }: { lead: Lead }) {
           <div className="lead-detail__sub">
             Enquiry · {bien.address}, {bien.postalCode} {bien.city}
           </div>
+          {enrichment && (
+            <div className="lead-detail__enriched">
+              {enrichment.label}: {enrichment.value}
+              <SourceChip source={enrichment.source} />
+            </div>
+          )}
         </div>
       </div>
 
@@ -147,6 +156,45 @@ export function LeadDetail({ lead }: { lead: Lead }) {
           </div>
         </div>
       </div>
+
+      {/* Suggested matches — incl. one surfaced from a call insight that
+          the hard criteria would have excluded. (buyer/sale lead) */}
+      {matches && matches.length > 0 && (
+        <>
+          <div className="kicker section-label">
+            Suggested matches · {matches.length}
+          </div>
+          <div className="matches">
+            {matches.map((m) => {
+              const isInsight = m.kind === "insight";
+              return (
+                <div
+                  key={m.id}
+                  className={`match-row ${isInsight ? "match-row--insight" : ""}`}
+                >
+                  <div className="match-row__main">
+                    <div className="match-row__addr">
+                      {m.address} · {m.price}
+                    </div>
+                    {m.note && <div className="match-row__note">{m.note}</div>}
+                    {m.source && <SourceChip source={m.source} />}
+                  </div>
+                  <div className="match-row__side">
+                    <span
+                      className={`match-tag ${isInsight ? "match-tag--insight" : ""}`}
+                    >
+                      {isInsight ? "insight" : "criteria match"}
+                    </span>
+                    <button type="button" className="match-row__cta">
+                      Draft alert →
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       {/* Reply — a sent record (auto) or a held draft (the exception) */}
       {held ? (

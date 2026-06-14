@@ -32,6 +32,8 @@ export interface ActivityEntry {
   time: string;
   /** Which session the entry belongs to — drives the "Overnight" eyebrow. */
   group: "overnight" | "approved";
+  /** Provenance, when the assistant enriched from a source. */
+  source?: string;
 }
 
 interface DemoState {
@@ -94,6 +96,33 @@ const OVERNIGHT_ACTIVITY: ActivityEntry[] = [
     tag: "Automatic",
     time: "06:04",
     group: "overnight",
+  },
+  {
+    id: "ov-enrich-contact",
+    text: "Contact enriched · Margaux Bonnet — employer + 2nd phone added",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "06:12",
+    group: "overnight",
+    source: "inbox",
+  },
+  {
+    id: "ov-enrich-owner",
+    text: "Owner note updated · Hélène Fontaine — from her latest email",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "05:55",
+    group: "overnight",
+    source: "inbox",
+  },
+  {
+    id: "ov-call",
+    text: "Call transcribed · M. Bertin · 8 min — number matched to contact, 3 actions detected",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "04:30",
+    group: "overnight",
+    source: "call · 08 Jun",
   },
   {
     id: "ov-dedup",

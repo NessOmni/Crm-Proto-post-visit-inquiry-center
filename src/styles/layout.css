@@ -604,6 +604,17 @@
 }
 
 /* Assistant activity summary */
+.activity__summary {
+  font-size: 12.5px;
+  color: var(--text-2);
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-2);
+}
+.activity__summary strong {
+  color: var(--text);
+  font-weight: 600;
+}
 .activity__eyebrow {
   margin: 12px 0 6px;
 }
@@ -636,7 +647,10 @@
   color: var(--text);
 }
 .activity__time {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
   margin-top: 2px;
   font-size: 12px;
   color: var(--text-2);

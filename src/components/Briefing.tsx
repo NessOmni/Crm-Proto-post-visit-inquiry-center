@@ -5,7 +5,7 @@ import type { CardVariant } from "./BriefingCard";
 import { DecisionCard } from "./flow1/DecisionCard";
 import { BurstCard } from "./flow2/BurstCard";
 import { AmbientCard } from "./AmbientCard";
-import { IconFileText, IconFileSignature, IconGauge } from "./icons";
+import { IconFileText, IconFileSignature, IconGauge, IconPhone } from "./icons";
 
 // Listing photo for the Sedaine mandate (gradient fallback when offline).
 const SEDAINE_PHOTO =
@@ -85,6 +85,17 @@ export function Briefing() {
           title="New estimation request"
           body="Comparables pulled, valuation band ready, appointment proposed for Thursday."
           cta="Review"
+        />
+        {/* Leadflow: call → transcript → matched contact → drafted actions. */}
+        <AmbientCard
+          variant={variantOf("call")}
+          Icon={IconPhone}
+          workflow="Call follow-up"
+          subject="M. Bertin"
+          title="Yesterday's call, turned into next steps"
+          body="8-minute call transcribed and matched to his contact. 3 actions detected — follow-up email drafted, valuation flagged, viewing to schedule."
+          cta="Review"
+          source="call · 08 Jun"
         />
 
         {/* Tier 3 — informational handled rows. Quietest, no CTA. */}

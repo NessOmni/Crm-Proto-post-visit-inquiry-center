@@ -14,6 +14,7 @@ export function AmbientCard({
   title,
   body,
   cta,
+  source,
 }: {
   variant: CardVariant;
   Icon: ComponentType<SVGProps<SVGSVGElement>>;
@@ -23,6 +24,7 @@ export function AmbientCard({
   title: string;
   body: string;
   cta: string;
+  source?: string;
 }) {
   return (
     <BriefingCard
@@ -35,6 +37,7 @@ export function AmbientCard({
       photoUrl={thumbUrl}
       title={title}
       body={body}
+      source={source}
       footer={
         // Inert — exists to be seen, not clicked, in this demo.
         <button type="button" className="bcard__cta">

@@ -210,6 +210,19 @@ button {
   background: var(--warn);
 }
 
+/* Provenance chip — the trust thread, shown wherever the assistant
+   enriched something from a source. Small and muted. */
+.source-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10.5px;
+  color: var(--text-3);
+  background: var(--canvas);
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+}
+
 /* Keyboard cue chip */
 kbd {
   display: inline-grid;
