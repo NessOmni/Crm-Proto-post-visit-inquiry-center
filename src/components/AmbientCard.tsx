@@ -16,7 +16,6 @@ export function AmbientCard({
   body,
   cta,
   source,
-  triggers,
   scope,
 }: {
   variant: CardVariant;
@@ -30,12 +29,9 @@ export function AmbientCard({
   body: string;
   cta: string;
   source?: string;
-  /** Why each item surfaced now — the proof it's not a timed blast. */
-  triggers?: string[];
   /** A subtle visibility-scope cue, e.g. "shared listing". */
   scope?: string;
 }) {
-  const chips = triggers && triggers.length > 0;
   return (
     <BriefingCard
       variant={variant}
@@ -56,14 +52,9 @@ export function AmbientCard({
         </button>
       }
     >
-      {(chips || scope) && (
+      {scope && (
         <div className="trigger-chips">
-          {triggers?.map((t) => (
-            <span key={t} className="trigger-chip">
-              trigger: {t}
-            </span>
-          ))}
-          {scope && <span className="trigger-chip">{scope}</span>}
+          <span className="trigger-chip">{scope}</span>
         </div>
       )}
     </BriefingCard>

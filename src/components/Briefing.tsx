@@ -114,10 +114,6 @@ export function Briefing() {
           subject="2 dormant contacts"
           title="2 sleeping leads just got a reason to hear from you"
           body="Julien Caron — quiet since January — a new mandate matches the search he'd given up on. Mme Lefèvre — estimation 8 months cold — now has two active buyers fitting her property. Both notes drafted in your voice, each built on a real new reason."
-          triggers={[
-            "new matching listing",
-            "matching buyers + comparable sold",
-          ]}
           cta="Review 2"
         />
 
@@ -144,10 +140,6 @@ export function Briefing() {
           subject="3 opportunities"
           title="3 prospecting openings spotted overnight"
           body="5 rue Bichat — you estimated it in February; it's now listed by a competitor, 5% below your number. Plus 2 new DPEs in your sector — likely future sellers. An approach drafted for each."
-          triggers={[
-            "your estimation now listed elsewhere",
-            "new DPE in your sector · Logic-Immo",
-          ]}
           cta="Review 3"
         />
 
