@@ -66,11 +66,11 @@ export function LeftRail({
     {
       label: "Portefeuille",
       items: [
+        { id: "contact", label: "Contact", Icon: IconContactRound },
+        { id: "acquereur", label: "Acquéreur", Icon: IconUserRoundSearch },
         // The Enquiry Center is the product's namesake depth view — wired
         // to the Lead Lens (a real, safe surface), unlike the inert items.
         { id: "enquiry-center", label: "Enquiry Center", Icon: IconInbox, onClick: openLens },
-        { id: "contact", label: "Contact", Icon: IconContactRound },
-        { id: "acquereur", label: "Acquéreur", Icon: IconUserRoundSearch },
       ],
     },
   ];
