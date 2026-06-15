@@ -214,6 +214,15 @@ const OVERNIGHT_ACTIVITY: ActivityEntry[] = [
     time: "01:40",
     group: "overnight",
   },
+  {
+    id: "ov-prospecting",
+    text: "Scanned your sector · 2 new DPEs, 1 estimation now listed elsewhere · drafted 3 approaches",
+    tier: "automatic",
+    tag: "Automatic",
+    time: "03:05",
+    group: "overnight",
+    source: "Logic-Immo / portals",
+  },
 ];
 
 function buildActivity(substrate: Substrate): ActivityEntry[] {

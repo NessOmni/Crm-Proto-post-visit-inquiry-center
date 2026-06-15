@@ -13,6 +13,7 @@ import {
   IconPhone,
   IconBellRing,
   IconUsers,
+  IconRadar,
 } from "./icons";
 
 // Listing photo for the Sedaine mandate (gradient fallback when offline).
@@ -132,6 +133,22 @@ export function Briefing() {
           body="New exclusive mandate on 11 rue Oberkampf — matches Mme Durand's search, quiet since March. Drafted an alert to wake her, with the listing."
           scope="shared listing"
           cta="Review"
+        />
+
+        {/* Prospecting (pige): the detection is a deterministic scan —
+            shown as trigger chips, not AI. The AI is the drafted approach. */}
+        <AmbientCard
+          variant={variantOf("prospecting")}
+          Icon={IconRadar}
+          workflow="Prospecting"
+          subject="3 opportunities"
+          title="3 prospecting openings spotted overnight"
+          body="5 rue Bichat — you estimated it in February; it's now listed by a competitor, 5% below your number. Plus 2 new DPEs in your sector — likely future sellers. An approach drafted for each."
+          triggers={[
+            "your estimation now listed elsewhere",
+            "new DPE in your sector · Logic-Immo",
+          ]}
+          cta="Review 3"
         />
 
         {/* Tier 3 — informational handled rows. Quietest, no CTA. */}

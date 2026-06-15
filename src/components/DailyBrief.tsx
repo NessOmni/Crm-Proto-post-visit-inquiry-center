@@ -13,6 +13,7 @@ import {
   IconFileText,
   IconFileSignature,
   IconBellRing,
+  IconRadar,
   IconAgenda,
   IconChevronDown,
   IconChevronUp,
@@ -96,6 +97,15 @@ const NEEDS: Row[] = [
     cat: "From your team",
     rest: "Karim",
     items: ["11 rue Oberkampf (exclusive) — matches Mme Durand's search"],
+  },
+  {
+    Icon: IconRadar,
+    cat: "Prospecting",
+    rest: "3 openings spotted (drafted approaches)",
+    items: [
+      "5 rue Bichat — your February estimate, now listed 5% below",
+      "2 new DPEs in your sector — likely future sellers",
+    ],
   },
 ];
 
