@@ -14,6 +14,7 @@ import {
   IconFileSignature,
   IconBadgeEuro,
   IconFileCheck,
+  IconInbox,
   IconContactRound,
   IconUserRoundSearch,
   IconSidebar,
@@ -35,7 +36,7 @@ export function LeftRail({
   collapsed: boolean;
   onToggle: () => void;
 }) {
-  const { view, goHome } = useDemo();
+  const { view, goHome, openLens } = useDemo();
 
   // Group 1 — surfaces. Accueil is the live home; the rest are inert.
   const surfaces: NavItem[] = [
@@ -65,6 +66,9 @@ export function LeftRail({
     {
       label: "Portefeuille",
       items: [
+        // The Enquiry Center is the product's namesake depth view — wired
+        // to the Lead Lens (a real, safe surface), unlike the inert items.
+        { id: "enquiry-center", label: "Enquiry Center", Icon: IconInbox, onClick: openLens },
         { id: "contact", label: "Contact", Icon: IconContactRound },
         { id: "acquereur", label: "Acquéreur", Icon: IconUserRoundSearch },
       ],
