@@ -183,13 +183,73 @@
 .lens__list {
   overflow-y: auto;
   /* Bottom clearance so rows never hide behind the docked bar. */
-  padding: 6px 0 84px;
+  padding: 0 0 84px;
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border);
 }
-.lens__list-label {
-  padding: 12px 16px 8px;
+
+/* Market split — segmented control; active tab clearly highlighted. */
+.lens__tabs {
+  display: flex;
+  gap: 6px;
+  padding: 12px 14px;
+}
+.seg {
+  flex: 1;
+  height: 34px;
+  border-radius: var(--r-btn);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+  background: var(--canvas);
+  border: 1px solid var(--border-2);
+  transition: background var(--t), color var(--t), border-color var(--t);
+}
+.seg:hover {
+  color: var(--text);
+}
+.seg--active,
+.seg--active:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* Address block — a delineated group: header + contained lead rows. */
+.lgroup {
+  border-top: 1px solid var(--border);
+}
+.lgroup__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--canvas);
+}
+.lgroup__thumb {
+  width: 38px;
+  height: 30px;
+  border-radius: 7px;
+  flex: none;
+}
+.lgroup__meta {
+  min-width: 0;
+}
+.lgroup__addr {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lgroup__spec {
+  font-size: 11.5px;
+  color: var(--text-2);
+  margin-top: 1px;
+}
+.lgroup__leads .lead-row:last-child {
+  border-bottom: none;
 }
 
 /* Lead row — dense list idiom */

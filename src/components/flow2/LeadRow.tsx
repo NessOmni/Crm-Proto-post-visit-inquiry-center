@@ -1,17 +1,16 @@
-/* One lead in the ranked list. The status dot and tag read the
-   assistant's disposition — auto-sent (green) vs held for you (amber) —
-   so the held exception is visually distinct from the five handled. */
+/* One lead in a listing group. The status dot and tag read the
+   assistant's disposition — auto-sent (green) vs held for you (amber).
+   No rank number and no market chip: the tab + address now carry the
+   market and listing; the warmth score stays. */
 import type { Lead } from "../../data/types";
 import { Avatar } from "./Avatar";
 
 export function LeadRow({
   lead,
-  rank,
   selected,
   onSelect,
 }: {
   lead: Lead;
-  rank: number;
   selected: boolean;
   onSelect: () => void;
 }) {
@@ -23,7 +22,6 @@ export function LeadRow({
       onClick={onSelect}
       aria-pressed={selected}
     >
-      <span className="lead-row__rank">{rank}</span>
       <span
         className={`lead-row__dot ${held ? "lead-row__dot--held" : "lead-row__dot--sent"}`}
         title={held ? "Held for you" : "Reply sent automatically"}
@@ -35,17 +33,12 @@ export function LeadRow({
             {lead.firstName} {lead.lastName}
           </span>
           <span className="portal">{lead.portal}</span>
-          <span className="lead-type">
-            {lead.transactionType === "sale" ? "Vente" : "Location"}
-          </span>
         </span>
         <span className="lead-row__sig">{lead.signals.join(" · ")}</span>
       </span>
       <span className="lead-row__end">
         <span className="lead-row__score">{lead.score}</span>
-        <span
-          className={`lead-tag ${held ? "lead-tag--held" : "lead-tag--sent"}`}
-        >
+        <span className={`lead-tag ${held ? "lead-tag--held" : "lead-tag--sent"}`}>
           {held ? "Held for you" : "Sent"}
         </span>
       </span>

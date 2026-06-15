@@ -120,6 +120,23 @@ const biens: Substrate["biens"] = [
     photoUrl:
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=70",
   },
+  {
+    id: "bien-beaurepaire",
+    reference: "OMN-2210",
+    kind: "rental",
+    address: "15 rue Beaurepaire",
+    postalCode: "75010",
+    city: "Paris",
+    priceEur: 1690,
+    surfaceM2: 38,
+    rooms: 2,
+    bedrooms: 1,
+    blurb:
+      "Deux-pièces clair à deux pas du canal Saint-Martin, cuisine équipée, troisième étage.",
+    ownerId: "owner-lemaire",
+    photoUrl:
+      "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=1200&q=70",
+  },
 ];
 
 /* --- Mandates ---------------------------------------------- */
@@ -147,6 +164,14 @@ const mandates: Substrate["mandates"] = [
     kind: "exclusive",
     active: true,
     signedOn: "2026-04-30",
+  },
+  {
+    id: "mandate-beaurepaire",
+    bienId: "bien-beaurepaire",
+    ownerId: "owner-lemaire",
+    kind: "exclusive",
+    active: true,
+    signedOn: "2026-05-18",
   },
 ];
 
@@ -205,7 +230,7 @@ const leads: Substrate["leads"] = [
     disposition: "auto-sent",
     transactionType: "rental",
     score: 79,
-    bienId: "bien-roquette",
+    bienId: "bien-beaurepaire",
     signals: ["Visite demandée", "Quartier ciblé"],
     arrivedAt: "2026-06-10T03:41:00+02:00",
     dedupedFrom: "Doublon SeLoger fusionné",
@@ -251,7 +276,7 @@ const leads: Substrate["leads"] = [
     disposition: "auto-sent",
     transactionType: "rental",
     score: 61,
-    bienId: "bien-roquette",
+    bienId: "bien-beaurepaire",
     signals: ["Première prise de contact", "À qualifier"],
     arrivedAt: "2026-06-10T05:47:00+02:00",
   },
@@ -541,11 +566,11 @@ const insights: Record<string, LeadInsight> = {
   // Rank 3 — strong intent, zero financials → asks for the full dossier.
   "lead-leroy": {
     inbound:
-      "Bonjour, je cherche absolument dans le 11e, autour de Bastille, et votre annonce " +
-      "correspond parfaitement à ce que je veux. Serait-il possible de visiter rapidement ? " +
-      "J'ai déjà visité plusieurs biens dans le secteur ces derniers jours.",
+      "Bonjour, je cherche absolument dans le 10e, autour du canal Saint-Martin, et votre " +
+      "annonce correspond parfaitement à ce que je veux. Serait-il possible de visiter " +
+      "rapidement ? J'ai déjà visité plusieurs biens dans le secteur ces derniers jours.",
     facts: [
-      { label: "Secteur ciblé : Bastille / 11e", status: "found" },
+      { label: "Secteur ciblé : Canal Saint-Martin / 10e", status: "found" },
       { label: "Visite : demandée rapidement", status: "found" },
       { label: "Revenus : non précisés", status: "gap" },
       { label: "Garant : non précisé", status: "gap" },
@@ -622,7 +647,7 @@ const insights: Record<string, LeadInsight> = {
   // Rank 6 — first contact, almost no info → invites her to qualify.
   "lead-girard": {
     inbound:
-      "Bonjour, est-ce que l'appartement rue de la Roquette est toujours disponible ? " +
+      "Bonjour, est-ce que l'appartement rue Beaurepaire est toujours disponible ? " +
       "Pourriez-vous m'en dire un peu plus ? Merci.",
     facts: [
       { label: "Intérêt : exprimé", status: "found" },
@@ -633,8 +658,8 @@ const insights: Record<string, LeadInsight> = {
     replyAt: "05:50",
     reply:
       "Bonjour Inès,\n\n" +
-      "Merci pour votre message. Oui, le bien est disponible : il s'agit d'un deux-pièces de 42 m² " +
-      "à 1 750 € par mois, rue de la Roquette. " +
+      "Merci pour votre message. Oui, le bien est disponible : il s'agit d'un deux-pièces de 38 m² " +
+      "à 1 690 € par mois, rue Beaurepaire. " +
       "Pour vérifier que cela correspond à votre situation, pourriez-vous m'indiquer vos revenus " +
       "et si vous disposez d'un garant ?\n\n" +
       "Bien à vous,\nCamille Roussel",
