@@ -13,7 +13,8 @@ import { VoiceMoment } from "./components/voice/VoiceMoment";
 import { IconReplay } from "./components/icons";
 
 export default function App() {
-  const { substrate, replay, view, goHome, startVoice } = useDemo();
+  const { substrate, replay, view, goHome, startVoice, startVoiceNote } =
+    useDemo();
   const { agency, agent } = substrate;
   useKeyboardNav();
 
@@ -71,7 +72,7 @@ export default function App() {
                   <VoiceCapture />
                   <ConversationBar
                     placeholder="Ask your assistant, or hold to dictate…"
-                    onDictate={() => startVoice("global")}
+                    onDictate={startVoiceNote}
                     onUpload={() => startVoice("upload")}
                   />
                 </div>
