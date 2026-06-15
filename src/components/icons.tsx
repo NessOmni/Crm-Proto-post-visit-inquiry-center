@@ -210,6 +210,41 @@ export const IconRadar = (p: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+/* Domain-nav icons (Lucide-derived, simplified to the house line style). */
+export const IconBadgeEuro = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+    <path d="M7 12h5" />
+    <path d="M15 9.4a4 4 0 1 0 0 5.2" />
+  </svg>
+);
+
+export const IconFileCheck = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+    <path d="M14 3v5h5" />
+    <path d="m9 15 2 2 4-4" />
+  </svg>
+);
+
+export const IconContactRound = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M16 18a4 4 0 0 0-8 0" />
+    <circle cx="12" cy="11" r="3" />
+    <rect x="3" y="4" width="18" height="18" rx="2" />
+    <path d="M8 2v2M16 2v2" />
+  </svg>
+);
+
+export const IconUserRoundSearch = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <circle cx="10" cy="8" r="5" />
+    <path d="M2 21a8 8 0 0 1 10.4-7.6" />
+    <circle cx="18" cy="18" r="3" />
+    <path d="m22 22-1.9-1.9" />
+  </svg>
+);
+
 export const IconSpark = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base({ width: 12, height: 12, ...p })}>
     <path d="M12 3l1.6 5.4L19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6L12 3Z" />

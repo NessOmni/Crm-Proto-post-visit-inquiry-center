@@ -151,9 +151,11 @@
   flex-direction: column;
   gap: 2px;
 }
-/* Grouped section header — same muted style as the "Navigate" eyebrow. */
+/* Domain section header — small gray eyebrow, set uppercase to read as a
+   domain band (Bien · Transaction · Portefeuille). */
 .sidebar__group-label {
-  font-size: 12px;
+  font-size: 11px;
+  text-transform: uppercase;
   color: var(--text-3);
   white-space: nowrap;
   padding: 0 10px;

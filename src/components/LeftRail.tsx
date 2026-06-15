@@ -9,10 +9,13 @@ import {
   IconAgenda,
   IconActivity,
   IconPerformance,
-  IconBuilding2,
+  IconRadar,
+  IconGauge,
   IconFileSignature,
-  IconUsers,
-  IconHandshake,
+  IconBadgeEuro,
+  IconFileCheck,
+  IconContactRound,
+  IconUserRoundSearch,
   IconSidebar,
   IconChevronLeft,
 } from "./icons";
@@ -32,9 +35,9 @@ export function LeftRail({
   collapsed: boolean;
   onToggle: () => void;
 }) {
-  const { view, goHome, openContacts } = useDemo();
+  const { view, goHome } = useDemo();
 
-  // Group 1 — surfaces.
+  // Group 1 — surfaces. Accueil is the live home; the rest are inert.
   const surfaces: NavItem[] = [
     { id: "accueil", label: "Accueil", Icon: IconHome, active: view === "briefing", onClick: goHome },
     { id: "agenda", label: "Agenda", Icon: IconAgenda },
@@ -42,12 +45,30 @@ export function LeftRail({
     { id: "performance", label: "Performance", Icon: IconPerformance },
   ];
 
-  // Group 2 — objects (Portefeuille).
-  const portfolio: NavItem[] = [
-    { id: "biens", label: "Biens", Icon: IconBuilding2 },
-    { id: "mandats", label: "Mandats", Icon: IconFileSignature },
-    { id: "contacts", label: "Contacts", Icon: IconUsers, active: view === "contacts", onClick: openContacts },
-    { id: "transactions", label: "Transactions", Icon: IconHandshake },
+  // Domain sections — presentational only, all inert for the demo.
+  const domains: { label: string; items: NavItem[] }[] = [
+    {
+      label: "Bien",
+      items: [
+        { id: "prospection", label: "Prospection", Icon: IconRadar },
+        { id: "estimation", label: "Estimation", Icon: IconGauge },
+        { id: "mandat", label: "Mandat", Icon: IconFileSignature },
+      ],
+    },
+    {
+      label: "Transaction",
+      items: [
+        { id: "offre", label: "Offre", Icon: IconBadgeEuro },
+        { id: "compromis", label: "Compromis", Icon: IconFileCheck },
+      ],
+    },
+    {
+      label: "Portefeuille",
+      items: [
+        { id: "contact", label: "Contact", Icon: IconContactRound },
+        { id: "acquereur", label: "Acquéreur", Icon: IconUserRoundSearch },
+      ],
+    },
   ];
 
   const renderItem = (item: NavItem) => {
@@ -89,13 +110,16 @@ export function LeftRail({
 
       <div className="sidebar__items">{surfaces.map(renderItem)}</div>
 
-      {collapsed ? (
-        <div className="sidebar__divider" />
-      ) : (
-        <div className="sidebar__group-label">Portefeuille</div>
-      )}
-
-      <div className="sidebar__items">{portfolio.map(renderItem)}</div>
+      {domains.map((group) => (
+        <div key={group.label}>
+          {collapsed ? (
+            <div className="sidebar__divider" />
+          ) : (
+            <div className="sidebar__group-label">{group.label}</div>
+          )}
+          <div className="sidebar__items">{group.items.map(renderItem)}</div>
+        </div>
+      ))}
     </nav>
   );
 }
