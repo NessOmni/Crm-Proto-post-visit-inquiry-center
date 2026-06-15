@@ -5,7 +5,6 @@ import { LeftRail } from "./components/LeftRail";
 import { Briefing } from "./components/Briefing";
 import { RightColumn } from "./components/RightColumn";
 import { ConversationBar } from "./components/ConversationBar";
-import { GhostChips } from "./components/GhostChips";
 import { CommandSurface } from "./components/CommandSurface";
 import { VoiceCapture } from "./components/flow1/VoiceCapture";
 import { ReviewSheet } from "./components/flow1/ReviewSheet";
@@ -79,7 +78,6 @@ export default function App() {
                 <Briefing />
                 <div className="dock">
                   <VoiceCapture />
-                  <GhostChips />
                   <ConversationBar
                     placeholder="Ask your assistant, or hold to dictate…"
                     onDictate={startVoiceNote}
