@@ -41,7 +41,7 @@ export function LeftRail({
   const surfaces: NavItem[] = [
     { id: "accueil", label: "Accueil", Icon: IconHome, active: view === "briefing", onClick: goHome },
     { id: "agenda", label: "Agenda", Icon: IconAgenda },
-    { id: "activite", label: "Activité", Icon: IconActivity },
+    { id: "activite", label: "Activité & tâches", Icon: IconActivity },
     { id: "performance", label: "Performance", Icon: IconPerformance },
   ];
 
