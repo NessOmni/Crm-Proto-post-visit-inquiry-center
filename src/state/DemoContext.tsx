@@ -70,6 +70,9 @@ interface DemoState {
   // Navigation — which surface is showing
   view: AppView;
 
+  // Assistant command surface — the summonable conversation dock
+  commandOpen: boolean;
+
   // Voice — the generalized "voice moment"
   voiceScenario: VoiceScenario | null;
   voicePhase: VoicePhase;
@@ -88,6 +91,8 @@ interface DemoState {
   sendReply: (id: string) => void;
   openContacts: () => void;
   goHome: () => void;
+  openCommand: () => void;
+  closeCommand: () => void;
   startVoice: (id: string) => void;
   closeVoice: () => void;
   approveVoiceOutput: (outputId: string) => void;
@@ -272,6 +277,9 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   // Navigation
   const [view, setView] = useState<AppView>("briefing");
 
+  // Assistant command surface — summoned over the calm briefing.
+  const [commandOpen, setCommandOpen] = useState(false);
+
   // Voice — the generalized voice moment (global / upload / record).
   const [voiceId, setVoiceId] = useState<string | null>(null);
   const [voicePhase, setVoicePhase] = useState<VoicePhase>("transcribing");
@@ -315,6 +323,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
 
   const startVoice = useCallback((id: string) => {
     if (!voiceScenarios[id]) return;
+    setCommandOpen(false); // the moment supersedes the command surface
     setVoiceId(id);
     setVoicePhase("transcribing");
     setVoiceReveal(0);
@@ -395,6 +404,9 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   const openContacts = useCallback(() => setView("contacts"), []);
   const goHome = useCallback(() => setView("briefing"), []);
 
+  const openCommand = useCallback(() => setCommandOpen(true), []);
+  const closeCommand = useCallback(() => setCommandOpen(false), []);
+
   const sendReply = useCallback((id: string) => {
     setRepliedLeadIds((prev) => ({ ...prev, [id]: true }));
     setSubstrate((prev) => ({
@@ -417,6 +429,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     setSelectedLeadId(null);
     setRepliedLeadIds({});
     setView("briefing"); // back to the home briefing; Contacts filters unmount
+    setCommandOpen(false);
     setVoiceId(null);
     setVoicePhase("transcribing");
     setVoiceReveal(0);
@@ -440,6 +453,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     selectedLeadId,
     repliedLeadIds,
     view,
+    commandOpen,
     voiceScenario,
     voicePhase,
     voiceTranscript,
@@ -455,6 +469,8 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     sendReply,
     openContacts,
     goHome,
+    openCommand,
+    closeCommand,
     startVoice,
     closeVoice,
     approveVoiceOutput,

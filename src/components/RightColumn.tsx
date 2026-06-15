@@ -170,6 +170,9 @@ export function RightColumn() {
         <span className="keys__label">Presenter keys</span>
         <ul>
           <li>
+            <kbd>⌘K</kbd> Assistant
+          </li>
+          <li>
             <kbd>1</kbd> Voice note
           </li>
           <li>

@@ -5,6 +5,8 @@ import { LeftRail } from "./components/LeftRail";
 import { Briefing } from "./components/Briefing";
 import { RightColumn } from "./components/RightColumn";
 import { ConversationBar } from "./components/ConversationBar";
+import { GhostChips } from "./components/GhostChips";
+import { CommandSurface } from "./components/CommandSurface";
 import { VoiceCapture } from "./components/flow1/VoiceCapture";
 import { ReviewSheet } from "./components/flow1/ReviewSheet";
 import { LeadLens } from "./components/flow2/LeadLens";
@@ -13,8 +15,15 @@ import { VoiceMoment } from "./components/voice/VoiceMoment";
 import { IconReplay } from "./components/icons";
 
 export default function App() {
-  const { substrate, replay, view, goHome, startVoice, startVoiceNote } =
-    useDemo();
+  const {
+    substrate,
+    replay,
+    view,
+    goHome,
+    startVoice,
+    startVoiceNote,
+    openCommand,
+  } = useDemo();
   const { agency, agent } = substrate;
   useKeyboardNav();
 
@@ -70,10 +79,12 @@ export default function App() {
                 <Briefing />
                 <div className="dock">
                   <VoiceCapture />
+                  <GhostChips />
                   <ConversationBar
                     placeholder="Ask your assistant, or hold to dictate…"
                     onDictate={startVoiceNote}
                     onUpload={() => startVoice("upload")}
+                    onActivate={openCommand}
                   />
                 </div>
               </div>
@@ -83,6 +94,7 @@ export default function App() {
         </div>
       </div>
 
+      <CommandSurface />
       <ReviewSheet />
       <LeadLens />
       <VoiceMoment />

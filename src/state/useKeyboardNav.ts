@@ -32,6 +32,7 @@ export function useKeyboardNav() {
     selectedLeadId,
     repliedLeadIds,
     voiceScenario,
+    commandOpen,
     startVoiceNote,
     openReview,
     approve,
@@ -40,12 +41,33 @@ export function useKeyboardNav() {
     sendReply,
     startVoice,
     closeVoice,
+    openCommand,
+    closeCommand,
     replay,
   } = useDemo();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const editing = isEditable(e.target);
+
+      // Assistant command surface — ⌘K / Ctrl+K summons it from the calm
+      // briefing and dismisses it; Esc closes it. While it's open it owns
+      // the keyboard, so the briefing shortcuts stay quiet behind it.
+      if ((e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K")) {
+        e.preventDefault();
+        if (commandOpen) closeCommand();
+        else if (!voiceScenario && !lensOpen && !reviewOpen && view === "briefing") {
+          openCommand();
+        }
+        return;
+      }
+      if (commandOpen) {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          closeCommand();
+        }
+        return;
+      }
 
       // Replay — available anywhere except while typing.
       if (!editing && (e.key === "r" || e.key === "R")) {
@@ -129,6 +151,7 @@ export function useKeyboardNav() {
     selectedLeadId,
     repliedLeadIds,
     voiceScenario,
+    commandOpen,
     startVoiceNote,
     openReview,
     approve,
@@ -137,6 +160,8 @@ export function useKeyboardNav() {
     sendReply,
     startVoice,
     closeVoice,
+    openCommand,
+    closeCommand,
     replay,
   ]);
 }

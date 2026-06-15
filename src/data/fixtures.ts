@@ -797,6 +797,36 @@ export const voiceScenarios: Record<string, VoiceScenario> = {
     ],
   },
 
+  // F — assistant command surface: "draft an offer on 12 rue Lamartine
+  // at 840". Comprehension resolves the Mercier buyer, the listing, the
+  // price and the standard loan condition from one line → a single
+  // drafted offer letter. Ties into the Mercier thread (he visited;
+  // objections noted ~845k, so he comes in at 840).
+  "offer-lamartine": {
+    id: "offer-lamartine",
+    context: "global",
+    transcript:
+      "Rédige une offre d'achat sur le 12 rue Lamartine pour Monsieur " +
+      "Mercier, à 840 000 euros, sous condition suspensive de prêt.",
+    intents: [
+      {
+        chips: [
+          { label: "Property", value: "12 rue Lamartine" },
+          { label: "Buyer", value: "Julien Mercier" },
+          { label: "Price", value: "840 000 €" },
+          { label: "Condition", value: "suspensive de prêt" },
+        ],
+      },
+    ],
+    outputs: [
+      {
+        id: "offer-lamartine-out-1",
+        kind: "card",
+        title: "Offre d'achat — 12 rue Lamartine",
+      },
+    ],
+  },
+
   // E — record-scoped dictation on Antoine David's contact record.
   "record-david": {
     id: "record-david",

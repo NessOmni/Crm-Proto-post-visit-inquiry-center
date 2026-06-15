@@ -10,10 +10,13 @@ export function ConversationBar({
   placeholder = "Ask your assistant, or hold to dictate…",
   onDictate,
   onUpload,
+  onActivate,
 }: {
   placeholder?: string;
   onDictate?: () => void;
   onUpload?: () => void;
+  /** Focusing the field summons the assistant command surface. */
+  onActivate?: () => void;
 }) {
   const { phase } = useDemo();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -35,7 +38,17 @@ export function ConversationBar({
   return (
     <div className="convo">
       <div className="convo__inner">
-        <span className="convo__field">{field}</span>
+        {onActivate && !busy ? (
+          <button
+            type="button"
+            className="convo__field convo__field--live"
+            onClick={onActivate}
+          >
+            {field}
+          </button>
+        ) : (
+          <span className="convo__field">{field}</span>
+        )}
         <button className="convo__send" aria-label="Send" tabIndex={-1}>
           <IconSend />
         </button>

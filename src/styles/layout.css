@@ -1004,6 +1004,167 @@
   color: var(--accent);
   cursor: default;
 }
+/* The field, when live, reads as a quiet text input that summons the
+   assistant command surface on click. */
+.convo__field--live {
+  text-align: left;
+  cursor: text;
+  background: none;
+}
+.convo__field--live:hover {
+  color: var(--text-2);
+}
+
+/* ============================================================
+   Resting-state ghost chips — capability made discoverable
+   without ⌘K. Deliberately low-contrast; never compete with
+   the briefing.
+   ============================================================ */
+.ghosts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 720px;
+  padding: 0 clamp(20px, 4vw, 40px) 10px;
+}
+.ghost-chip {
+  font-size: 12px;
+  color: var(--text-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  padding: 5px 11px;
+  transition: color var(--t), border-color var(--t);
+}
+.ghost-chip:hover {
+  color: var(--text-2);
+  border-color: var(--border-2);
+}
+
+/* ============================================================
+   Assistant command surface — summoned over the calm briefing.
+   The inverse of a CRUD palette: every row is real work, no
+   "Add / Create / New". Anchored to the dock, white surface,
+   whisper shadow; the home stays legible behind it.
+   ============================================================ */
+.command-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(17, 24, 39, 0.28);
+  animation: fade 0.14s ease both;
+}
+.command {
+  position: fixed;
+  z-index: 61;
+  left: 50%;
+  bottom: clamp(16px, 6vh, 64px);
+  transform: translateX(-50%);
+  width: min(560px, 94vw);
+  padding: 8px;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-pop);
+  animation: voice-rise 0.22s ease both;
+}
+.command__label {
+  display: block;
+  padding: 8px 10px 6px;
+}
+.command__sugs {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+.command-sug {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  text-align: left;
+  padding: 9px 10px;
+  border-radius: var(--r-input);
+  transition: background var(--t);
+}
+.command-sug:hover {
+  background: var(--canvas);
+}
+.command-sug[aria-disabled="true"] {
+  cursor: default;
+}
+.command-sug__icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: var(--r-btn);
+  color: var(--accent);
+  background: var(--accent-tint);
+}
+.command-sug__icon svg {
+  width: 15px;
+  height: 15px;
+}
+.command-sug__text {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text);
+}
+.command-sug__meta {
+  margin-left: auto;
+  padding-left: 10px;
+  font-size: 12px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.command__inputrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 8px 0 14px;
+  border-radius: var(--r-input);
+  border: 1px solid var(--border-2);
+  background: var(--surface);
+}
+.command__inputrow:focus-within {
+  border-color: var(--accent);
+}
+.command__input {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  color: var(--text);
+  background: none;
+  border: none;
+  outline: none;
+}
+.command__input::placeholder {
+  color: var(--text-3);
+}
+.command__mic,
+.command__enter {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: var(--r-btn);
+  background: var(--accent);
+  color: #fff;
+  transition: background var(--t);
+}
+.command__mic:hover,
+.command__enter:hover {
+  background: var(--accent-hover);
+}
+.command__enter svg {
+  width: 16px;
+  height: 16px;
+}
 
 /* --- Responsive ------------------------------------------- */
 @media (max-width: 1080px) {
