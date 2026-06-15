@@ -22,7 +22,11 @@ function ActivityRow({ entry }: { entry: ActivityEntry }) {
         {entry.text}
         <span className="activity__time">
           <span>
-            {entry.tag} · {entry.time}
+            {/* Concrete clock time only on actions you just approved;
+                the ambient feed stays timeless ("Recently"). */}
+            {entry.group === "approved"
+              ? `${entry.tag} · ${entry.time}`
+              : entry.tag}
           </span>
           {entry.source && <SourceChip source={entry.source} />}
           {entry.triggeredBy && <TriggeredBy src={entry.triggeredBy} />}
@@ -143,7 +147,7 @@ export function RightColumn() {
           ))}
 
           {overnight.length > 0 && (
-            <div className="activity__eyebrow kicker">Overnight</div>
+            <div className="activity__eyebrow kicker">Recently</div>
           )}
           {shownOvernight.map((entry) => (
             <ActivityRow key={entry.id} entry={entry} />
