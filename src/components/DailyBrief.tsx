@@ -236,8 +236,8 @@ export function DailyBrief() {
 
       <div className="brief__foot">
         <span className="brief__phone">
-          <IconPhone />
-          Sent to your phone at 7:30 ·{" "}
+          <span className="brief__channel-dot" />
+          Envoyé sur WhatsApp · 7:30 ·{" "}
           <button type="button" className="brief__replay">
             Replay
           </button>

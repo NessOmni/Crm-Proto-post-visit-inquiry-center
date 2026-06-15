@@ -223,6 +223,18 @@ button {
   border-radius: var(--r-pill);
   white-space: nowrap;
 }
+/* Channel dot — names the source's medium (WhatsApp green). The chip
+   stays a provenance source; the dot only marks the channel. */
+.source-chip__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 5px;
+  flex: none;
+}
+.source-chip__dot--wa {
+  background: #25d366;
+}
 
 /* Cross-actor attribution — teammate (avatar + name) or client portal. */
 .attribution {

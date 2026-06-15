@@ -110,6 +110,18 @@ const PROCESS_STEP_MS = 480;
    product's range: lead handling, email triage, dedup, market veille,
    and listing monitoring. All Automatic · handled. */
 const OVERNIGHT_ACTIVITY: ActivityEntry[] = [
+  // Cross-channel proof: a voice command came in over WhatsApp this
+  // morning and the assistant drafted the offer — now visible in-app,
+  // awaiting your ok. WhatsApp is the source, not a trust tier.
+  {
+    id: "ov-wa-offer",
+    text: "Offre d'achat rédigée — 12 rue Lamartine · 840 000 € · Julien Mercier",
+    tier: "drafted",
+    tag: "Drafted · à valider",
+    time: "07:34",
+    group: "overnight",
+    source: "WhatsApp",
+  },
   {
     id: "ov-leads",
     text: "6 enquiries ranked by likelihood to convert · 24 rue de la Roquette",

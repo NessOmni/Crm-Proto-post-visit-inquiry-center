@@ -386,6 +386,14 @@
   width: 13px;
   height: 13px;
 }
+/* WhatsApp channel marker on the delivery line — green dot, no logo. */
+.brief__channel-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #25d366;
+  flex: none;
+}
 .brief__replay {
   color: var(--text-2);
   text-decoration: underline;
