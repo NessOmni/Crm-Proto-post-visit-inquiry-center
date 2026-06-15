@@ -202,7 +202,7 @@ const leads: Substrate["leads"] = [
     score: 94,
     bienId: "bien-roquette",
     signals: ["A répondu en 4 min", "Dossier complet joint", "Disponible cette semaine"],
-    arrivedAt: "2026-06-10T01:12:00+02:00",
+    arrivedAt: "2026-06-09T18:24:00+02:00",
   },
   {
     id: "lead-david",
@@ -217,7 +217,7 @@ const leads: Substrate["leads"] = [
     score: 88,
     bienId: "bien-lancry",
     signals: ["Budget 420 k€", "Financement en cours"],
-    arrivedAt: "2026-06-10T02:05:00+02:00",
+    arrivedAt: "2026-06-09T19:47:00+02:00",
   },
   {
     id: "lead-leroy",
@@ -232,7 +232,7 @@ const leads: Substrate["leads"] = [
     score: 79,
     bienId: "bien-beaurepaire",
     signals: ["Visite demandée", "Quartier ciblé"],
-    arrivedAt: "2026-06-10T03:41:00+02:00",
+    arrivedAt: "2026-06-09T21:32:00+02:00",
     dedupedFrom: "Doublon SeLoger fusionné",
   },
   {
@@ -248,7 +248,7 @@ const leads: Substrate["leads"] = [
     score: 72,
     bienId: "bien-roquette",
     signals: ["Revenus 3× le loyer", "Sans animaux"],
-    arrivedAt: "2026-06-10T04:18:00+02:00",
+    arrivedAt: "2026-06-09T22:50:00+02:00",
   },
   {
     id: "lead-morel",
@@ -263,7 +263,7 @@ const leads: Substrate["leads"] = [
     score: 68,
     bienId: "bien-lancry",
     signals: ["Mutation pro", "Achat résidence principale"],
-    arrivedAt: "2026-06-10T05:02:00+02:00",
+    arrivedAt: "2026-06-10T07:38:00+02:00",
   },
   {
     id: "lead-girard",
@@ -278,7 +278,7 @@ const leads: Substrate["leads"] = [
     score: 61,
     bienId: "bien-beaurepaire",
     signals: ["Première prise de contact", "À qualifier"],
-    arrivedAt: "2026-06-10T05:47:00+02:00",
+    arrivedAt: "2026-06-10T08:46:00+02:00",
   },
 ];
 
@@ -441,9 +441,10 @@ export const flow1 = {
 } as const;
 
 /* ============================================================
-   Flow 2 — the overnight burst
-   Leads arrived overnight, were deduplicated, acknowledged, and
-   ranked by warmth — all Automatic · handled. The Lead Lens is a
+   Flow 2 — the new-leads burst
+   Leads arrived since the agent's last visit, were deduplicated,
+   acknowledged, and ranked by warmth — all Automatic · handled, each
+   handled as it came in (no implausible deep-night batch). The Lead Lens is a
    depth view the agent chooses to open. Deterministic & offline.
    ============================================================ */
 
@@ -527,7 +528,7 @@ const insights: Record<string, LeadInsight> = {
       { label: "Visite : souhaitée cette semaine", status: "found" },
       { label: "Garant : non précisé", status: "gap" },
     ],
-    replyAt: "01:15",
+    replyAt: "18:27",
     reply:
       "Bonjour Margaux,\n\n" +
       "Merci pour votre message — le 24 rue de la Roquette est toujours disponible. " +
@@ -553,7 +554,7 @@ const insights: Record<string, LeadInsight> = {
       { label: "Visite : souhaitée rapidement", status: "found" },
       { label: "Accord de prêt : non confirmé", status: "gap" },
     ],
-    replyAt: "02:08",
+    replyAt: "19:50",
     reply:
       "Bonjour Antoine,\n\n" +
       "Merci pour votre message — le 18 rue de Lancry est toujours disponible. " +
@@ -575,7 +576,7 @@ const insights: Record<string, LeadInsight> = {
       { label: "Revenus : non précisés", status: "gap" },
       { label: "Garant : non précisé", status: "gap" },
     ],
-    replyAt: "03:44",
+    replyAt: "21:35",
     reply:
       "Bonjour Camille,\n\n" +
       "Avec plaisir — l'emplacement correspond exactement à votre recherche et le bien est disponible. " +
@@ -633,7 +634,7 @@ const insights: Record<string, LeadInsight> = {
       { label: "Financement : en cours de validation", status: "found" },
       { label: "Accord de prêt : non confirmé", status: "gap" },
     ],
-    replyAt: "05:05",
+    replyAt: "07:41",
     reply:
       "Bonjour Thomas,\n\n" +
       "Merci pour votre message — le 18 rue de Lancry est toujours disponible, et une mutation " +
@@ -655,7 +656,7 @@ const insights: Record<string, LeadInsight> = {
       { label: "Revenus : non précisés", status: "gap" },
       { label: "Garant : non précisé", status: "gap" },
     ],
-    replyAt: "05:50",
+    replyAt: "08:49",
     reply:
       "Bonjour Inès,\n\n" +
       "Merci pour votre message. Oui, le bien est disponible : il s'agit d'un deux-pièces de 38 m² " +
@@ -669,13 +670,13 @@ const insights: Record<string, LeadInsight> = {
 export const flow2 = {
   bienId: "bien-roquette",
   mandateId: "mandate-roquette",
-  /** What the assistant did overnight, for the burst-card summary. */
+  /** What the assistant did since your last visit, for the burst-card summary. */
   arrivedCount: 7,
   dedupedCount: 1,
   rankedCount: 6,
   autoSentCount: leads.filter((l) => l.disposition === "auto-sent").length,
   heldCount: leads.filter((l) => l.disposition === "held").length,
-  acknowledgedAt: "Overnight · 01:12–05:47",
+  acknowledgedAt: "Handled as they arrived",
   insights,
   timelines: Object.fromEntries(
     leads.map((l) => [l.id, buildTimeline(l.id)]),

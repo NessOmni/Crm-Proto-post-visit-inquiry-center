@@ -20,7 +20,7 @@ import {
 } from "./icons";
 
 const COLLAPSED =
-  "Routine cleared overnight · your judgment calls are teed up · next: Sarah Petit, 11:30";
+  "Routine already cleared · your judgment calls are teed up · next: Sarah Petit, 11:30";
 
 interface Row {
   Icon: ComponentType<SVGProps<SVGSVGElement>>;
@@ -222,11 +222,11 @@ export function DailyBrief() {
   return (
     <div className="brief">
       <p className="brief__lead">
-        Quiet night — I cleared the routine and teed up what actually needs your
-        judgment.
+        Since you were last here, I cleared the routine and teed up what
+        actually needs your judgment.
       </p>
 
-      {section("Handled overnight", HANDLED)}
+      {section("Already handled", HANDLED)}
       {section("Needs your ok", NEEDS)}
       {section("Your day", DAY)}
 

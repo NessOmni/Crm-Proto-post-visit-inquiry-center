@@ -138,7 +138,7 @@ export function Briefing() {
           Icon={IconRadar}
           workflow="Prospecting"
           subject="3 opportunities"
-          title="3 prospecting openings spotted overnight"
+          title="3 prospecting openings spotted since your last visit"
           body="5 rue Bichat — you estimated it in February; it's now listed by a competitor, 5% below your number. Plus 2 new DPEs in your sector — likely future sellers. An approach drafted for each."
           cta="Review 3"
         />

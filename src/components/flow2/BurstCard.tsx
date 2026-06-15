@@ -1,4 +1,4 @@
-/* The overnight-burst card — a standard card via the shared shell.
+/* The new-leads card — a standard card via the shared shell.
    Keeps its internal warmest-lead row; not a second spotlight. */
 import type { CardVariant } from "../BriefingCard";
 import { BriefingCard } from "../BriefingCard";
@@ -22,12 +22,12 @@ export function BurstCard({ variant }: { variant: CardVariant }) {
       accent="automatic"
       tag="Automatic · handled"
       Icon={IconUsers}
-      workflow="Overnight"
+      workflow="Since your last visit"
       subject="across your listings"
       photoUrl={bien.photoUrl}
-      title={`${flow2.rankedCount} new leads, sorted before you woke up.`}
-      body={`${flow2.arrivedCount} enquiries arrived overnight. Your assistant deduplicated ${flow2.dedupedCount}, answered ${autoSent} warm leads on its own, and held ${heldFor} for your call — ranked and ready to review.`}
-      ariaLabel="Overnight lead burst"
+      title={`${flow2.rankedCount} new leads, sorted and ranked for you.`}
+      body={`${flow2.arrivedCount} enquiries have come in since you were last here. Your assistant deduplicated ${flow2.dedupedCount}, answered ${autoSent} warm leads on its own, and held ${heldFor} for your call — ranked and ready to review.`}
+      ariaLabel="New leads since your last visit"
       footer={
         <>
           <button className="btn btn--primary" onClick={openLens}>
