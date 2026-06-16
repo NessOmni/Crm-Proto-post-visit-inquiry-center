@@ -16,6 +16,28 @@
 
 ---
 
+## 0. Using these assets in another project
+
+This document is **self-contained** — it describes the whole prototype in
+prose and needs no other file to be understood. If you carry it into a
+different Claude project:
+
+- **Attach *this* `.md` as the context.** It is what a model reads to
+  understand the flow, the mental model, and the foundations for new features.
+- **The `.html` is for humans, not for the model.** It is a minified build —
+  open it in a browser to *see/demo* the prototype, but don't rely on a model
+  to "read" it for understanding (it's a compiled bundle, not readable design
+  context). Keep it as a reference artifact you open yourself.
+- **Optional companions:** `design-system.md` (a fuller visual reference) and
+  the source tree. They add detail but are not required — the design-token
+  reference and architecture map below let this doc stand on its own.
+- **Do not rely on the repo's `CLAUDE.md`** for the current state: it describes
+  the original build brief and predates later work (the assistant command
+  surface, WhatsApp-as-provenance, the domain-section navigation, and the
+  "since your last visit" reframe). This document supersedes it.
+
+---
+
 ## 1. The philosophy (the five lines everything serves)
 
 1. The home is a **calm briefing** of a few decision cards — never a database, never an inbox.
@@ -265,7 +287,31 @@ not size jumps. Success green for *handled*; WhatsApp-green (`#25D366`) appears
 *only* as the channel dot. Radii: 8px controls, 10–12px cards, round avatars/
 dots. Motion is functional only (the streaming transcript, the processing
 checklist) and honours `prefers-reduced-motion`. UI chrome in English; French
-fixture data kept authentic. Full reference: [`design-system.md`](./design-system.md).
+fixture data kept authentic.
+
+**Design tokens (the palette in full):**
+
+| Token | Value | Role |
+| --- | --- | --- |
+| `--canvas` | `#F7F7F8` | app background (faint gray) |
+| `--surface` | `#FFFFFF` | panels, cards |
+| `--border` | `#ECECEC` | panel/card hairlines |
+| `--border-2` | `#E5E7EB` | form-row separators |
+| `--text` | `#1A1A1A` | primary text |
+| `--text-2` | `#6B7280` | secondary text |
+| `--text-3` | `#9CA3AF` | metadata / timestamps |
+| `--accent` | `#4263EB` | **the only strong colour** — every primary action |
+| `--accent-hover` | `#3654D1` | accent hover |
+| `--accent-tint` | `rgba(66,99,235,.08)` | indigo wash (active nav, chips) |
+| `--success` | `#22C55E` | *Automatic · handled* dot |
+| *(channel)* | `#25D366` | WhatsApp source dot — **only** as a channel marker |
+
+Radii: 8px buttons/inputs · 10–12px cards/thumbnails · fully round avatars and
+status dots. Type: Inter throughout, sentence case, no uppercase/letter-spacing
+tricks (the domain nav headers are the one intentional uppercase eyebrow).
+Avatars use soft desaturated pastels, one consistent colour per entity.
+*(`design-system.md`, if present in the repo, is a fuller visual reference —
+optional; this table is sufficient to reproduce the look.)*
 
 ---
 
