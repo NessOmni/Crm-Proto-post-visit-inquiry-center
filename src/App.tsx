@@ -9,6 +9,8 @@ import { CommandSurface } from "./components/CommandSurface";
 import { VoiceCapture } from "./components/flow1/VoiceCapture";
 import { ReviewSheet } from "./components/flow1/ReviewSheet";
 import { LeadLens } from "./components/flow2/LeadLens";
+import { OwnerReportSheet } from "./components/flow3/OwnerReportSheet";
+import { OwnerLens } from "./components/flow3/OwnerLens";
 import { ContactsView } from "./components/contacts/ContactsView";
 import { VoiceMoment } from "./components/voice/VoiceMoment";
 import { IconReplay } from "./components/icons";
@@ -94,7 +96,9 @@ export default function App() {
 
       <CommandSurface />
       <ReviewSheet />
+      <OwnerReportSheet />
       <LeadLens />
+      <OwnerLens />
       <VoiceMoment />
     </div>
   );

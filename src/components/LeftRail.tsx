@@ -36,7 +36,7 @@ export function LeftRail({
   collapsed: boolean;
   onToggle: () => void;
 }) {
-  const { view, goHome, openLens } = useDemo();
+  const { view, goHome, openLens, openOwnerLens } = useDemo();
 
   // Group 1 — surfaces. Accueil is the live home; the rest are inert.
   const surfaces: NavItem[] = [
@@ -53,7 +53,8 @@ export function LeftRail({
       items: [
         { id: "prospection", label: "Prospection", Icon: IconRadar },
         { id: "estimation", label: "Estimation", Icon: IconGauge },
-        { id: "mandat", label: "Mandat", Icon: IconFileSignature },
+        // Live: the Owner Lens (the seller-relationship depth view).
+        { id: "mandat", label: "Mandat", Icon: IconFileSignature, onClick: openOwnerLens },
       ],
     },
     {

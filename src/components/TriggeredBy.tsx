@@ -4,7 +4,7 @@
    ("[name]'s assistant", spark glyph), and a client ("client portal" chip). */
 import type { TriggerSource } from "../state/DemoContext";
 import { Avatar } from "./flow2/Avatar";
-import { IconSpark } from "./icons";
+import { IconSpark, IconRadar } from "./icons";
 
 export function TriggeredBy({ src }: { src: TriggerSource }) {
   return (
@@ -23,6 +23,11 @@ export function TriggeredBy({ src }: { src: TriggerSource }) {
         </span>
       )}
       {src.kind === "client" && <span className="portal-chip">client portal</span>}
+      {src.kind === "signal" && (
+        <span className="trig__src trig__src--assist">
+          <IconRadar /> signal
+        </span>
+      )}
       <span className="trig__detail">— {src.detail}</span>
     </span>
   );

@@ -5,6 +5,7 @@ import type { CardVariant } from "./BriefingCard";
 import { DailyBrief } from "./DailyBrief";
 import { DecisionCard } from "./flow1/DecisionCard";
 import { BurstCard } from "./flow2/BurstCard";
+import { OwnerReportCard } from "./flow3/OwnerReportCard";
 import { AmbientCard } from "./AmbientCard";
 import {
   IconFileText,
@@ -21,11 +22,13 @@ const SEDAINE_PHOTO =
   "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=400&q=70";
 
 export function Briefing() {
-  const { substrate, phase } = useDemo();
+  const { substrate, phase, ownerPhase } = useDemo();
   const { agent } = substrate;
   // The card is present from the moment it lands and stays after approval —
   // collapsing to a slim resolved row rather than disappearing.
   const hasCard = phase === "ready" || phase === "approved";
+  // Flow 3 — the owner-report card is present once landed (pressing 5).
+  const hasOwnerCard = ownerPhase !== "idle";
 
   // The spotlight rule: at most ONE spotlight at a time, chosen by the
   // highest-priority *present* card that carries the spotlight flag — a
@@ -35,6 +38,9 @@ export function Briefing() {
   // only the highest-priority renders spotlight; the others are standard.
   const registry = [
     { id: "mercier", present: phase === "ready", priority: 100, spotlight: true },
+    // Flow 3 — the freshly-landed owner report takes the spotlight, but
+    // stays below a ready post-visit card so Flow 1 is untouched.
+    { id: "owner-report", present: ownerPhase === "landed", priority: 95, spotlight: true },
     { id: "burst", present: true, priority: 60, spotlight: false },
     { id: "owner", present: true, priority: 40, spotlight: false },
     { id: "mandate", present: true, priority: 30, spotlight: false },
@@ -63,17 +69,22 @@ export function Briefing() {
       <section className="briefing__cards">
         {/* Tier 1/2 — decision cards, one spotlight, the rest standard. */}
         {hasCard && <DecisionCard variant={variantOf("mercier")} />}
+        {hasOwnerCard && <OwnerReportCard variant={variantOf("owner-report")} />}
         <BurstCard variant={variantOf("burst")} />
 
-        <AmbientCard
-          variant={variantOf("owner")}
-          Icon={IconFileText}
-          workflow="Owner reporting"
-          subject="Hélène Fontaine, Marc Lefèvre +1"
-          title="Monthly owner reports — 3 ready to send"
-          body="Hélène Fontaine, Marc Lefèvre, +1 — each in your voice, comps included."
-          cta="Review 3"
-        />
+        {/* The breadth "3 reports" card steps aside once the specific Hélène
+            report is on screen as the Flow 3 decision card. */}
+        {!hasOwnerCard && (
+          <AmbientCard
+            variant={variantOf("owner")}
+            Icon={IconFileText}
+            workflow="Owner reporting"
+            subject="Hélène Fontaine, Marc Lefèvre +1"
+            title="Monthly owner reports — 3 ready to send"
+            body="Hélène Fontaine, Marc Lefèvre, +1 — each in your voice, comps included."
+            cta="Review 3"
+          />
+        )}
         <AmbientCard
           variant={variantOf("mandate")}
           Icon={IconFileSignature}

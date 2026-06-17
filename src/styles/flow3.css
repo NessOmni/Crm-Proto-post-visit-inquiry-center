@@ -1,0 +1,155 @@
+/* ============================================================
+   Flow 3 — Owner reporting. The owner-report decision card, the
+   composite-report review sheet, and the Owner Lens (the seller-side
+   twin of the Lead Lens). Tokens only — no new colours. Reuses the
+   .lens / .sheet / .pills / .mandate-card / .timeline shells.
+   ============================================================ */
+
+/* --- The decision card's signal-as-provenance line --------- */
+.owner-trigger {
+  margin: 2px 0 4px;
+}
+
+/* --- The composite-report review sheet --------------------- */
+.owner-report__meta {
+  font-size: 12.5px;
+  color: var(--text-2);
+  margin-bottom: 4px;
+}
+.owner-report__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+
+/* --- Owner Lens: the mandate row (dense list idiom) -------- */
+.mandate-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  text-align: left;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border-2);
+  transition: background var(--t);
+}
+.mandate-row:hover {
+  background: var(--accent-tint);
+}
+.mandate-row--selected {
+  background: var(--accent-tint);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+.mandate-row__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--success);
+}
+.mandate-row__dot--on-track {
+  background: var(--success);
+}
+.mandate-row__dot--watch {
+  background: var(--text-3);
+}
+.mandate-row__dot--overdue {
+  background: var(--warn);
+}
+.mandate-row__thumb {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex: none;
+}
+.mandate-row__main {
+  flex: 1;
+  min-width: 0;
+}
+.mandate-row__addr {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mandate-row__owner {
+  display: block;
+  font-size: 12px;
+  color: var(--text-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mandate-row__end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex: none;
+  text-align: right;
+}
+.mandate-row__stat {
+  font-size: 12px;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.mandate-row__contact {
+  font-size: 11.5px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.mandate-row__contact--overdue {
+  color: var(--warn);
+}
+
+/* --- The comparables (market) panel ------------------------ */
+.comps {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+.comp-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-input);
+  background: var(--surface);
+}
+.comp-row__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--text-2);
+}
+.comp-row__dot--sold {
+  background: var(--text-2);
+}
+.comp-row__dot--active {
+  background: transparent;
+  border: 1.5px solid var(--text-3);
+}
+.comp-row__main {
+  flex: 1;
+  min-width: 0;
+}
+.comp-row__addr {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+.comp-row__detail {
+  display: block;
+  font-size: 12px;
+  color: var(--text-2);
+}

@@ -179,6 +179,9 @@ export function RightColumn() {
             <kbd>2</kbd> Lead Lens
           </li>
           <li>
+            <kbd>5</kbd> Owner report
+          </li>
+          <li>
             <kbd>3</kbd> Dictate (global)
           </li>
           <li>
