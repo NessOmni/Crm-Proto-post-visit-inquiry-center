@@ -129,7 +129,7 @@ Focusing the field (or ⌘K) summons the **command surface** (§6).
 
 ---
 
-## 4. The two flows
+## 4. The flows
 
 ### Flow 1 — The Mercier moment (post-visit processing)
 The proof that **the agent supervises**.
@@ -169,6 +169,35 @@ The proof that **the assistant runs the day** — and that depth is *pull*.
    styled distinctly (amber) — the one decision point kept for the human.
 4. **Closing the Lens** returns to the calm briefing. It is a depth view the
    agent *chose* to open — **not an inbox**.
+
+### Flow 3 — Owner reporting (the Owner Lens)
+The seller-side relationship made visible, and proof the supervision grammar
+generalizes to a **periodic, signal-driven** moment the agent never initiated.
+
+1. **The card.** Unlike Flow 1 it is *not* dictated — a decision card **appears**
+   (pressing `5`), the assistant already done: a bi-weekly cadence plus a market
+   signal woke it. Badge **Drafted · à valider**, a `source: cadence · quinzaine`
+   chip, and a **signal-as-provenance** "triggered by" naming the real
+   world-state change (*rapport dû + comparable vendu à proximité*). Headline
+   names Hélène Fontaine / 12 rue Lamartine; preview: *"2 visites · 1 offre à
+   840 000 € · le prix de marché tient."*
+2. **The review sheet** reuses the post-visit slide-over shell but shows **one
+   composite living report** (not four atomic outputs), in the agent's
+   first-person voice, three citation-backed sections — *Activité de la
+   quinzaine · Le marché autour de votre bien · Notre lecture*. Footer:
+   *Modifier · Décliner · Approuver et envoyer.* Approve writes **one** entry to
+   the activity log.
+3. **The Owner Lens** (opened from the **Mandat** nav item, the symmetric twin
+   of Enquiry Center → Lead Lens): active mandates sorted by health — each row a
+   bien thumbnail, owner, days-on-market, last-contact recency, and a health dot;
+   **one amber row** overdue for owner contact (the decision point kept for the
+   human, mirroring Flow 2's held lead). The detail shows stat pills, the bien
+   card, a **comparables panel** (PriceHubble/DVF numbers, no visible API), and
+   the **Living Page** — the report/communication history with automatic-tier
+   steps tagged. Closing returns to the briefing.
+4. **Standalone:** Flow 3 reads the same substrate but does **not** depend on
+   Flow 1 having been run. Buyer depth (Lead Lens) ↔ owner depth (Owner Lens) —
+   one coherent system.
 
 ---
 
@@ -322,6 +351,7 @@ optional; this table is sufficient to reproduce the look.)*
 | **⌘K** | Summon the assistant command surface (Esc closes) |
 | **1** | Flow 1 — dictate the post-visit note → open review |
 | **2** | Flow 2 — open the Lead Lens / Enquiry Center |
+| **5** | Flow 3 — land the owner-report card (then open its review) |
 | **3** | Global dictation (comprehension moment) |
 | **4** | Upload a recording (comprehension moment) |
 | **↑ ↓ / Enter** | In the Lens: move between ranked leads / send reply |
@@ -350,6 +380,8 @@ src/
     voice/VoiceMoment — the reusable comprehension moment
     flow1/  VoiceCapture · DecisionCard · ReviewSheet · CitationChip
     flow2/  BurstCard · LeadLens · LeadRow · LeadDetail · Avatar
+    flow3/  OwnerReportCard · OwnerReportSheet · OwnerLens · MandateRow ·
+            MandateDetail · ComparablesPanel · LivingPageTimeline
   styles/  tokens.css (design tokens) + layout/flow1/flow2/voice/contacts css
 ```
 

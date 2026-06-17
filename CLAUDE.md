@@ -24,10 +24,16 @@ The briefing carries one collapsed card: overnight, leads arrived, were deduplic
 Selecting a lead opens a detail panel: stat pills, the active-mandate property card, the assistant-drafted reply in a full composer with toolbar, and an activity timeline where automatic-tier actions are tagged.
 The Lens is a depth view the agent chose to open — closing it returns to the calm briefing. It is not an inbox.
 
+Flow 3 — Owner reporting (the seller side)
+
+The owner/mandate relationship made two-sided. Unlike Flow 1 this is not dictated: a periodic, signal-driven decision card appears (cadence = quinzaine + a market signal), the assistant already done. Pressing 5 lands it — badge Drafted · à valider, source chip source: cadence · quinzaine, and a "triggered by" naming the real signal (rapport dû + comparable vendu à proximité).
+Expanding opens the review sheet shell with ONE composite living report (not four atomic outputs) in the agent's first-person voice to Hélène Fontaine — three citation-backed sections (Activité de la quinzaine · Le marché autour de votre bien · Notre lecture). Footer: Modifier · Décliner · Approuver et envoyer. Approve writes one entry to the Activity log.
+The Mandat nav item (under BIEN) opens the Owner Lens — the symmetric twin of the Lead Lens (buyer depth ↔ owner depth): active mandates sorted by health (days-on-market, last-contact recency, a health dot; one amber row overdue for contact), each detail showing stat pills, the bien card, a comparables panel, and the report/communication history (the Living Page). Closing returns to the calm briefing. Flow 3 is standalone — it does not depend on Flow 1.
+
 Reset
 A discreet "Replay the scene" button resets all state so the demo can be run repeatedly, identically.
 Data substrate
-Entity types: Agency, Agent, Bien, Owner, Contact, Visit, Lead, Communication, Mandate, Citation. One seed fixtures file in /src/data that both flows read — same agency, same agent, the Rue Lamartine bien (the Mercier visit), and the 24 rue de la Roquette rental. The point on stage: one substrate, two workflows.
+Entity types: Agency, Agent, Bien, Owner, Contact, Visit, Lead, Communication, Mandate, Citation. One seed fixtures file in /src/data that all flows read — same agency, same agent, the Rue Lamartine bien (the Mercier visit + the Fontaine owner report), and the 24 rue de la Roquette rental. The point on stage: one substrate, several workflows.
 Design system — clean, light, functional SaaS aesthetic
 White surfaces on a faint gray canvas, hairline borders instead of shadows, one saturated indigo accent carrying every primary action. Dense but breathable. Quiet, professional, unornamented — the interface recedes; the data is the interface. (Full reference: /docs/design-system.md.)
 
@@ -54,6 +60,7 @@ Substrate + fixtures (the shared model both flows read).
 App shell + design tokens + the calm briefing home (correct aesthetic, mostly empty).
 Flow 1 end to end (voice → processing → card → review sheet → approve → Activity log).
 Flow 2 (burst card → Lead Lens with the ranked 6 → detail panel → composer).
-"Replay the scene" + presentation polish (keyboard nav between the two demo moments is a plus).
+Flow 3 (owner-report card → composite review sheet → approve → Activity log; the Owner Lens from the Mandat nav).
+"Replay the scene" + presentation polish (keyboard nav between the demo moments is a plus).
 
 Stop at the end of each stage and wait for confirmation before continuing.
