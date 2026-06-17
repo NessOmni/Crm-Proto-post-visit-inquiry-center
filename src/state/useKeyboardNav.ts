@@ -4,13 +4,25 @@
 
      1   Flow 1 — dictate the post-visit note (then open review)
      2   Flow 2 — open the Lead Lens
-     ↑ ↓ move between ranked leads · Enter approves & sends
-     Enter (in review) approves the four outputs
+     5   Flow 3 — land the owner report (then open its review)
+     ↑ ↓ move between ranked leads / mandates · Enter approves
+     Enter (in a review) approves the outputs
      R   Replay the scene
      Esc closes the open surface (handled per-surface)
    ============================================================ */
 import { useEffect } from "react";
 import { useDemo } from "./DemoContext";
+import { flow3 } from "../data/fixtures";
+
+// The Owner Lens mandate order — health first (overdue rises), matching the
+// Owner Lens list so ↑/↓ navigation lines up with what's on screen.
+const HEALTH_ORDER = { overdue: 0, watch: 1, "on-track": 2 } as const;
+const mandateOrder = () =>
+  [...flow3.mandates].sort(
+    (a, b) =>
+      HEALTH_ORDER[a.health] - HEALTH_ORDER[b.health] ||
+      b.daysOnMarket - a.daysOnMarket,
+  );
 
 function isEditable(target: EventTarget | null): boolean {
   const el = target as HTMLElement | null;
@@ -33,6 +45,10 @@ export function useKeyboardNav() {
     repliedLeadIds,
     voiceScenario,
     commandOpen,
+    ownerLensOpen,
+    ownerReviewOpen,
+    ownerPhase,
+    selectedMandateId,
     startVoiceNote,
     openReview,
     approve,
@@ -43,6 +59,10 @@ export function useKeyboardNav() {
     closeVoice,
     openCommand,
     closeCommand,
+    landOwnerReport,
+    openOwnerReview,
+    approveOwnerReport,
+    selectMandate,
     replay,
   } = useDemo();
 
@@ -56,7 +76,14 @@ export function useKeyboardNav() {
       if ((e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K")) {
         e.preventDefault();
         if (commandOpen) closeCommand();
-        else if (!voiceScenario && !lensOpen && !reviewOpen && view === "briefing") {
+        else if (
+          !voiceScenario &&
+          !lensOpen &&
+          !reviewOpen &&
+          !ownerLensOpen &&
+          !ownerReviewOpen &&
+          view === "briefing"
+        ) {
           openCommand();
         }
         return;
@@ -117,6 +144,32 @@ export function useKeyboardNav() {
         return;
       }
 
+      // --- Owner Lens scope (Flow 3) — same nav as the Lead Lens ---
+      if (ownerLensOpen) {
+        const order = mandateOrder();
+        const idx = Math.max(
+          0,
+          order.findIndex((m) => m.mandateId === selectedMandateId),
+        );
+        if (e.key === "ArrowDown" || (!editing && e.key === "j")) {
+          e.preventDefault();
+          selectMandate(order[Math.min(order.length - 1, idx + 1)].mandateId);
+        } else if (e.key === "ArrowUp" || (!editing && e.key === "k")) {
+          e.preventDefault();
+          selectMandate(order[Math.max(0, idx - 1)].mandateId);
+        }
+        return;
+      }
+
+      // --- Owner report sheet scope (Flow 3) ---
+      if (ownerReviewOpen) {
+        if (e.key === "Enter" && !editing && ownerPhase !== "approved") {
+          e.preventDefault();
+          approveOwnerReport();
+        }
+        return;
+      }
+
       if (editing) return;
 
       // The briefing shortcuts only apply on the home surface — never
@@ -137,6 +190,11 @@ export function useKeyboardNav() {
       } else if (e.key === "4") {
         e.preventDefault();
         startVoice("upload");
+      } else if (e.key === "5") {
+        e.preventDefault();
+        // Flow 3 — land the owner-report card; once landed, open its review.
+        if (ownerPhase === "idle") landOwnerReport();
+        else openOwnerReview();
       }
     };
 
@@ -152,6 +210,10 @@ export function useKeyboardNav() {
     repliedLeadIds,
     voiceScenario,
     commandOpen,
+    ownerLensOpen,
+    ownerReviewOpen,
+    ownerPhase,
+    selectedMandateId,
     startVoiceNote,
     openReview,
     approve,
@@ -162,6 +224,10 @@ export function useKeyboardNav() {
     closeVoice,
     openCommand,
     closeCommand,
+    landOwnerReport,
+    openOwnerReview,
+    approveOwnerReport,
+    selectMandate,
     replay,
   ]);
 }

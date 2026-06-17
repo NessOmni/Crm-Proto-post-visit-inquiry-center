@@ -15,7 +15,7 @@ import {
   type ReactNode,
 } from "react";
 import type { Substrate, TrustTier, VoiceScenario } from "../data/types";
-import { loadSubstrate, flow1, voiceScenarios } from "../data/fixtures";
+import { loadSubstrate, flow1, flow3, voiceScenarios } from "../data/fixtures";
 import { commById, outputRecipient } from "../data/selectors";
 
 /** Flow 1 progresses through these phases. */
@@ -23,6 +23,10 @@ export type Flow1Phase = "idle" | "recording" | "processing" | "ready" | "approv
 
 /** A generalized "voice moment" plays through these beats. */
 export type VoicePhase = "transcribing" | "understood" | "drafted";
+
+/** Flow 3 — the owner-report decision card: idle until landed (pressing
+ *  5), then approved or declined in the review sheet. */
+export type OwnerPhase = "idle" | "landed" | "approved" | "declined";
 
 /** The home briefing, or the deep Contacts database view. */
 export type AppView = "briefing" | "contacts";
@@ -33,7 +37,10 @@ export type AppView = "briefing" | "contacts";
 export type TriggerSource =
   | { kind: "teammate"; name: string; initials: string; detail: string }
   | { kind: "assistant-of"; name: string; detail: string }
-  | { kind: "client"; detail: string };
+  | { kind: "client"; detail: string }
+  // A cadence/market signal — Flow 3's "signal-as-provenance": no actor,
+  // the world-state change itself woke the action.
+  | { kind: "signal"; detail: string };
 
 export interface ActivityEntry {
   id: string;
@@ -73,6 +80,12 @@ interface DemoState {
   // Assistant command surface — the summonable conversation dock
   commandOpen: boolean;
 
+  // Flow 3 — Owner reporting
+  ownerPhase: OwnerPhase;
+  ownerReviewOpen: boolean;
+  ownerLensOpen: boolean;
+  selectedMandateId: string | null;
+
   // Voice — the generalized "voice moment"
   voiceScenario: VoiceScenario | null;
   voicePhase: VoicePhase;
@@ -93,6 +106,15 @@ interface DemoState {
   goHome: () => void;
   openCommand: () => void;
   closeCommand: () => void;
+  // Flow 3 actions
+  landOwnerReport: () => void;
+  openOwnerReview: () => void;
+  closeOwnerReview: () => void;
+  approveOwnerReport: () => void;
+  declineOwnerReport: () => void;
+  openOwnerLens: () => void;
+  closeOwnerLens: () => void;
+  selectMandate: (id: string) => void;
   startVoice: (id: string) => void;
   closeVoice: () => void;
   approveVoiceOutput: (outputId: string) => void;
@@ -272,6 +294,18 @@ function buildActivity(substrate: Substrate): ActivityEntry[] {
   });
 }
 
+/* The one activity entry written when the owner report is approved.
+   Tier dot + source chip (cadence), mirroring the Flow 1 approved rows. */
+const OWNER_REPORT_ACTIVITY: ActivityEntry = {
+  id: "f3-owner-report",
+  text: "Rapport propriétaire envoyé — Hélène Fontaine · 12 rue Lamartine",
+  tier: "drafted",
+  tag: "Approved",
+  time: "09:30",
+  group: "approved",
+  source: `cadence · ${flow3.cadence}`,
+};
+
 export function DemoProvider({ children }: { children: ReactNode }) {
   const [substrate, setSubstrate] = useState<Substrate>(() => loadSubstrate());
   const [phase, setPhase] = useState<Flow1Phase>("idle");
@@ -291,6 +325,13 @@ export function DemoProvider({ children }: { children: ReactNode }) {
 
   // Assistant command surface — summoned over the calm briefing.
   const [commandOpen, setCommandOpen] = useState(false);
+
+  // Flow 3 — Owner reporting.
+  const [ownerPhase, setOwnerPhase] = useState<OwnerPhase>("idle");
+  const [ownerReviewOpen, setOwnerReviewOpen] = useState(false);
+  const [ownerLensOpen, setOwnerLensOpen] = useState(false);
+  const [selectedMandateId, setSelectedMandateId] = useState<string | null>(null);
+  const ownerTimer = useRef<number | null>(null);
 
   // Voice — the generalized voice moment (global / upload / record).
   const [voiceId, setVoiceId] = useState<string | null>(null);
@@ -419,6 +460,33 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   const openCommand = useCallback(() => setCommandOpen(true), []);
   const closeCommand = useCallback(() => setCommandOpen(false), []);
 
+  // --- Flow 3 actions — the owner report is woken by a cadence/signal,
+  // not dictated: the card appears, then is reviewed and approved. ---
+  const landOwnerReport = useCallback(
+    () => setOwnerPhase((p) => (p === "idle" ? "landed" : p)),
+    [],
+  );
+  const openOwnerReview = useCallback(() => {
+    setOwnerPhase((p) => (p === "idle" ? "landed" : p));
+    setOwnerReviewOpen(true);
+  }, []);
+  const closeOwnerReview = useCallback(() => setOwnerReviewOpen(false), []);
+  const approveOwnerReport = useCallback(() => {
+    setOwnerPhase("approved");
+    if (ownerTimer.current) window.clearTimeout(ownerTimer.current);
+    ownerTimer.current = window.setTimeout(() => setOwnerReviewOpen(false), 680);
+  }, []);
+  const declineOwnerReport = useCallback(() => {
+    setOwnerPhase("declined");
+    setOwnerReviewOpen(false);
+  }, []);
+  const openOwnerLens = useCallback(() => {
+    setSelectedMandateId((prev) => prev ?? flow3.mandates[0]?.mandateId ?? null);
+    setOwnerLensOpen(true);
+  }, []);
+  const closeOwnerLens = useCallback(() => setOwnerLensOpen(false), []);
+  const selectMandate = useCallback((id: string) => setSelectedMandateId(id), []);
+
   const sendReply = useCallback((id: string) => {
     setRepliedLeadIds((prev) => ({ ...prev, [id]: true }));
     setSubstrate((prev) => ({
@@ -446,6 +514,12 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     setVoicePhase("transcribing");
     setVoiceReveal(0);
     setApprovedVoice({});
+    // Flow 3 — back to the opening state.
+    if (ownerTimer.current) window.clearTimeout(ownerTimer.current);
+    setOwnerPhase("idle");
+    setOwnerReviewOpen(false);
+    setOwnerLensOpen(false);
+    setSelectedMandateId(null);
   }, []);
 
   const transcriptText = useMemo(
@@ -460,12 +534,18 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     transcriptDone: revealCount >= tokens.length,
     stepIndex,
     reviewOpen,
-    activity,
+    // The approved owner report rides at the top of the feed (one entry).
+    activity:
+      ownerPhase === "approved" ? [OWNER_REPORT_ACTIVITY, ...activity] : activity,
     lensOpen,
     selectedLeadId,
     repliedLeadIds,
     view,
     commandOpen,
+    ownerPhase,
+    ownerReviewOpen,
+    ownerLensOpen,
+    selectedMandateId,
     voiceScenario,
     voicePhase,
     voiceTranscript,
@@ -483,6 +563,14 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     goHome,
     openCommand,
     closeCommand,
+    landOwnerReport,
+    openOwnerReview,
+    closeOwnerReview,
+    approveOwnerReport,
+    declineOwnerReport,
+    openOwnerLens,
+    closeOwnerLens,
+    selectMandate,
     startVoice,
     closeVoice,
     approveVoiceOutput,

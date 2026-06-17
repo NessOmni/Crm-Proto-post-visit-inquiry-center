@@ -16,6 +16,8 @@ import type {
   SuggestedMatch,
   ContactRow,
   VoiceScenario,
+  ReportSection,
+  MandateStat,
 } from "./types";
 
 /* --- Agency & agent --------------------------------------- */
@@ -319,6 +321,38 @@ const citations: Substrate["citations"] = [
     source: "lead-message",
     label: "SeLoger · Margaux Bonnet",
     quote: "Bonjour, le bien est-il toujours disponible ? Dossier complet prêt à envoyer.",
+  },
+  // Flow 3 — owner report sources. Each backs a report section.
+  {
+    id: "cite-f3-visits",
+    source: "visit",
+    label: "Journal de visites · quinzaine",
+    quote: "2 visites cette quinzaine — 6 et 9 juin.",
+  },
+  {
+    id: "cite-f3-offer",
+    source: "record",
+    label: "Offre reçue · 12 rue Lamartine",
+    quote: "Offre de M. Mercier à 840 000 €, sous condition suspensive de prêt.",
+  },
+  {
+    id: "cite-f3-portals",
+    source: "record",
+    label: "Stats portails · SeLoger + Bien'ici",
+    quote: "148 vues et 11 demandes de contact sur la quinzaine.",
+  },
+  {
+    id: "cite-f3-comps",
+    source: "record",
+    label: "Comparables · DVF / PriceHubble",
+    quote:
+      "73 m² vendu 832 000 € à proximité ; biens actifs entre 10 800 et 11 200 €/m².",
+  },
+  {
+    id: "cite-f3-prior",
+    source: "mandate",
+    label: "Analyse · P07",
+    quote: "Intérêt soutenu, le prix tient — pas d'ajustement recommandé.",
   },
 ];
 
@@ -719,6 +753,151 @@ export const flow2 = {
       },
     ],
   } as Record<string, SuggestedMatch[]>,
+} as const;
+
+/* ============================================================
+   Flow 3 — Owner reporting. A periodic, signal-driven owner report
+   (not dictated) + the Owner Lens, the symmetric twin of the Lead
+   Lens. Anchors on Hélène Fontaine / 12 rue Lamartine and reads the
+   same biens/mandates as the rest. Standalone: it does NOT depend on
+   Flow 1 having been run. Deterministic & offline.
+   ============================================================ */
+
+const ownerReport: { to: string; bien: string; channel: string; sections: ReportSection[] } = {
+  to: "Hélène Fontaine",
+  bien: "12 rue Lamartine",
+  channel: "email",
+  sections: [
+    {
+      id: "sec-activite",
+      heading: "Activité de la quinzaine",
+      body:
+        "Bonjour Madame Fontaine,\n\nVoici le point de quinzaine sur le 12 rue " +
+        "Lamartine. Nous avons organisé deux visites, dont une a déjà débouché " +
+        "sur une offre à 840 000 €, sous condition suspensive de prêt. Côté " +
+        "diffusion, l'annonce a généré 148 vues et 11 demandes de contact sur " +
+        "SeLoger et Bien'ici — un niveau d'intérêt soutenu.",
+      citationIds: ["cite-f3-visits", "cite-f3-offer", "cite-f3-portals"],
+    },
+    {
+      id: "sec-marche",
+      heading: "Le marché autour de votre bien",
+      body:
+        "Sur le secteur, un bien comparable de 73 m² s'est vendu récemment à " +
+        "832 000 €, et les biens actuellement actifs se situent entre 10 800 et " +
+        "11 200 €/m². Votre prix de 845 000 € reste cohérent avec ce que le " +
+        "marché valide aujourd'hui.",
+      citationIds: ["cite-f3-comps"],
+    },
+    {
+      id: "sec-lecture",
+      heading: "Notre lecture",
+      body:
+        "Mon analyse : l'intérêt est réel et l'offre reçue confirme le " +
+        "positionnement. Je ne recommande pas d'ajustement de prix à ce stade — " +
+        "nous tenons la ligne, et je reviens vers vous dès qu'il y a du concret " +
+        "sur l'offre en cours.\n\nBien à vous,\nCamille Roussel",
+      citationIds: ["cite-f3-prior"],
+    },
+  ],
+};
+
+const mandateStats: MandateStat[] = [
+  // The hero — Hélène Fontaine, 12 rue Lamartine. Report due now.
+  {
+    mandateId: "mandate-lamartine",
+    health: "on-track",
+    daysOnMarket: 37,
+    lastContactDays: 21,
+    visitsPeriod: 2,
+    leadsPeriod: 5,
+    reportNote: "Rapport dû",
+    comparables: [
+      { address: "9 rue Buffault", detail: "73 m² · vendu 832 000 € · juin", kind: "sold", source: "DVF" },
+      { address: "21 rue de Maubeuge", detail: "81 m² · vendu 905 000 € · mai", kind: "sold", source: "DVF" },
+      { address: "4 rue Rodier", detail: "76 m² · actif 11 050 €/m²", kind: "active", source: "PriceHubble" },
+    ],
+    history: [
+      { id: "h-lam-1", tier: "automatic", label: "Rapport de quinzaine — prêt à valider", detail: "Activité · marché · lecture", time: "auj." },
+      { id: "h-lam-2", tier: "automatic", label: "Offre reçue · 840 000 €", detail: "M. Mercier — condition suspensive de prêt", time: "09 juin" },
+      { id: "h-lam-3", tier: "automatic", label: "2 visites organisées", detail: "06 et 09 juin", time: "06–09 juin" },
+      { id: "h-lam-4", tier: "automatic", label: "Dernier point propriétaire", detail: "Email — il y a 3 semaines", time: "20 mai" },
+    ],
+  },
+  // Filler — 24 rue de la Roquette, healthy (today's 11:30 visit, 6 leads).
+  {
+    mandateId: "mandate-roquette",
+    health: "on-track",
+    daysOnMarket: 19,
+    lastContactDays: 6,
+    visitsPeriod: 1,
+    leadsPeriod: 6,
+    reportNote: "À jour",
+    comparables: [
+      { address: "12 rue de la Folie-Méricourt", detail: "40 m² · loué 1 720 € · mai", kind: "sold", source: "DVF" },
+      { address: "30 rue Sedaine", detail: "44 m² · actif 1 780 €", kind: "active", source: "PriceHubble" },
+    ],
+    history: [
+      { id: "h-roq-1", tier: "automatic", label: "6 demandes classées", detail: "Visite 11:30 — Sarah Petit", time: "auj." },
+      { id: "h-roq-2", tier: "automatic", label: "Point propriétaire envoyé", detail: "Email — il y a 6 jours", time: "04 juin" },
+    ],
+  },
+  // Filler — 18 rue de Lancry, watch (low activity, a sale).
+  {
+    mandateId: "mandate-lancry",
+    health: "watch",
+    daysOnMarket: 41,
+    lastContactDays: 12,
+    visitsPeriod: 1,
+    leadsPeriod: 2,
+    reportNote: "Activité faible",
+    comparables: [
+      { address: "7 rue de Marseille", detail: "65 m² · vendu 408 000 € · avril", kind: "sold", source: "DVF" },
+      { address: "14 quai de Valmy", detail: "70 m² · actif 6 350 €/m²", kind: "active", source: "PriceHubble" },
+    ],
+    history: [
+      { id: "h-lan-1", tier: "automatic", label: "1 visite organisée", detail: "Peu de demandes ce mois", time: "02 juin" },
+      { id: "h-lan-2", tier: "automatic", label: "Point propriétaire envoyé", detail: "Email — il y a 12 jours", time: "29 mai" },
+    ],
+  },
+  // Filler — 15 rue Beaurepaire, AMBER: owner contact overdue (the one
+  // decision point kept for the human, mirroring Flow 2's held lead).
+  {
+    mandateId: "mandate-beaurepaire",
+    health: "overdue",
+    daysOnMarket: 23,
+    lastContactDays: 34,
+    visitsPeriod: 0,
+    leadsPeriod: 1,
+    reportNote: "Contact en retard",
+    comparables: [
+      { address: "8 rue Bichat", detail: "36 m² · loué 1 650 € · mai", kind: "sold", source: "DVF" },
+      { address: "19 rue Lucien Sampaix", detail: "39 m² · actif 1 720 €", kind: "active", source: "PriceHubble" },
+    ],
+    held: {
+      signal: "Dernier contact il y a 34 jours — au-delà de la cadence de quinzaine.",
+      reasoning:
+        "Aucune visite cette quinzaine et une seule demande : le silence n'est pas une bonne nouvelle à transmettre par défaut. Mieux vaut un appel.",
+      suggestedAction: "Appeler M. Lemaire pour faire le point avant d'envoyer un rapport.",
+    },
+    history: [
+      { id: "h-bea-1", tier: "drafted", held: true, label: "Relance propriétaire à prévoir", detail: "Contact en retard — appel suggéré", time: "auj." },
+      { id: "h-bea-2", tier: "automatic", label: "Dernier point propriétaire", detail: "Email — il y a 34 jours", time: "07 mai" },
+    ],
+  },
+];
+
+export const flow3 = {
+  ownerId: "owner-fontaine",
+  bienId: "bien-lamartine",
+  mandateId: "mandate-lamartine",
+  cadence: "quinzaine",
+  /** The real world-state change that woke this — the "triggered by". */
+  triggerSignal: "rapport dû + comparable vendu à proximité",
+  /** The card's one-line finding preview. */
+  preview: "2 visites · 1 offre à 840 000 € · le prix de marché tient.",
+  report: ownerReport,
+  mandates: mandateStats,
 } as const;
 
 /* ============================================================

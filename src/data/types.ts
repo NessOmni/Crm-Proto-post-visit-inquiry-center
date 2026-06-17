@@ -306,3 +306,54 @@ export type ContactColumn =
   | "email"
   | "category"
   | "manager";
+
+/* ============================================================
+   Flow 3 — Owner reporting. The seller-side relationship: a
+   periodic, signal-driven owner report and the Owner Lens (the
+   symmetric twin of the Lead Lens). A lens is a projection over
+   the one substrate, not a new store.
+   ============================================================ */
+
+/** A mandate's health, driving the row dot. "overdue" is the single
+ *  amber decision point kept for the human (owner contact has lapsed). */
+export type MandateHealth = "on-track" | "watch" | "overdue";
+
+/** A comparable sale or active listing supporting the market read. */
+export interface Comparable {
+  address: string;
+  /** e.g. "73 m² · vendu 832 000 € · juin". */
+  detail: string;
+  kind: "sold" | "active";
+  /** Provenance, e.g. "DVF" or "PriceHubble" — shown as a source chip. */
+  source: string;
+}
+
+/** One section of the composite owner report — each citation-backed. */
+export interface ReportSection {
+  id: ID;
+  /** French section heading. */
+  heading: string;
+  /** French body, written in the agent's first-person voice. */
+  body: string;
+  /** Resolve against substrate.citations (reuses the CitationChip). */
+  citationIds: ID[];
+}
+
+/** Health + period snapshot for a mandate in the Owner Lens. */
+export interface MandateStat {
+  mandateId: ID;
+  health: MandateHealth;
+  daysOnMarket: number;
+  /** Recency of the last owner contact, in days. */
+  lastContactDays: number;
+  visitsPeriod: number;
+  leadsPeriod: number;
+  /** Short cadence note for the row, e.g. "Rapport dû" / "À jour". */
+  reportNote: string;
+  /** Per-mandate owner-comms history (the Living Page timeline). */
+  history: LeadEvent[];
+  /** Comparables for the detail's market panel. */
+  comparables: Comparable[];
+  /** Amber-only: why this mandate is held for the human. */
+  held?: { signal: string; reasoning: string; suggestedAction: string };
+}
