@@ -1,0 +1,123 @@
+/* ============================================================
+   Polish layer — experiment (ui-ux-pro-max principles applied)
+   ------------------------------------------------------------
+   Additive only. The established identity is preserved on purpose:
+   indigo accent, Inter, "hairlines not shadows", calm motion. What
+   the design engine flagged as high-impact and genuinely missing is
+   applied here — accessibility focus states, interaction craft,
+   motion easing, perceived-performance on imagery, crisper type.
+   Loaded last so it layers over the base without forking it.
+   ============================================================ */
+
+:root {
+  /* Refined ease-out for entering motion (engine: easing-functions —
+     "linear feels robotic; ease-out for entering"). */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Hovers/state changes settle with a touch more intention (still
+     well under the 150–300ms band for entering animations). */
+  --t: 0.14s var(--ease-out);
+}
+
+/* --- Crisper text rendering — a quiet premium upgrade ------- */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============================================================
+   Accessibility — a single, consistent keyboard focus ring.
+   (Engine priority 1, High: focus-states. The prototype is
+   keyboard-driven — presenter keys, Tab nav — so this matters.)
+   Mouse clicks stay quiet; keyboard focus is clearly shown. The
+   indigo ring follows each element's own radius via `outline`.
+   `:where()` keeps specificity 0 so components can still override.
+   ============================================================ */
+:where(
+  button,
+  a,
+  input,
+  textarea,
+  select,
+  [role="button"],
+  [tabindex]
+):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+:where(
+  button,
+  a,
+  input,
+  textarea,
+  select,
+  [role="button"],
+  [tabindex]
+):focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ============================================================
+   Interaction craft — cursor, tactile press, disabled clarity.
+   (Engine priority 2: cursor-pointer, press-feedback,
+   disabled-states.)
+   ============================================================ */
+button:not(:disabled),
+[role="button"],
+a {
+  cursor: pointer;
+}
+
+/* A barely-there press on primary controls — felt, not seen. */
+.btn:not(:disabled):active,
+.convo__mic:not(:disabled):active,
+.command__mic:active,
+.command__enter:active,
+.lens__close:active,
+.sheet__close:active,
+.voice__close:active {
+  transform: translateY(0.5px);
+}
+
+/* Disabled reads as disabled (except the intentional "done" state). */
+.btn:disabled,
+button:disabled {
+  opacity: 0.6;
+}
+.btn--done:disabled,
+.convo__mic:disabled {
+  opacity: 1;
+}
+
+/* ============================================================
+   Perceived performance — property photos resolve gracefully.
+   Space is already reserved by the container (no CLS); add a
+   subtle shimmer while loading and a soft fade-in once decoded,
+   instead of a flat-gray flash. (Engine priority 3:
+   content-jumping, progressive-loading.) Reduced-motion is
+   honoured globally, so this stills to an instant swap.
+   ============================================================ */
+.photo img {
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-out);
+}
+.photo--loaded img {
+  opacity: 1;
+}
+.photo--loading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(100deg, #eef0f2 30%, #f5f6f8 50%, #eef0f2 70%);
+  background-size: 200% 100%;
+  animation: photo-shimmer 1.25s ease-in-out infinite;
+}
+@keyframes photo-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
